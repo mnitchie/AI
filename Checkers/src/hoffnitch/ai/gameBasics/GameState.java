@@ -9,14 +9,18 @@ public class GameState {
 	
 	public GameState() {
 		boardPieces = new Piece[WIDTH][WIDTH];
+		
+		for (int i = 0; i < WIDTH; i++)
+			for (int j = 0; j < WIDTH; j++)
+				boardPieces[i][j] = null;
 	}
 	
 	public Piece getPiece(Position position) {
-		return boardPieces[position.getX()][position.getY()];
+		return boardPieces[position.getRow()][position.getCol()];
 	}
 	
 	public void setPiece(Piece piece, Position position) {
-		boardPieces[position.getX()][position.getY()] = piece;
+		boardPieces[position.getRow()][position.getCol()] = piece;
 	}
 	
 	/**
@@ -24,6 +28,12 @@ public class GameState {
 	 * @return current game state
 	 */
 	public Piece[][] getState() {
-		return null;
+		return boardPieces;
+	}
+	
+	public void updateGameState(Action action)
+	{		
+		setPiece(null, action.getPiece().getPosition());
+		setPiece(action.getPiece(), action.getMoveChain().getPosition());	
 	}
 }
