@@ -43,4 +43,14 @@ public class GameState {
 				&& position.col < WIDTH;
 	}
 	
+	public Piece[][] cloneState() {
+		Piece[][] clonedState = new Piece[WIDTH][WIDTH];
+		
+		for (short i = 0; i < WIDTH; i++)
+			for (short j = 0; j < WIDTH; j++)
+				clonedState[i][j] = boardPieces[i][j];
+		
+		return clonedState;
+	}
+	
 }

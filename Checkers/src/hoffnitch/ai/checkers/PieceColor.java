@@ -1,6 +1,6 @@
 package hoffnitch.ai.checkers;
 
-public enum Color {
+public enum PieceColor {
 	RED,
 	BLACK
 	;
