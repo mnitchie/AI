@@ -6,7 +6,7 @@ public class Demo
 	public static void main(String[] args) {
 		
 		// human player
-		Player red = new HumanPlayer("Mike", PieceColor.RED);
+		Player red = new HumanPlayer("Mike", PieceColor.WHITE);
 		
 		// AI Player
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);

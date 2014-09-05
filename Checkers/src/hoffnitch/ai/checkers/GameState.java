@@ -22,7 +22,7 @@ public class GameState {
 	 */
 	public Piece getPiece(Position position) {
 		if (inBounds(position))
-			return boardPieces[position.row][position.col];
+			return boardPieces[position.getRowAndColumn().row][position.getRowAndColumn().column];
 		else
 			return null;
 	}
@@ -30,17 +30,18 @@ public class GameState {
 	public void setPiece(Piece piece, Position position) {
 		
 		// TODO add error checking
-		boardPieces[position.row][position.col] = piece;
+		boardPieces[position.getRowAndColumn().row][position.getRowAndColumn().column] = piece;
 		
 		if (piece != null)
 			piece.setPosition(position);
 	}
 	
 	public boolean inBounds(Position position) {
-		return position.row >= 0
-				&& position.row < WIDTH
-				&& position.col >= 0
-				&& position.col < WIDTH;
+	    RowAndColumn rowAndColumn = position.getRowAndColumn();
+		return rowAndColumn.row >= 0
+				&& rowAndColumn.row < WIDTH
+				&& rowAndColumn.column >= 0
+				&& rowAndColumn.column < WIDTH;
 	}
 	
 	public Piece[][] getBoard() {
