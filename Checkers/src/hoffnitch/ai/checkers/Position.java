@@ -10,4 +10,13 @@ public class Position {
 		this.col = col;
 	}
 	
+	/**
+	 * Get another position, a given distance away from the current position
+	 * @param row Distance between rows
+	 * @param col Distance between cols
+	 * @return
+	 */
+	public Position offset(short row,  short col) {
+		return new Position((short)(this.row + row), (short)(this.col + col));
+	}
 }

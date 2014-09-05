@@ -1,14 +1,15 @@
 package hoffnitch.ai.checkers;
 
+
 public class Demo
 {
 	public static void main(String[] args) {
 		
 		// human player
-		Player red = new Player();
+		Player red = new HumanPlayer("Mike", PieceColor.RED);
 		
 		// AI Player
-		Player black = new Player();
+		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
 		
 		GameState board = new GameState();
 		
