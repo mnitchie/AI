@@ -2,7 +2,7 @@ package hoffnitch.ai.checkers;
 
 public class CheckersMoveValidator
 {
-	public static Turn<Short> validateTurn(Player player, Turn<Short> turn) {
+	public static Turn validateTurn(Player player, Turn turn) {
 		
 		if (!player.color.equals(turn.piece.color)) {
 			// return a message - "Wrong color"
