@@ -7,7 +7,7 @@ public class HumanPlayer extends Player
 	}
 	
 	@Override
-	public Turn<Short> getMove()
+	public Turn getMove()
 	{
 		// TODO Auto-generated method stub
 		return null;

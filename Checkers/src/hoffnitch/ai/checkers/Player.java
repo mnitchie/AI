@@ -10,6 +10,6 @@ public abstract class Player
 		this.color = color;
 	}
 	
-	public abstract Turn<Short> getMove();
+	public abstract Turn getMove();
 	
 }
