@@ -43,4 +43,14 @@ public class GameState {
 				&& position.col < WIDTH;
 	}
 	
+	public Piece[][] getBoard() {
+	    Piece[][] toReturn = new Piece[WIDTH][WIDTH];
+	    for(int i = 0; i < boardPieces.length; i++) {
+	        for(int j = 0; j < boardPieces[i].length; j++) {
+	            toReturn[i][j] = boardPieces[i][j];
+	        }
+	    }
+	    return toReturn;
+	}
+	
 }
