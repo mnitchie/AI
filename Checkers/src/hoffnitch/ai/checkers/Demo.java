@@ -6,7 +6,7 @@ public class Demo
 	public static void main(String[] args) {
 		
 		// human player
-		Player red = new HumanPlayer("Mike", PieceColor.WHITE);
+		Player red = new HumanPlayer("Mike", PieceColor.RED);
 		
 		// AI Player
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
@@ -14,11 +14,11 @@ public class Demo
 		GameState board = new GameState();
 		
 		while(!isOver(board)) {
-			black.getMove();
+			black.getTurn();
 			// update view
 			if (isOver(board))
 				break;
-			red.getMove();
+			red.getTurn();
 			// update view
 			// 
 		}
