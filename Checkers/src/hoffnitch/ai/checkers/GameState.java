@@ -4,6 +4,7 @@ package hoffnitch.ai.checkers;
 public class GameState {
 	
 	public static final int WIDTH = 8;
+	public static final int MAX_INDEX = 32;
 	
 	private Piece[][] boardPieces;
 	
@@ -15,18 +16,6 @@ public class GameState {
 				boardPieces[i][j] = null;
 	}
 	
-	/**
-	 * TODO: Throw exception
-	 * @param position
-	 * @return
-	 */
-	public Piece getPiece(Position position) {
-		if (inBounds(position))
-			return boardPieces[position.getRowAndColumn().row][position.getRowAndColumn().column];
-		else
-			return null;
-	}
-	
 	public void setPiece(Piece piece, Position position) {
 		
 		// TODO add error checking
@@ -36,13 +25,31 @@ public class GameState {
 			piece.setPosition(position);
 	}
 	
-	public boolean inBounds(Position position) {
-	    RowAndColumn rowAndColumn = position.getRowAndColumn();
-		return rowAndColumn.row >= 0
-				&& rowAndColumn.row < WIDTH
-				&& rowAndColumn.column >= 0
-				&& rowAndColumn.column < WIDTH;
+	// I'm not convinced that checking if a position is in bounds is the GameState's job... -MN
+//	public boolean inBounds(Position position) {
+//	    RowAndColumn rowAndColumn = position.getRowAndColumn();
+//		return rowAndColumn.row >= 0
+//				&& rowAndColumn.row < WIDTH
+//				&& rowAndColumn.column >= 0
+//				&& rowAndColumn.column < WIDTH;
+//	}
+	
+	public Piece getPieceAtPosition(Position p) {
+        return getPieceAtPosition(p.getRowAndColumn());
 	}
+	
+    public Piece getPieceAtPosition(int index) {
+        return getPieceAtPosition(CheckerBoardLocationLookup.getLocationFor(index));   
+    }
+	
+	public Piece getPieceAtPosition(RowAndColumn rowAndColumn) {
+        return getPieceAtPosition(rowAndColumn.row, rowAndColumn.column);
+	    
+	}
+	
+	public Piece getPieceAtPosition(int row, int column) {
+        return boardPieces[row][column];
+    }
 	
 	public Piece[][] getBoard() {
 	    Piece[][] toReturn = new Piece[WIDTH][WIDTH];

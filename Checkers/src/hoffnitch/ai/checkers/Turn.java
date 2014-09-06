@@ -1,14 +1,19 @@
 package hoffnitch.ai.checkers;
 
-import java.util.Queue;
+import java.util.LinkedList;
 
 public class Turn {
 	
 	public final Piece piece;
-	private Queue<Position> moves;
+	private LinkedList<Position> moves = new LinkedList<Position>();
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
+	}
+	
+	public Turn(Piece piece, Position move) {
+	    this.piece = piece;
+	    addMove(move);
 	}
 
 	public void addMove(Position space) {
