@@ -9,10 +9,10 @@ import java.awt.Point;
 
 public class GuiPiece {
 	private int size;
-	private Piece piece;
 	private Point coordinates;
 	private boolean isMoving;
 	public final Color renderColor;
+	public final Piece piece;
 	
 	public GuiPiece(Piece piece, int size) {
 		this.piece = piece;

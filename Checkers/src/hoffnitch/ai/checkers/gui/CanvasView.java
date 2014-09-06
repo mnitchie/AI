@@ -18,9 +18,6 @@ public class CanvasView extends JFrame implements View
 	public static final int HEIGHT	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
 	
 	private BoardCanvas canvas;
-	private GameState gameState;
-	private GuiPiece grabbedPiece;
-	private Point grabOffset;
 	
 	public CanvasView(String title, GameState initialBoard) {
 		super(title);

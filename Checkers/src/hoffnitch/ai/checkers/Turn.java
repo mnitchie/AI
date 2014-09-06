@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class Turn {
@@ -9,6 +10,7 @@ public class Turn {
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
+		moves = new LinkedList<Position>();
 	}
 
 	public void addMove(Position space) {

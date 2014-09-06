@@ -4,6 +4,9 @@ import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.checkers.RowAndColumn;
+import hoffnitch.ai.checkers.Turn;
+import hoffnitch.ai.checkers.gui.GuiPiece;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -30,8 +33,12 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	public static final Color PIECE_RED		= Color.RED;
 	
 	private GameState board;
+	private GuiPiece grabbedPiece;
+	private Point grabOffset;
 	private List<GuiPiece> guiPieces;
 	private Map<Piece, GuiPiece> pieceMap;
+
+	private volatile Turn newTurn;
 	
 	public BoardCanvas(GameState board) {
 		this.board = board;
@@ -122,8 +129,10 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 			Position position = new Position(row, column);
 			Piece piece = board.getPiece(position);
 			if (piece != null) {
-				GuiPiece guiPiece = pieceMap.get(piece);
-				System.out.println(guiPiece);
+				grabbedPiece = pieceMap.get(piece);
+				grabbedPiece.setMoving(true);
+				grabOffset = new Point(e.getX() % TILE_SIZE, e.getY() % TILE_SIZE);
+				newTurn = new Turn(grabbedPiece.piece);
 			}
 		}
 	}
@@ -135,7 +144,33 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO: implement mouseReleased
+		if (grabbedPiece != null) {
+			int row = e.getY() / TILE_SIZE;
+			int column = e.getX() / TILE_SIZE;
+			
+			if (CheckerBoardLocationLookup.isValidPosition(row, column)) {
+				// valid position; move piece
+				Position position = new Position(row, column);
+				newTurn.addMove(position);
+				
+				// TODO: check if more jumps are available
+				// TODO: update gamestate
+				grabbedPiece.piece.setPosition(position);
+				grabbedPiece.setCoordinates(new Point(column * TILE_SIZE, row * TILE_SIZE));
+				grabbedPiece.setMoving(false);
+				grabbedPiece = null;
+				grabOffset = null;
+			} else {
+				// invalid position; move piece to previous position
+				RowAndColumn originalLocation = grabbedPiece.piece.getPosition().getRowAndColumn();
+				grabbedPiece.setCoordinates(new Point(originalLocation.column * TILE_SIZE, originalLocation.row * TILE_SIZE));
+				grabbedPiece.setMoving(false);
+				grabbedPiece = null;
+				grabOffset = null;
+				newTurn = null;
+			}
+			repaint();
+		}
 	}
 
 	/**
@@ -145,7 +180,10 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO: implement mouseDragged
+		if (grabbedPiece != null) {
+			grabbedPiece.setCoordinates(new Point(e.getX() - grabOffset.x, e.getY() - grabOffset.y));
+		}
+		repaint();
 	}
 	
 	/********************************************************
