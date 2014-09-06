@@ -11,17 +11,17 @@ public class CheckersMoveGenerator {
         this.gameState = gameState;
     }
 
-    public List<Turn> getMovesForTurn() {
+    public List<Turn> getMovesForTurn(PieceColor pieceColor) {
         List<Turn> legalMoves = new ArrayList<Turn>();
 
         for (int i = 1; i <= 32; i++) {
             Piece piece = gameState.getPieceAtPosition(i);
-            if (piece != null) {
+            if (piece != null && piece.color == pieceColor) {
                 legalMoves.addAll(getMovesForPiece(piece));
             }
         }
 
-        return null;
+        return legalMoves;
     }
 
     /**
@@ -33,29 +33,29 @@ public class CheckersMoveGenerator {
         List<Position> positionsToCheck = new ArrayList<Position>();
         RowAndColumn rc = piece.getPosition().getRowAndColumn();
 
-        Position topLeft = new Position(rc.row - 1, rc.column - 1);
-        Position topRight = new Position(rc.row - 1, rc.column + 1);
-        Position bottomLeft = new Position(rc.row + 1, rc.column - 1);
-        Position bottomRight = new Position(rc.row + 1, rc.column + 1);
+        RowAndColumn topLeft = new RowAndColumn(rc.row - 1, rc.column - 1);
+        RowAndColumn topRight = new RowAndColumn(rc.row - 1, rc.column + 1);
+        RowAndColumn bottomLeft = new RowAndColumn(rc.row + 1, rc.column - 1);
+        RowAndColumn bottomRight = new RowAndColumn(rc.row + 1, rc.column + 1);
 
         if (isInBounds(topLeft)
                 && (piece.isCrowned() || piece.color == PieceColor.WHITE)) {
-            positionsToCheck.add(topLeft);
+            positionsToCheck.add(new Position(topLeft));
         }
 
         if (isInBounds(topRight)
                 && (piece.isCrowned() || piece.color == PieceColor.WHITE)) {
-            positionsToCheck.add(topRight);
+            positionsToCheck.add(new Position(topRight));
         }
 
         if (isInBounds(bottomLeft)
                 && (piece.isCrowned() || piece.color == PieceColor.BLACK)) {
-            positionsToCheck.add(bottomLeft);
+            positionsToCheck.add(new Position(bottomLeft));
         }
 
-        if (isInBounds(bottomLeft)
+        if (isInBounds(bottomRight)
                 && (piece.isCrowned() || piece.color == PieceColor.BLACK)) {
-            positionsToCheck.add(bottomRight);
+            positionsToCheck.add( new Position(bottomRight));
         }
         
         for (Position p : positionsToCheck) {
@@ -68,8 +68,11 @@ public class CheckersMoveGenerator {
         }
         return legalTurnsForPiece;
     }
-
-    private boolean isInBounds(Position p) {
-        return p.getIndex() <= GameState.NUM_POSITIONS;
+    
+    private boolean isInBounds(RowAndColumn rc) {
+        return rc.row < GameState.WIDTH &&
+               rc.column < GameState.WIDTH &&
+               rc.row >= 0 &&
+               rc.column >= 0;
     }
 }

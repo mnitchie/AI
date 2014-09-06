@@ -11,9 +11,18 @@ public class GameState {
 	public GameState() {
 		boardPieces = new Piece[WIDTH][WIDTH];
 		
-		for (int i = 0; i < WIDTH; i++)
-			for (int j = 0; j < WIDTH; j++)
-				boardPieces[i][j] = null;
+		for (int i = 1; i <= NUM_POSITIONS; i++) {
+		    Position position = new Position(i);
+		    RowAndColumn rc = position.getRowAndColumn();
+		    
+		    if (i <= 12) {
+		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.BLACK, position);
+		    } else if (i >= 21) {
+		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.WHITE, position);
+		    } else {
+		        boardPieces[rc.row][rc.column] = null;
+		    }
+		}
 	}
 	
 	public void setPiece(Piece piece, Position position) {
@@ -24,15 +33,6 @@ public class GameState {
 		if (piece != null)
 			piece.setPosition(position);
 	}
-	
-	// I'm not convinced that checking if a position is in bounds is the GameState's job... -MN
-//	public boolean inBounds(Position position) {
-//	    RowAndColumn rowAndColumn = position.getRowAndColumn();
-//		return rowAndColumn.row >= 0
-//				&& rowAndColumn.row < WIDTH
-//				&& rowAndColumn.column >= 0
-//				&& rowAndColumn.column < WIDTH;
-//	}
 	
 	public Piece getPieceAtPosition(Position p) {
         return getPieceAtPosition(p.getRowAndColumn());

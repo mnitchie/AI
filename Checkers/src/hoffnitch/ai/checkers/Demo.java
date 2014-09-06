@@ -1,5 +1,7 @@
 package hoffnitch.ai.checkers;
 
+import java.util.List;
+
 
 public class Demo
 {
@@ -12,8 +14,10 @@ public class Demo
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
 		
 		GameState board = new GameState();
+		CheckersMoveGenerator moveGenerator = new CheckersMoveGenerator(board);
 		
 		while(!isOver(board)) {
+		    List<Turn> validTurns = moveGenerator.getMovesForTurn(red.color);
 			black.getTurn();
 			// update view
 			if (isOver(board))

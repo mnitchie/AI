@@ -25,4 +25,15 @@ public class Turn {
 		return moves.poll();
 	}
 	
+	public String toString() {
+	    StringBuilder toReturn = new StringBuilder();
+	    toReturn.append(piece.getPosition().getIndex());
+	    for (Position p : moves) {
+	        toReturn.append("-");
+	        toReturn.append(p.getIndex());
+	    }
+	    
+	    return toReturn.toString();
+	}
+	
 }
