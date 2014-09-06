@@ -4,6 +4,7 @@ package hoffnitch.ai.checkers;
 public class GameState {
 	
 	public static final int WIDTH = 8;
+	public static final int NUM_POSITIONS = 32;
 	
 	private Piece[][] boardPieces;
 	
