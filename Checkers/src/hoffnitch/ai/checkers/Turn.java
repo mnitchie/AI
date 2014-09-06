@@ -9,6 +9,7 @@ public class Turn {
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
+		moves = new LinkedList<Position>();
 	}
 	
 	public Turn(Piece piece, Position move) {

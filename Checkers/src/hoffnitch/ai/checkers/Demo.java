@@ -14,11 +14,11 @@ public class Demo
 		GameState board = new GameState();
 		
 		while(!isOver(board)) {
-			black.getMove();
+			black.getTurn();
 			// update view
 			if (isOver(board))
 				break;
-			red.getMove();
+			red.getTurn();
 			// update view
 			// 
 		}

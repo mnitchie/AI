@@ -70,6 +70,6 @@ public class CheckersMoveGenerator {
     }
 
     private boolean isInBounds(Position p) {
-        return p.getIndex() <= GameState.MAX_INDEX;
+        return p.getIndex() <= GameState.NUM_POSITIONS;
     }
 }
