@@ -84,4 +84,10 @@ public class CheckerBoardLocationLookup {
     public static RowAndColumn getLocationFor(int index) {
         return INDEX_TO_ROW_AND_COLUMN.get(index);
     }
+    
+    public static boolean isValidPosition(int row, int column) {
+    	return row >= 0 && row < GameState.WIDTH
+    			&& column >= 0 && column < GameState.WIDTH
+    			&& (row + column) % 2 == 1;
+    }
 }

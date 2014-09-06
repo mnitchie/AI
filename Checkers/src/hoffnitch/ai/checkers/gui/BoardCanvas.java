@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers.gui;
 
+import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.Position;
@@ -8,8 +9,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.event.MouseInputListener;
@@ -26,10 +29,13 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	public static final Color PIECE_BLACK	= Color.BLACK;
 	public static final Color PIECE_RED		= Color.RED;
 	
+	private GameState board;
 	private List<GuiPiece> guiPieces;
+	private Map<Piece, GuiPiece> pieceMap;
 	
-	public BoardCanvas(GameState initialBoard) {
-		initializePieces(initialBoard);
+	public BoardCanvas(GameState board) {
+		this.board = board;
+		initializePieces(board);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -40,11 +46,14 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	 */
 	private void initializePieces(GameState board) {
 		guiPieces = new LinkedList<GuiPiece>();
+		pieceMap = new HashMap<Piece, GuiPiece>();
+		
 		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
 			Piece piece = board.getPiece(new Position(i));
 			if (piece != null) {
 				GuiPiece guiPiece = new GuiPiece(piece, TILE_SIZE);
 				guiPieces.add(guiPiece);
+				pieceMap.put(piece, guiPiece);
 			}
 		}
 	}
@@ -106,7 +115,17 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO: implement mousePressed
+		int row = e.getY() / TILE_SIZE;
+		int column = e.getX() / TILE_SIZE;
+		
+		if (CheckerBoardLocationLookup.isValidPosition(row, column)) {
+			Position position = new Position(row, column);
+			Piece piece = board.getPiece(position);
+			if (piece != null) {
+				GuiPiece guiPiece = pieceMap.get(piece);
+				System.out.println(guiPiece);
+			}
+		}
 	}
 	
 	/**
