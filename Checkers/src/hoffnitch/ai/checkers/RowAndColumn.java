@@ -9,6 +9,10 @@ public class RowAndColumn {
         this.column = column;
     }
     
+    public RowAndColumn getRowAndColumnInDirection(Direction direction) {
+        return new RowAndColumn(this.row + direction.rowAdjustment, this.column + direction.columnAdjustment);
+    }
+    
     @Override
     public boolean equals(Object obj) {
     	if (obj instanceof RowAndColumn) {

@@ -44,6 +44,10 @@ public class Position {
     
     private void setIndexFromRowAndColumn() {
         this.index = CheckerBoardLocationLookup.getLocationFor(this.rowAndColumn);
-
+    }
+    
+    public Position getPositionInDirection(Direction direction) {
+        return new Position(this.rowAndColumn.row + direction.rowAdjustment,
+                            this.rowAndColumn.column + direction.columnAdjustment);
     }
 }
