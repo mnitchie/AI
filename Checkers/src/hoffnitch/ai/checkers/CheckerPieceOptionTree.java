@@ -73,15 +73,15 @@ public class CheckerPieceOptionTree {
     
     private void generateJumpMoves(Node n, GameState gameState) {
         for (Direction direction : Direction.values()) {
-            if (pieceCanJumpInDirection(n.piece, direction, gameState)) {
-                Node move = new Node(n.position.getPositionInDirection(direction), n.piece);
+            if (pieceCanJumpInDirection(n.piece, n.position, direction, gameState)) {
+                Node move = new Node(n.position.getPositionInDirection(direction).getPositionInDirection(direction), n.piece);
                 n.children.put(direction, move);
                 GameState copy = new GameState(gameState);
                 Position adjacentPosition = n.position.getPositionInDirection(direction);
                 Position farPosition = adjacentPosition.getPositionInDirection(direction);
                 copy.setPiece(null, n.position);
                 copy.setPiece(null, adjacentPosition);
-                copy.setPiece(n.piece, farPosition);
+                copy.setPiece(new Piece(n.piece), farPosition);
                 generateJumpMoves(move, copy);
             }
         }
@@ -98,13 +98,13 @@ public class CheckerPieceOptionTree {
         }
     }
     
-    private boolean pieceCanJumpInDirection(Piece piece, Direction direction, GameState gameState) {
+    private boolean pieceCanJumpInDirection(Piece piece, Position position, Direction direction, GameState gameState) {
         
         // the piece can move in that direction
         if (!direction.pieceCanMove(piece)) {
             return false;
         }
-        RowAndColumn adjacentRC = piece.getPosition().getRowAndColumn().getRowAndColumnInDirection(direction);
+        RowAndColumn adjacentRC = position.getRowAndColumn().getRowAndColumnInDirection(direction);
         // if the adjacent place is in bounds
         if (!isInBounds(adjacentRC)) {
             return false;

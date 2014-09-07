@@ -9,6 +9,7 @@ public class Piece {
 	public Piece(PieceColor color, Position position) {
 		this.color = color;
 		this.position = position;
+		this.crowned = false;
 	}
 	
 	public Piece(Piece otherPiece) {
@@ -32,8 +33,9 @@ public class Piece {
 		return crowned;
 	}
 
-	public void setCrowned(boolean crowned)
+	public Piece setCrowned(boolean crowned)
 	{
 		this.crowned = crowned;
+		return this;
 	}
 }

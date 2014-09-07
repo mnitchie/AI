@@ -32,6 +32,9 @@ public class GameState {
 	
 	public GameState(CheckersScenario scenario) {
 	    boardPieces = new Piece[WIDTH][WIDTH];
+	    for (int i = 1; i <= NUM_POSITIONS; i++) {
+	        setPiece(null, new Position(i));
+	    }
 	    for (Piece p : scenario.getScenario()) {
 	        setPiece(p, p.getPosition());
 	    }
@@ -99,7 +102,7 @@ public class GameState {
 	    StringBuilder toReturn = new StringBuilder();
         final String horizontal = "   +---+---+---+---+---+---+---+---+\n";
 
-	    toReturn.append("      A   B   C   D   E   F   G   H\n");
+	    toReturn.append("     A   B   C   D   E   F   G   H\n");
 	        
         for (int i = 0; i < GameState.WIDTH; i++) {
             toReturn.append(horizontal);

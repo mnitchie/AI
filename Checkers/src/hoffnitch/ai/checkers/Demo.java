@@ -8,21 +8,21 @@ public class Demo
 	public static void main(String[] args) {
 		
 		// human player
-		Player red = new HumanPlayer("Mike", PieceColor.WHITE);
+		Player white = new HumanPlayer("Mike", PieceColor.WHITE);
 		
 		// AI Player
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
 		
-		GameState board = new GameState();
+		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_ONE_OPTION);
 		CheckersMoveGenerator moveGenerator = new CheckersMoveGenerator(board);
 		
 		while(!isOver(board)) {
-		    List<Turn> validTurns = moveGenerator.getMovesForTurn(red.color);
+		    List<Turn> validTurns = moveGenerator.getMovesForTurn(white.color);
 			black.getTurn();
 			// update view
 			if (isOver(board))
 				break;
-			red.getTurn();
+			white.getTurn();
 			// update view
 			// 
 		}
