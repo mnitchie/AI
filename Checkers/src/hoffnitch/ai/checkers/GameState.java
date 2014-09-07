@@ -1,10 +1,15 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.PieceColor;
+import hoffnitch.ai.checkers.Piece;
+
 
 public class GameState {
 	
 	public static final int WIDTH = 8;
 	public static final int NUM_POSITIONS = 32;
+	public static final int BLACK_START_INDEX = 12;
+	public static final int WHITE_START_INDEX = 21;
 	
 	private Piece[][] boardPieces;
 	
@@ -15,9 +20,9 @@ public class GameState {
 		    Position position = new Position(i);
 		    RowAndColumn rc = position.getRowAndColumn();
 		    
-		    if (i <= 12) {
+		    if (i <= BLACK_START_INDEX) {
 		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.BLACK, position);
-		    } else if (i >= 21) {
+		    } else if (i >= WHITE_START_INDEX) {
 		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.WHITE, position);
 		    } else {
 		        boardPieces[rc.row][rc.column] = null;
@@ -26,6 +31,7 @@ public class GameState {
 	}
 	
 	public GameState(CheckersScenario scenario) {
+	    boardPieces = new Piece[WIDTH][WIDTH];
 	    for (Piece p : scenario.getScenario()) {
 	        setPiece(p, p.getPosition());
 	    }
@@ -35,7 +41,8 @@ public class GameState {
 	    this.boardPieces = new Piece[WIDTH][WIDTH];
 	    for (int i = 0; i < WIDTH; i++) {
 	        for (int j = 0; j < WIDTH; j++) {
-	            this.boardPieces[i][j] = new Piece(toCopy.getPieceAtPosition(i, j)); 
+	            Piece pieceToCopy = toCopy.getPieceAtPosition(i, j);
+	            this.boardPieces[i][j] = pieceToCopy == null ? null : new Piece(toCopy.getPieceAtPosition(i, j)); 
 	        }
 	    }
 	}
@@ -87,4 +94,38 @@ public class GameState {
 		return clonedState;
 	}
 	
+	public String toString() {
+	    
+	    StringBuilder toReturn = new StringBuilder();
+        final String horizontal = "   +---+---+---+---+---+---+---+---+\n";
+
+	    toReturn.append("      A   B   C   D   E   F   G   H\n");
+	        
+        for (int i = 0; i < GameState.WIDTH; i++) {
+            toReturn.append(horizontal);
+            toReturn.append(" " + i + " ");
+            for (int j = 0; j < GameState.WIDTH; j++) {
+                Piece piece = boardPieces[i][j];
+                char pieceIndicator = ' ';
+                if (piece != null) {
+                    if (piece.color == PieceColor.BLACK) {
+                        if (piece.isCrowned())
+                            pieceIndicator = 'B';
+                        else
+                            pieceIndicator = 'b';
+                    } else {
+                        if (piece.isCrowned())
+                            pieceIndicator = 'R';
+                        else
+                            pieceIndicator = 'r';
+                    }
+                }
+                toReturn.append("| " + pieceIndicator + " ");
+	        }
+            toReturn.append("|");
+            toReturn.append("\n");
+	    }
+        toReturn.append(horizontal);
+        return toReturn.toString();
+	}	
 }

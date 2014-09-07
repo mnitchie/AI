@@ -55,4 +55,8 @@ public class Position {
         return new Position(this.rowAndColumn.row + direction.rowAdjustment,
                             this.rowAndColumn.column + direction.columnAdjustment);
     }
+    
+    public String toString() {
+        return "" + index;
+    }
 }
