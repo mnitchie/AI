@@ -25,6 +25,12 @@ public class GameState {
 		}
 	}
 	
+	public GameState(CheckersScenario scenario) {
+	    for (Piece p : scenario.getScenario()) {
+	        setPiece(p, p.getPosition());
+	    }
+	}
+	
 	public GameState(GameState toCopy) {
 	    this.boardPieces = new Piece[WIDTH][WIDTH];
 	    for (int i = 0; i < WIDTH; i++) {
