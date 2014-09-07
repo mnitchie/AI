@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Turn {
 	
@@ -16,9 +17,17 @@ public class Turn {
 	    this.piece = piece;
 	    addMove(move);
 	}
+	
+	public Turn(Piece piece, List<Position> positions) {
+	    this.piece = piece;
+	    for (Position p : positions) {
+	        moves.offer(p); // This might be backwards.
+	    }
+	}
 
-	public void addMove(Position space) {
+	public Turn addMove(Position space) {
 		moves.offer(space);
+		return this;
 	}
 	
 	public Position getNextMove() {
@@ -35,5 +44,8 @@ public class Turn {
 	    
 	    return toReturn.toString();
 	}
+	
+	// TODO: Generate an equals method to test if the attempted move is one of the 
+	// available moves.
 	
 }
