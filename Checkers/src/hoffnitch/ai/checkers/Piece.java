@@ -11,6 +11,12 @@ public class Piece {
 		this.position = position;
 	}
 	
+	public Piece(Piece otherPiece) {
+	    this.position = new Position(otherPiece.position);
+	    this.color = otherPiece.color;
+	    this.crowned = otherPiece.crowned;
+	}
+	
 	public Position getPosition()
 	{
 		return position;
@@ -30,7 +36,4 @@ public class Piece {
 	{
 		this.crowned = crowned;
 	}
-	
-	
-	
 }

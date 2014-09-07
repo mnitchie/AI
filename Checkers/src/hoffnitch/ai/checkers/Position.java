@@ -16,6 +16,11 @@ public class Position {
         this.setLocation(rowAndColumn);
     }
     
+    public Position(Position toCopy) {
+        this.index = toCopy.index;
+        this.rowAndColumn = new RowAndColumn(toCopy.rowAndColumn);
+    }
+    
     public int getIndex() {
         return index;
     }

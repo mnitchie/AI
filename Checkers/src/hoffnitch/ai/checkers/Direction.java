@@ -1,11 +1,22 @@
 package hoffnitch.ai.checkers;
 
 public enum Direction {
-    TOP_LEFT(-1, -1),
-    TOP_RIGHT(-1, 1),
-    BOTTOM_LEFT(1, -1),
-    BOTTOM_RIGHT(1, 1),
-    NONE(0, 0)
+    TOP_LEFT(-1, -1) {
+        public boolean pieceCanMove(Piece p) {
+            return p.isCrowned() || p.color == PieceColor.WHITE;
+        }},
+    TOP_RIGHT(-1, 1) {
+        public boolean pieceCanMove(Piece p) {
+            return p.isCrowned() || p.color == PieceColor.WHITE;
+        }},
+    BOTTOM_LEFT(1, -1) {
+        public boolean pieceCanMove(Piece p) {
+            return p.isCrowned() || p.color == PieceColor.BLACK;
+        }},
+    BOTTOM_RIGHT(1, 1) {
+        public boolean pieceCanMove(Piece p) {
+            return p.isCrowned() || p.color == PieceColor.BLACK;
+        }}
     ;
     
     public final int rowAdjustment;
@@ -15,20 +26,6 @@ public enum Direction {
         this.rowAdjustment = rowAdjustment;
         this.columnAdjustment = columnAdjustment;
     }
-    
-//    public static Direction getDirection(Position start, Position end) {
-//        int rowDiff = start.getRowAndColumn().row - end.getRowAndColumn().row;
-//        int colDiff = start.getRowAndColumn().column - end.getRowAndColumn().column;
-//        
-//        if (rowDiff == 0 || colDiff == 0) {
-//            return NONE;
-//        }
-//        
-//        if (rowDiff < 0) {
-//            
-//        }
-//        if (colDiff > 0) {
-//            
-//        }
-//    }
+
+    public abstract boolean pieceCanMove(Piece p);
 }

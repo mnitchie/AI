@@ -25,9 +25,19 @@ public class GameState {
 		}
 	}
 	
+	public GameState(GameState toCopy) {
+	    this.boardPieces = new Piece[WIDTH][WIDTH];
+	    for (int i = 0; i < WIDTH; i++) {
+	        for (int j = 0; j < WIDTH; j++) {
+	            this.boardPieces[i][j] = new Piece(toCopy.getPieceAtPosition(i, j)); 
+	        }
+	    }
+	}
+	
 	public void setPiece(Piece piece, Position position) {
 		
 		// TODO add error checking
+	    // Or not... Perhaps we assume that any input to this class is valid?
 		boardPieces[position.getRowAndColumn().row][position.getRowAndColumn().column] = piece;
 		
 		if (piece != null)

@@ -9,6 +9,11 @@ public class RowAndColumn {
         this.column = column;
     }
     
+    public RowAndColumn(RowAndColumn toCopy) {
+        this.row = toCopy.row;
+        this.column = toCopy.column;
+    }
+    
     public RowAndColumn getRowAndColumnInDirection(Direction direction) {
         return new RowAndColumn(this.row + direction.rowAdjustment, this.column + direction.columnAdjustment);
     }
