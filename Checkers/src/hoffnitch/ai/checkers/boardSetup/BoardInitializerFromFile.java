@@ -6,6 +6,7 @@ import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class BoardInitializerFromFile extends BoardInitializer
 	public void setBoard(GameState board)
 	{
 		clearBoard(board);
+		
+		System.out.println(board);
 		
 		setPieces(board, blackUncrowned, PieceColor.BLACK, false);
 		setPieces(board, blackCrowned, PieceColor.BLACK, true);
@@ -79,12 +82,15 @@ public class BoardInitializerFromFile extends BoardInitializer
 				}
 			}
 		}
-		
 	}
 	
 	public void loadFile(String fileName) throws IOException {
+		loadFile(new File(fileName));
+	}
+	
+	public void loadFile(File file) throws IOException {
 		loaded = false;
-		BufferedReader reader = new BufferedReader(new FileReader(fileName));
+		BufferedReader reader = new BufferedReader(new FileReader(file));
 
 		readIndices(reader.readLine(), blackUncrowned);
 		readIndices(reader.readLine(), blackCrowned);
@@ -97,7 +103,11 @@ public class BoardInitializerFromFile extends BoardInitializer
 	}
 	
 	public void saveFile(String fileName) throws FileNotFoundException {
-		PrintWriter writer = new PrintWriter(fileName);
+		saveFile(new File(fileName));
+	}
+	
+	public void saveFile(File file) throws FileNotFoundException {
+		PrintWriter writer = new PrintWriter(file);
 
 		writer.println(writeIndices(blackUncrowned));
 		writer.println(writeIndices(blackCrowned));
