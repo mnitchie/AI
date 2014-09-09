@@ -1,5 +1,7 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
+
 import java.util.List;
 
 

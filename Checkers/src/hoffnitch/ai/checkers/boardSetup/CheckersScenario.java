@@ -1,7 +1,10 @@
-package hoffnitch.ai.checkers;
+package hoffnitch.ai.checkers.boardSetup;
+
+import hoffnitch.ai.checkers.Piece;
+import hoffnitch.ai.checkers.PieceColor;
+import hoffnitch.ai.checkers.Position;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public enum CheckersScenario {
@@ -54,7 +57,7 @@ public enum CheckersScenario {
             return scenario;
         }
     },
-    DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS { // for easy copy and pasting to create new scenarios
+    DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS {
         public List<Piece> getScenario() {
             List<Piece> scenario = new ArrayList<Piece>();
             scenario.add(new Piece(PieceColor.WHITE, new Position(18)));

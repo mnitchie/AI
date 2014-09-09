@@ -2,6 +2,7 @@ package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Piece;
+import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
 
 
 public class GameState {
