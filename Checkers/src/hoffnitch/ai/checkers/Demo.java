@@ -13,7 +13,7 @@ public class Demo
 		// AI Player
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
 		
-		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_ONE_OPTION);
+		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS);
 		CheckersMoveGenerator moveGenerator = new CheckersMoveGenerator(board);
 		
 		while(!isOver(board)) {

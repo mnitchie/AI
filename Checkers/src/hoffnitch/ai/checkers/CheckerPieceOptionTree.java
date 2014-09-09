@@ -42,26 +42,25 @@ public class CheckerPieceOptionTree {
         if (root.isLeaf()) {
             return Collections.emptyList();
         }
-        doGetMoves(root, root.piece);
+        doGetMoves(root, root.piece, new ArrayList<Position>());
         return movesForPiece;
     }
     
-    private Turn doGetMoves(Node n, Piece startingPiece) {
+    private void doGetMoves(Node n, Piece startingPiece, List<Position> movesForTurn) {
         if (n.isLeaf()) {
-            return new Turn(startingPiece, n.position);
-        }
-        for (Direction direction : Direction.values()) {
-            Node next = n.children.get(direction);
-            if (next != null) {
-                if (n == root) {
-                    movesForPiece.add(doGetMoves(next, startingPiece));
-                } else {
-                    movesForPiece.add(doGetMoves(next, startingPiece).addMove(n.position));
+            movesForTurn.add(n.position);
+            movesForPiece.add(new Turn(startingPiece, movesForTurn));
+        } else {
+            for (Direction direction : Direction.values()) {
+                Node next = n.children.get(direction);
+                List<Position> movesSoFar = new ArrayList<Position>(movesForTurn);
+                if (next != null) {
+                  movesSoFar.add(n.position);
+                  doGetMoves(next, startingPiece, movesSoFar);
+
                 }
             }
         }
-        return null; //KLUDGE!!!
-        
     }
     
     private void populateMoves(GameState gameState) {
