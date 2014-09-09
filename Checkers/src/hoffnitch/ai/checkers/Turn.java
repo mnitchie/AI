@@ -36,12 +36,14 @@ public class Turn {
 	
 	public String toString() {
 	    StringBuilder toReturn = new StringBuilder();
-	    toReturn.append(piece.getPosition().getIndex());
+	    boolean first = true;
 	    for (Position p : moves) {
-	        toReturn.append("-");
+	        if (!first) {
+	            toReturn.append("-");
+	        }
 	        toReturn.append(p.getIndex());
+	        first = false;
 	    }
-	    
 	    return toReturn.toString();
 	}
 	
