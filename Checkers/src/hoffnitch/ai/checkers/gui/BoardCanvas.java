@@ -4,7 +4,6 @@ import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.Position;
-import hoffnitch.ai.checkers.RowAndColumn;
 import hoffnitch.ai.checkers.Turn;
 
 import java.awt.Color;
@@ -232,42 +231,6 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	}
 	
 	/**
-	 * Handler for mouseRelease event.
-	 * Drops the current piece
-	 * @param e MouseEvent
-	 */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-//		if (grabbedPiece != null) {
-//			int row = e.getY() / TILE_SIZE;
-//			int column = e.getX() / TILE_SIZE;
-//			
-//			if (CheckerBoardLocationLookup.isValidPosition(row, column)) {
-//				// valid position; move piece
-//				Position position = new Position(row, column);
-//				turnBeingBuilt.addMove(position);
-//				
-//				// TODO: check if more jumps are available
-//				// TODO: update gamestate
-//				grabbedPiece.piece.setPosition(position);
-//				grabbedPiece.setCoordinates(new Point(column * TILE_SIZE, row * TILE_SIZE));
-//				grabbedPiece.setMoving(false);
-//				grabbedPiece = null;
-//				grabOffset = null;
-//			} else {
-//				// invalid position; move piece to previous position
-//				RowAndColumn originalLocation = grabbedPiece.piece.getPosition().getRowAndColumn();
-//				grabbedPiece.setCoordinates(new Point(originalLocation.column * TILE_SIZE, originalLocation.row * TILE_SIZE));
-//				grabbedPiece.setMoving(false);
-//				grabbedPiece = null;
-//				grabOffset = null;
-//				newTurn = null;
-//			}
-//			repaint();
-//		}
-	}
-
-	/**
 	 * Handler for dragging mouse.
 	 * Moves piece if one is grabbed.
 	 * @param e MouseEvent
@@ -283,6 +246,7 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	/********************************************************
 	/** the stuff below is for MouseListener, but not used **
 	/*******************************************************/ 
+	@Override public void mouseReleased(MouseEvent e)  { }
 	@Override public void mouseClicked(MouseEvent e)  { }		
 	@Override public void mouseEntered(MouseEvent e) { }
 	@Override public void mouseExited(MouseEvent e) { }
