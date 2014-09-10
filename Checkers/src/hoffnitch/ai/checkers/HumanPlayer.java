@@ -1,16 +1,22 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.gui.BoardCanvas;
+
+import java.util.List;
+
 public class HumanPlayer extends Player
 {
-	public HumanPlayer(String name, PieceColor color) {
+	BoardCanvas view;
+	
+	public HumanPlayer(String name, PieceColor color, BoardCanvas view) {
 		super(name, color);
+		this.view = view;
 	}
 	
 	@Override
-	public Turn getTurn()
+	public Turn getTurn(List<Turn> options)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return view.getTurn(options);
 	}
 
 }
