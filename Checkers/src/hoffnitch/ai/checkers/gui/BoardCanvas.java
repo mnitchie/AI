@@ -41,6 +41,9 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	private volatile Turn newTurn;
 	
 	public BoardCanvas(GameState board) {
+		guiPieces = new LinkedList<GuiPiece>();
+		pieceMap = new HashMap<Piece, GuiPiece>();
+		
 		this.board = board;
 		initializePieces(board);
 		addMouseListener(this);
@@ -51,9 +54,9 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	 * Generate a guiPieces based on pieces in gameState
 	 * @param board GameState to get pieces from
 	 */
-	private void initializePieces(GameState board) {
-		guiPieces = new LinkedList<GuiPiece>();
-		pieceMap = new HashMap<Piece, GuiPiece>();
+	public void initializePieces(GameState board) {
+		guiPieces.clear();
+		pieceMap.clear();
 		
 		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
 			Piece piece = board.getPieceAtPosition(new Position(i));
@@ -63,6 +66,7 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 				pieceMap.put(piece, guiPiece);
 			}
 		}
+		repaint();
 	}
 	
 	/**
@@ -72,7 +76,6 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
 		drawBoard(g);
 		
 		for (GuiPiece piece: guiPieces)

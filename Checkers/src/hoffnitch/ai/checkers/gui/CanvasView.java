@@ -29,7 +29,7 @@ public class CanvasView extends JFrame implements View {
 	private JMenuBar menuBar;
 	private JMenu menu;
 	
-	private BoardCanvas canvas;
+	public final BoardCanvas canvas;
 	private GameState board;
 	
 	public CanvasView(String title, GameState initialBoard) {
@@ -79,7 +79,6 @@ public class CanvasView extends JFrame implements View {
 		load.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("load");
 				JFileChooser fileChooser = new JFileChooser("data");
 				int returnValue = fileChooser.showOpenDialog(parent);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -88,6 +87,7 @@ public class CanvasView extends JFrame implements View {
 					try {
 						initializer.loadFile(file);
 						initializer.setBoard(parent.board);
+						canvas.initializePieces(parent.board);
 					} catch (IOException e1) {
 						System.out.println("Failed to load file");
 					}
@@ -95,6 +95,29 @@ public class CanvasView extends JFrame implements View {
 			}
 		});
 		menu.add(load);
+		
+		// save
+		JMenuItem save = new JMenuItem("Save", KeyEvent.VK_S); 
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
+		save.getAccessibleContext().setAccessibleDescription("Save a board configuration");
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser("data");
+				int returnValue = fileChooser.showSaveDialog(parent);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					BoardInitializerFromFile initializer = new BoardInitializerFromFile();
+					try {
+						initializer.getBoard(parent.board);
+						initializer.saveFile(file);
+					} catch (IOException e1) {
+						System.out.println("Failed to save file");
+					}
+				}
+			}
+		});
+		menu.add(save);
 		
 		setJMenuBar(menuBar);
 	}

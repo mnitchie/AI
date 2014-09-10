@@ -43,8 +43,6 @@ public class BoardInitializerFromFile extends BoardInitializer
 	{
 		clearBoard(board);
 		
-		System.out.println(board);
-		
 		setPieces(board, blackUncrowned, PieceColor.BLACK, false);
 		setPieces(board, blackCrowned, PieceColor.BLACK, true);
 		setPieces(board, redUncrowned, PieceColor.WHITE, false);
