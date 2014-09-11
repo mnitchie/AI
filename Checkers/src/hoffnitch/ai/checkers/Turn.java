@@ -19,6 +19,21 @@ public class Turn {
 	    addMove(move);
 	}
 	
+	public boolean containsJump() {
+		if (moves.size() == 2) {
+			RowAndColumn first = moves.get(0).getRowAndColumn();
+			RowAndColumn second = moves.get(1).getRowAndColumn();
+			
+			if (Math.abs(first.row - second.row) == 1)
+				return false;
+			else
+				return true;
+			
+		} else {
+			return true;
+		}
+	}
+	
 	public Turn(Piece piece, List<Position> positions) {
 	    this.piece = piece;
 	    for (Position p : positions) {
