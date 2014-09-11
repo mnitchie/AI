@@ -1,5 +1,7 @@
 package hoffnitch.ai.checkers;
 
+import java.util.List;
+
 public abstract class Player
 {
 	public final String name;
@@ -10,6 +12,6 @@ public abstract class Player
 		this.color = color;
 	}
 	
-	public abstract Turn getTurn();
+	public abstract Turn getTurn(List<Turn> options);
 	
 }

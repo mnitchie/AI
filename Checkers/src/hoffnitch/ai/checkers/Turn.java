@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,6 +19,21 @@ public class Turn {
 	    addMove(move);
 	}
 	
+	public boolean containsJump() {
+		if (moves.size() == 2) {
+			RowAndColumn first = moves.get(0).getRowAndColumn();
+			RowAndColumn second = moves.get(1).getRowAndColumn();
+			
+			if (Math.abs(first.row - second.row) == 1)
+				return false;
+			else
+				return true;
+			
+		} else {
+			return true;
+		}
+	}
+	
 	public Turn(Piece piece, List<Position> positions) {
 	    this.piece = piece;
 	    for (Position p : positions) {
@@ -25,6 +41,10 @@ public class Turn {
 	    }
 	}
 
+	public Iterator<Position> iterator() {
+		return moves.iterator();
+	}
+	
 	public Turn addMove(Position space) {
 		moves.offer(space);
 		return this;
@@ -32,6 +52,10 @@ public class Turn {
 	
 	public Position getNextMove() {
 		return moves.poll();
+	}
+	
+	public int numPositions() {
+		return moves.size();
 	}
 	
 	public String toString() {

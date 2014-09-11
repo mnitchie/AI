@@ -1,5 +1,9 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.ai.RandomBot;
+import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
+import hoffnitch.ai.checkers.gui.CanvasView;
+
 import java.util.List;
 
 
@@ -7,24 +11,32 @@ public class Demo
 {
 	public static void main(String[] args) {
 		
+		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS);
+		CheckersTurnMoveGenerator moveGenerator = new CheckersTurnMoveGenerator(board);
+		CanvasView view = new CanvasView("Checkers", board);
+		
 		// human player
-		Player white = new HumanPlayer("Mike", PieceColor.WHITE);
+		Player white = new HumanPlayer("Mike", PieceColor.WHITE, view.canvas);
 		
 		// AI Player
-		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
+		//Player black = new HumanPlayer("Tyler", PieceColor.BLACK, view.canvas);
+		Player black = new RandomBot("Brad", PieceColor.BLACK);
 		
-		GameState board = new GameState(CheckersScenario.TWO_PIECES_ONE_JUMP_ONE_ADJACENT);
-		CheckersTurnMoveGenerator moveGenerator = new CheckersTurnMoveGenerator(board);
+		view.setVisible(true);
 		
 		while(!isOver(board)) {
-		    List<Turn> validTurns = moveGenerator.getMovesForTurn(white.color);
-			black.getTurn();
-			// update view
+		    List<Turn> validTurns = moveGenerator.getMovesForTurn(black.color);
+			Turn turn = black.getTurn(validTurns);
+			board.doTurn(turn);
+			view.canvas.syncWithGameState();
+			
 			if (isOver(board))
 				break;
-			white.getTurn();
-			// update view
-			// 
+			
+			validTurns = moveGenerator.getMovesForTurn(white.color);
+			turn = white.getTurn(validTurns);
+			board.doTurn(turn);
+			view.canvas.syncWithGameState();
 		}
 	}
 	

@@ -1,8 +1,8 @@
 package hoffnitch.ai.checkers;
 
-import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Piece;
+import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
 
+import java.util.Iterator;
 
 public class GameState {
 	
@@ -48,6 +48,41 @@ public class GameState {
 	            this.boardPieces[i][j] = pieceToCopy == null ? null : new Piece(toCopy.getPieceAtPosition(i, j)); 
 	        }
 	    }
+	}
+	
+	public void doTurn(Turn turn) {
+		Iterator<Position> positions = turn.iterator();
+		
+		Position current = positions.next();
+		boolean isAdjacentMove = !turn.containsJump();
+		
+		// non-jump
+		if (isAdjacentMove) {
+			setPiece(null, current);
+			setPiece(turn.piece, positions.next());
+		}
+		
+		// jump
+		else {
+			
+			while (positions.hasNext()) {
+				setPiece(null, current);
+				Position next = positions.next();
+				
+				int jumpedRow = (current.getRowAndColumn().row + next.getRowAndColumn().row) / 2;
+				int jumpedColumn = (current.getRowAndColumn().column + next.getRowAndColumn().column) / 2;
+				
+				Position jumped = new Position(jumpedRow, jumpedColumn);
+				Piece removedPiece = getPieceAtPosition(jumped);
+				
+				removedPiece.setAlive(false);
+				setPiece(null, jumped);
+				
+				setPiece(turn.piece, next);
+				
+				current = next;
+			}
+		}
 	}
 	
 	public void setPiece(Piece piece, Position position) {

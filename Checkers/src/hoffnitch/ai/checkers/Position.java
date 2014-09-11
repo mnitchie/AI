@@ -56,6 +56,10 @@ public class Position {
                             this.rowAndColumn.column + direction.columnAdjustment);
     }
     
+    public boolean equals(Object obj) {
+    	return (obj instanceof Position && ((Position)obj).index == index);
+    }
+    
     public String toString() {
         return "" + index;
     }

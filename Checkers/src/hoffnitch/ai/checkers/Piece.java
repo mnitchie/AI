@@ -4,12 +4,14 @@ public class Piece {
 	
 	private Position position;
 	private boolean crowned;
+	private boolean alive;
 	public final PieceColor color;
 	
 	public Piece(PieceColor color, Position position) {
 		this.color = color;
 		this.position = position;
 		this.crowned = false;
+		this.alive = true;
 	}
 	
 	public Piece(Piece otherPiece) {
@@ -38,4 +40,13 @@ public class Piece {
 		this.crowned = crowned;
 		return this;
 	}
+	
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+	
 }

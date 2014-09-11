@@ -22,7 +22,7 @@ public class GuiPiece {
 		setCoordinates();
 	}
 	
-	private void setCoordinates() {
+	public void setCoordinates() {
 		RowAndColumn rowAndColumn = piece.getPosition().getRowAndColumn();
 		coordinates = new Point(size * rowAndColumn.column, size * rowAndColumn.row);
 	}
