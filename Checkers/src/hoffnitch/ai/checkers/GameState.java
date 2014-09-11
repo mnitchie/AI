@@ -53,15 +53,17 @@ public class GameState {
 	public void doTurn(Turn turn) {
 		Iterator<Position> positions = turn.iterator();
 		
+		Position current = positions.next();
+		boolean isAdjacentMove = !turn.containsJump();
+		
 		// non-jump
-		if (turn.numPositions() == 1) {
-			setPiece(null, turn.piece.getPosition());
+		if (isAdjacentMove) {
+			setPiece(null, current);
 			setPiece(turn.piece, positions.next());
 		}
 		
 		// jump
 		else {
-			Position current = turn.piece.getPosition();
 			
 			while (positions.hasNext()) {
 				setPiece(null, current);

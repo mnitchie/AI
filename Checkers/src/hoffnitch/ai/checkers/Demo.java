@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.ai.RandomBot;
 import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
 import hoffnitch.ai.checkers.gui.CanvasView;
 
@@ -11,13 +12,14 @@ public class Demo
 	public static void main(String[] args) {
 		
 		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS);
-		CanvasView view = new CanvasView("test", board);
+		CanvasView view = new CanvasView("Checkers", board);
 		
 		// human player
 		Player white = new HumanPlayer("Mike", PieceColor.WHITE, view.canvas);
 		
 		// AI Player
-		Player black = new HumanPlayer("Tyler", PieceColor.BLACK, view.canvas);
+		//Player black = new HumanPlayer("Tyler", PieceColor.BLACK, view.canvas);
+		Player black = new RandomBot("Brad", PieceColor.BLACK);
 		
 		CheckersMoveGenerator moveGenerator = new CheckersMoveGenerator(board);
 		
@@ -36,7 +38,6 @@ public class Demo
 			turn = white.getTurn(validTurns);
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
-			
 		}
 	}
 	

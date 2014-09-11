@@ -194,7 +194,7 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 							grabbedPiece = pieceMap.get(piece);
 							grabbedPiece.setMoving(true);
 							grabOffset = new Point(e.getX() % TILE_SIZE, e.getY() % TILE_SIZE);
-							turnBeingBuilt = new Turn(grabbedPiece.piece);
+							turnBeingBuilt = new Turn(grabbedPiece.piece, position);
 						}
 					}
 				}

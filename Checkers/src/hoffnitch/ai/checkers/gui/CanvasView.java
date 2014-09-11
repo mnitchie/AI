@@ -46,7 +46,7 @@ public class CanvasView extends JFrame implements View {
 		pack();
 		// set fixed window size
 		Insets insets = getInsets();
-		setSize(WIDTH + 2, HEIGHT + insets.top + menuBar.getBounds().height);
+		setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + menuBar.getBounds().height);
 		setResizable(false);
 	}
 	
@@ -73,7 +73,7 @@ public class CanvasView extends JFrame implements View {
 		final CanvasView parent = this;
 		
 		// load
-		JMenuItem load = new JMenuItem("load", KeyEvent.VK_L); 
+		JMenuItem load = new JMenuItem("Load", KeyEvent.VK_L); 
 		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.getAccessibleContext().setAccessibleDescription("Load a board configuration");
 		load.addActionListener(new ActionListener() {
