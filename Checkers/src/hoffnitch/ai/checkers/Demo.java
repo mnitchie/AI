@@ -13,8 +13,8 @@ public class Demo
 		// AI Player
 		Player black = new HumanPlayer("Tyler", PieceColor.BLACK);
 		
-		GameState board = new GameState(CheckersScenario.DOUBLE_JUMP_TWO_OPTIONS_AMBIGUOUS_TWO_OPTIONS);
-		CheckersMoveGenerator moveGenerator = new CheckersMoveGenerator(board);
+		GameState board = new GameState(CheckersScenario.TWO_PIECES_ONE_JUMP_ONE_ADJACENT);
+		CheckersTurnMoveGenerator moveGenerator = new CheckersTurnMoveGenerator(board);
 		
 		while(!isOver(board)) {
 		    List<Turn> validTurns = moveGenerator.getMovesForTurn(white.color);
