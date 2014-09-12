@@ -16,10 +16,13 @@ public class CheckersTurnMoveGenerator {
     public List<Turn> getMovesForTurn(PieceColor pieceColor) {
         jumpMovesForTurn = new ArrayList<Turn>();
         adjacentMovesForTurn = new ArrayList<Turn>();
+        
         for (int i = 1; i <= GameState.NUM_POSITIONS; i++) {
             Piece piece = gameState.getPieceAtPosition(i);
+            
             if (piece != null && piece.color == pieceColor) {
                 generateJumpMovesForPiece(piece, piece.getPosition(), gameState, new ArrayList<Position>());
+                
                 // Only look for adjacent moves if we don't have any jump moves yet.
                 if (jumpMovesForTurn.isEmpty()) {
                     generateAdjacentMovesForPiece(piece);
@@ -27,15 +30,33 @@ public class CheckersTurnMoveGenerator {
             }
         }
         
+        // If there are any jump moves, return only the jump moves
         if (!jumpMovesForTurn.isEmpty()) {
             return jumpMovesForTurn;
         } 
+        
         List<Turn> allMoves = new ArrayList<Turn>();
         allMoves.addAll(jumpMovesForTurn);
         allMoves.addAll(adjacentMovesForTurn);
         return allMoves;
     }
     
+    /**
+     * Algorithm:
+     * For each direction
+     *   IF piece can jump in that direction
+     *     Copy gameState and change the copy to reflect how the board would
+     *     look after the jump move
+     *     add that move to the list of possible moves
+     *     execute the same algorithm from the new position with the new gameState
+     *   ELSE
+     *     IF there were any possible moves
+     *       create a new Turn with piece and the list of moves
+     * @param piece The Piece object making the move. Will not change during a recursive call
+     * @param position The current Position of the piece. Will change during recursive calls
+     * @param gamestate The current game state. Will change to reflect the removal of jumped pieces
+     * @param moves The list of positions piece has occupied during the jump sequence. Will change during recursive calls.
+     */
     public void generateJumpMovesForPiece(Piece piece, Position position, GameState gamestate, List<Position> moves) {
         for (Direction direction : Direction.values()) {
             if (pieceCanJumpInDirection(piece, position, direction, gameState)) {
@@ -61,6 +82,14 @@ public class CheckersTurnMoveGenerator {
         }
     }
     
+    /**
+     * Checks if a given piece can move in a given direction
+     * @param piece The piece being moved
+     * @param position The position piece currently occupies
+     * @param direction The direction to move
+     * @param gameState The current gameState
+     * @return true of the piece can jump in the given direction. false otherwise.
+     */
     private boolean pieceCanJumpInDirection(Piece piece, Position position,
             Direction direction, GameState gameState) {
 
@@ -68,26 +97,31 @@ public class CheckersTurnMoveGenerator {
         if (!direction.pieceCanMove(piece)) {
             return false;
         }
+        
+        // if the adjacent place is in bounds
         RowAndColumn adjacentRC = position.getRowAndColumn()
                 .getRowAndColumnInDirection(direction);
-        // if the adjacent place is in bounds
         if (!isInBounds(adjacentRC)) {
             return false;
         }
-        Piece adjacentPiece = gameState.getPieceAtPosition(adjacentRC);
+        
         // the position in that direction is occupied
+        Piece adjacentPiece = gameState.getPieceAtPosition(adjacentRC);
         if (adjacentPiece == null) {
             return false;
         }
+        
         // the piece in that position is an opponent
         if (adjacentPiece.color == piece.color) {
             return false;
         }
-        RowAndColumn farRC = adjacentRC.getRowAndColumnInDirection(direction);
+        
         // if the far position is valid
+        RowAndColumn farRC = adjacentRC.getRowAndColumnInDirection(direction);
         if (!isInBounds(farRC)) {
             return false;
         }
+        
         // if the far position is available
         Piece farPiece = gameState.getPieceAtPosition(farRC);
         if (farPiece != null) {
