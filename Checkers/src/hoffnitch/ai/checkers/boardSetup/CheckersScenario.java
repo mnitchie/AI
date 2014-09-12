@@ -22,6 +22,23 @@ public enum CheckersScenario {
             return scenario;
         }
     },
+    KING_ONE_OPTION {
+        public List<Piece> getScenario() {
+            List<Piece> scenario = new ArrayList<Piece>();
+            scenario.add(new Piece(PieceColor.LIGHT, new Position(18)).setCrowned(true));
+            scenario.add(new Piece(PieceColor.DARK, new Position(14)));
+            return scenario;
+        }
+    },
+    KING_BACKWARDS_DOUBLE_JUMP {
+        public List<Piece> getScenario() {
+            List<Piece> scenario = new ArrayList<Piece>();
+            scenario.add(new Piece(PieceColor.LIGHT, new Position(2)).setCrowned(true));
+            scenario.add(new Piece(PieceColor.DARK, new Position(7)));
+            scenario.add(new Piece(PieceColor.DARK, new Position(15)));
+            return scenario;
+        }
+    },
     SINGLE_JUMP_AND_ADJACENT {
         public List<Piece> getScenario() {
             List<Piece> scenario = new ArrayList<Piece>();

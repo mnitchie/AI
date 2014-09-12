@@ -18,6 +18,7 @@ public class Piece {
 	    this.position = new Position(otherPiece.position);
 	    this.color = otherPiece.color;
 	    this.crowned = otherPiece.crowned;
+	    this.alive = otherPiece.alive;
 	}
 	
 	public Position getPosition()

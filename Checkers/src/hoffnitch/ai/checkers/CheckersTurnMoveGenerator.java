@@ -57,10 +57,12 @@ public class CheckersTurnMoveGenerator {
      * @param gamestate The current game state. Will change to reflect the removal of jumped pieces
      * @param moves The list of positions piece has occupied during the jump sequence. Will change during recursive calls.
      */
-    public void generateJumpMovesForPiece(Piece piece, Position position, GameState gamestate, List<Position> moves) {
+    public void generateJumpMovesForPiece(Piece piece, Position position, GameState currentGameState, List<Position> moves) {
+        boolean hasOption = false;
         for (Direction direction : Direction.values()) {
-            if (pieceCanJumpInDirection(piece, position, direction, gameState)) {
-                GameState copy = new GameState(gameState);
+            if (pieceCanJumpInDirection(piece, position, direction, currentGameState)) {
+                hasOption = true;
+                GameState copy = new GameState(currentGameState);
                 // for clearing the jumped piece from the copied game state
                 Position adjacentPosition = position
                         .getPositionInDirection(direction);
@@ -76,7 +78,7 @@ public class CheckersTurnMoveGenerator {
             } 
             
         }
-        if (!moves.isEmpty()) {
+        if (!hasOption && !moves.isEmpty()) {
             moves.add(position);
             jumpMovesForTurn.add(new Turn(piece, moves));
         }
@@ -91,7 +93,7 @@ public class CheckersTurnMoveGenerator {
      * @return true of the piece can jump in the given direction. false otherwise.
      */
     private boolean pieceCanJumpInDirection(Piece piece, Position position,
-            Direction direction, GameState gameState) {
+            Direction direction, GameState currentGameState) {
 
         // the piece can move in that direction
         if (!direction.pieceCanMove(piece)) {
@@ -106,7 +108,7 @@ public class CheckersTurnMoveGenerator {
         }
         
         // the position in that direction is occupied
-        Piece adjacentPiece = gameState.getPieceAtPosition(adjacentRC);
+        Piece adjacentPiece = currentGameState.getPieceAtPosition(adjacentRC);
         if (adjacentPiece == null) {
             return false;
         }
@@ -123,7 +125,7 @@ public class CheckersTurnMoveGenerator {
         }
         
         // if the far position is available
-        Piece farPiece = gameState.getPieceAtPosition(farRC);
+        Piece farPiece = currentGameState.getPieceAtPosition(farRC);
         if (farPiece != null) {
             return false;
         }
