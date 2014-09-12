@@ -24,7 +24,10 @@ public class Demo
 		
 		while(!isOver(board)) {
 		    List<Turn> validTurns = moveGenerator.getMovesForTurn(black.color);
+		    System.out.println(board);
 			Turn turn = black.getTurn(validTurns);
+			System.out.println(turn);
+			view.textArea.append(turn.toString() + "\n");
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 			
@@ -32,7 +35,10 @@ public class Demo
 				break;
 			
 			validTurns = moveGenerator.getMovesForTurn(white.color);
+			System.out.println(board);
 			turn = white.getTurn(validTurns);
+			System.out.println(turn);
+			view.textArea.append(turn.toString() + "\n");
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 		}

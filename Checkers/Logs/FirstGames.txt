@@ -1,0 +1,693 @@
+BLACK:10-15
+WHITE:22-18
+BLACK:15-22
+WHITE:25-18
+BLACK:9-13
+WHITE:24-19
+BLACK:6-9
+WHITE:18-14
+BLACK:9-18
+WHITE:23-14
+BLACK:11-15
+WHITE:19-10
+BLACK:5-9
+WHITE:14-5
+BLACK:7-14
+WHITE:21-17
+BLACK:14-21
+WHITE:26-22
+BLACK:2-7
+WHITE:27-23
+BLACK:12-16
+WHITE:28-24
+BLACK:13-17
+WHITE:22-13
+BLACK:1-6
+WHITE:5-1
+BLACK:6-9
+WHITE:13-6
+BLACK:16-20
+WHITE:24-19
+BLACK:7-10
+WHITE:23-18
+BLACK:3-7
+WHITE:6-2
+BLACK:8-12
+WHITE:31-26
+BLACK:7-11
+WHITE:32-27
+BLACK:10-14
+WHITE:18-9
+BLACK:12-16
+WHITE:19-12
+BLACK:11-16
+WHITE:12-8
+BLACK:4-11
+WHITE:26-23
+BLACK:16-19
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+
+***********************************************************************
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:11-16
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:22-18
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | w |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | w |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:8-11
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   | w |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 | w |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:21-17
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   | w |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:11-15
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   | w |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:18-11
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:16-20
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:11-8
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:4-11
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:23-19
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   | b |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:9-13
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   | w |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:25-22
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   | b |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:10-15
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:19-10
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   | b |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   | w |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:6-15
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   |   |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   | w |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:26-23
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   | b |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:12-16
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+WHITE:24-19
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   | b |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   | w |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   | w |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+BLACK:15-24
+     A   B   C   D   E   F   G   H
+   +---+---+---+---+---+---+---+---+
+ 0 |   | b |   | b |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 | b |   |   |   | b |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   | b |   |   |
+   +---+---+---+---+---+---+---+---+
+ 3 | b |   |   |   |   |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 4 |   | w |   |   |   |   |   | b |
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   | w |   | w |   | b |   |
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   | w |   | w |
+   +---+---+---+---+---+---+---+---+
+ 7 | w |   | w |   | w |   | w |   |
+   +---+---+---+---+---+---+---+---+
+
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)
+Exception in thread "AWT-EventQueue-0" java.util.NoSuchElementException
+	at java.util.LinkedList$ListItr.next(LinkedList.java:888)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.filterItertors(BoardCanvas.java:90)
+	at hoffnitch.ai.checkers.gui.BoardCanvas.mousePressed(BoardCanvas.java:204)
+	at java.awt.Component.processMouseEvent(Component.java:6502)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3321)
+	at java.awt.Component.processEvent(Component.java:6270)
+	at java.awt.Container.processEvent(Container.java:2229)
+	at java.awt.Component.dispatchEventImpl(Component.java:4861)
+	at java.awt.Container.dispatchEventImpl(Container.java:2287)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4832)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4489)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4422)
+	at java.awt.Container.dispatchEventImpl(Container.java:2273)
+	at java.awt.Window.dispatchEventImpl(Window.java:2719)
+	at java.awt.Component.dispatchEvent(Component.java:4687)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:723)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:682)
+	at java.awt.EventQueue$3.run(EventQueue.java:680)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:87)
+	at java.awt.EventQueue$4.run(EventQueue.java:696)
+	at java.awt.EventQueue$4.run(EventQueue.java:694)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:693)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:244)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:163)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:151)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:147)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:139)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:97)

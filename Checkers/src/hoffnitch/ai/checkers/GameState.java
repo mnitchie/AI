@@ -153,9 +153,9 @@ public class GameState {
                             pieceIndicator = 'b';
                     } else {
                         if (piece.isCrowned())
-                            pieceIndicator = 'R';
+                            pieceIndicator = 'W';
                         else
-                            pieceIndicator = 'r';
+                            pieceIndicator = 'w';
                     }
                 }
                 toReturn.append("| " + pieceIndicator + " ");

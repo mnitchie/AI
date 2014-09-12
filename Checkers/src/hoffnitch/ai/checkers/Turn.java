@@ -60,6 +60,7 @@ public class Turn {
 	
 	public String toString() {
 	    StringBuilder toReturn = new StringBuilder();
+	    toReturn.append(piece.color + ":");
 	    boolean first = true;
 	    for (Position p : moves) {
 	        if (!first) {

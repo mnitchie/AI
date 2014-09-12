@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 
 public class CanvasView extends JFrame implements View {
@@ -30,6 +32,7 @@ public class CanvasView extends JFrame implements View {
 	private JMenu menu;
 	
 	public final BoardCanvas canvas;
+	public final JTextArea textArea;
 	private GameState board;
 	
 	public CanvasView(String title, GameState initialBoard) {
@@ -39,15 +42,24 @@ public class CanvasView extends JFrame implements View {
 		
 		this.board = initialBoard;
 		canvas = new BoardCanvas(initialBoard);
-		add(canvas);
+		add(canvas, BorderLayout.CENTER);
 		
 		makeMenu();
+		textArea = new JTextArea(10, 10);
+		makeTextArea();
 		
 		pack();
 		// set fixed window size
 		Insets insets = getInsets();
-		setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + menuBar.getBounds().height);
+		// I don't know why "+4". The text area overlaps the board without it.
+		setSize(WIDTH + insets.left + insets.right, HEIGHT + insets.top + menuBar.getBounds().height + textArea.getHeight() + 4);
 		setResizable(false);
+	}
+	
+	private void makeTextArea() {
+	    JScrollPane scrollPane = new JScrollPane(textArea);
+	    textArea.setEditable(false);
+	    add(scrollPane, BorderLayout.PAGE_END);
 	}
 	
 	@Override
