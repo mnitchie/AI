@@ -1,7 +1,6 @@
 package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.Piece;
-import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.RowAndColumn;
 
 import java.awt.Color;

@@ -167,6 +167,10 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 			Point coordinates = piece.getCoordinates();
 			g.setColor(piece.renderColor);
 			g.fillOval(coordinates.x, coordinates.y, TILE_SIZE, TILE_SIZE);
+			if (piece.piece.isCrowned()) {
+			    g.setColor(Color.WHITE);
+			    g.drawChars("K".toCharArray(), 0, 1, coordinates.x + TILE_SIZE/2 - 5, coordinates.y + TILE_SIZE/2 + 5);
+			}
 		}
 	}
 	
