@@ -24,6 +24,9 @@ public class Demo
 		
 		while(!isOver(board)) {
 		    List<Turn> validTurns = moveGenerator.getMovesForTurn(black.color);
+		    if (validTurns.size() == 0)
+		    	break;
+		    
 		    System.out.println(board);
 			Turn turn = black.getTurn(validTurns);
 			System.out.println(turn);
@@ -35,6 +38,9 @@ public class Demo
 				break;
 			
 			validTurns = moveGenerator.getMovesForTurn(white.color);
+			if (validTurns.size() == 0)
+		    	break;
+		    
 			System.out.println(board);
 			turn = white.getTurn(validTurns);
 			System.out.println(turn);
@@ -42,6 +48,8 @@ public class Demo
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 		}
+		
+		System.out.println("Game over");
 	}
 	
 	private static boolean isOver(GameState board) {
