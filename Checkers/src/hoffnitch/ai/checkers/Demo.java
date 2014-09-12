@@ -21,11 +21,16 @@ public class Demo
 		Player black = new RandomBot("Brad", PieceColor.DARK);
 		
 		view.setVisible(true);
+		Player winner = null;
 		
-		while(!isOver(board)) {
+		while (winner == null) {
+			
 		    List<Turn> validTurns = moveGenerator.getMovesForTurn(black.color);
-		    if (validTurns.size() == 0)
+		    
+		    if (validTurns.size() == 0) {
+		    	winner = white;
 		    	break;
+		    }
 		    
 		    System.out.println(board);
 			Turn turn = black.getTurn(validTurns);
@@ -34,12 +39,16 @@ public class Demo
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 			
-			if (isOver(board))
+			if (isOver(board)) {
+				winner = black;
 				break;
+			}
 			
 			validTurns = moveGenerator.getMovesForTurn(white.color);
-			if (validTurns.size() == 0)
+			if (validTurns.size() == 0) {
+				winner = black;
 		    	break;
+			}
 		    
 			System.out.println(board);
 			turn = white.getTurn(validTurns);
@@ -47,9 +56,14 @@ public class Demo
 			view.textArea.append(turn.toString() + "\n");
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
+			
+			if (isOver(board)) {
+				winner = black;
+				break;
+			}
 		}
 		
-		System.out.println("Game over");
+		System.out.println(winner.color.toString() + " wins");
 	}
 	
 	private static boolean isOver(GameState board) {

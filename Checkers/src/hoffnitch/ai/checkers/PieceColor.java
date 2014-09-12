@@ -3,17 +3,24 @@ package hoffnitch.ai.checkers;
 import java.awt.Color;
 
 public enum PieceColor {
-	LIGHT {
-	    public Color getGuiColor() {
-	        return Color.RED;
-	    }
-	},
-	DARK {
-	    public Color getGuiColor() {
-	        return Color.BLACK;
-	    }
-	}
+	
+	LIGHT (Color.RED, "Light"),
+	DARK (Color.BLACK, "Dark")
 	;
 	
-	public abstract Color getGuiColor();
+	public final Color color;
+	public final String name;
+	
+	PieceColor (Color color, String name) {
+		this.color = color;
+		this.name = name;
+	}
+	
+	public Color getGuiColor() {
+		return color;
+	}
+	
+	public String toString() {
+		return name;
+	}
 }
