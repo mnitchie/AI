@@ -15,10 +15,10 @@ public class Demo
 		CanvasView view = new CanvasView("Checkers", board);
 		
 		// human player
-		Player white = new HumanPlayer("Mike", PieceColor.WHITE, view.canvas);
+		Player white = new HumanPlayer("Mike", PieceColor.LIGHT, view.canvas);
 		
 		// AI Player
-		Player black = new RandomBot("Brad", PieceColor.BLACK);
+		Player black = new RandomBot("Brad", PieceColor.DARK);
 		
 		view.setVisible(true);
 		

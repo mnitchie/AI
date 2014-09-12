@@ -18,7 +18,7 @@ public class GuiPiece {
 		this.piece = piece;
 		this.size = size;
 		isMoving = false;
-		renderColor = (piece.color == PieceColor.BLACK)? Color.BLACK: Color.RED;
+		renderColor = (piece.color == PieceColor.DARK) ? Color.BLACK: Color.WHITE;
 		setCoordinates();
 	}
 	

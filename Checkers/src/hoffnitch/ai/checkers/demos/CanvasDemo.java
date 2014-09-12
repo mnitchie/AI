@@ -25,7 +25,7 @@ public class CanvasDemo
 			
 			// test saving file
 			Position pos = new Position(3);
-			Piece p = new Piece(PieceColor.BLACK, pos);
+			Piece p = new Piece(PieceColor.DARK, pos);
 			board.setPiece(p, pos);
 			
 			initializer.getBoard(board);

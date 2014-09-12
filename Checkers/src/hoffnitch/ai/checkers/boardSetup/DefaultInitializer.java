@@ -16,14 +16,14 @@ public class DefaultInitializer extends BoardInitializer
 		// set black pieces
 		for (int positionIndex = 1; positionIndex < 13; positionIndex++) {
 			Position position = new Position(positionIndex);
-			Piece piece = new Piece(PieceColor.BLACK, position);
+			Piece piece = new Piece(PieceColor.DARK, position);
 			board.setPiece(piece, position);
 		}
 		
 		// set red pieces
 		for (int positionIndex = 21; positionIndex < 33; positionIndex++) {
 			Position position = new Position(positionIndex);
-			Piece piece = new Piece(PieceColor.WHITE, position);
+			Piece piece = new Piece(PieceColor.LIGHT, position);
 			board.setPiece(piece, position);
 		}
 	}

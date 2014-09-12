@@ -43,10 +43,10 @@ public class BoardInitializerFromFile extends BoardInitializer
 	{
 		clearBoard(board);
 		
-		setPieces(board, blackUncrowned, PieceColor.BLACK, false);
-		setPieces(board, blackCrowned, PieceColor.BLACK, true);
-		setPieces(board, redUncrowned, PieceColor.WHITE, false);
-		setPieces(board, redCrowned, PieceColor.WHITE, true);
+		setPieces(board, blackUncrowned, PieceColor.DARK, false);
+		setPieces(board, blackCrowned, PieceColor.DARK, true);
+		setPieces(board, redUncrowned, PieceColor.LIGHT, false);
+		setPieces(board, redCrowned, PieceColor.LIGHT, true);
 	}
 	
 	private void setPieces(GameState board, ArrayList<Integer> indices, PieceColor color, boolean isCrowned) {
@@ -67,7 +67,7 @@ public class BoardInitializerFromFile extends BoardInitializer
 		for (int index = 1; index < 33; index++) {
 			Piece piece = board.getPieceAtPosition(index);
 			if (piece != null) {
-				if (piece.color == PieceColor.BLACK) {
+				if (piece.color == PieceColor.DARK) {
 					if (piece.isCrowned())
 						blackCrowned.add(index);
 					else

@@ -1,7 +1,19 @@
 package hoffnitch.ai.checkers;
 
+import java.awt.Color;
+
 public enum PieceColor {
-	WHITE,
-	BLACK
+	LIGHT {
+	    public Color getGuiColor() {
+	        return Color.WHITE;
+	    }
+	},
+	DARK {
+	    public Color getGuiColor() {
+	        return Color.BLACK;
+	    }
+	}
 	;
+	
+	public abstract Color getGuiColor();
 }

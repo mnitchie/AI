@@ -21,9 +21,9 @@ public class GameState {
 		    RowAndColumn rc = position.getRowAndColumn();
 		    
 		    if (i <= BLACK_START_INDEX) {
-		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.BLACK, position);
+		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.DARK, position);
 		    } else if (i >= WHITE_START_INDEX) {
-		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.WHITE, position);
+		        boardPieces[rc.row][rc.column] = new Piece(PieceColor.LIGHT, position);
 		    } else {
 		        boardPieces[rc.row][rc.column] = null;
 		    }
@@ -94,13 +94,13 @@ public class GameState {
 	        return false;
 	    }
 	    
-	    if (piece.color == PieceColor.WHITE &&
+	    if (piece.color == PieceColor.LIGHT &&
             piece.getPosition().getIndex() >= 0 &&
             piece.getPosition().getIndex() <= 4) {
                 return true;
 	    }
 	    
-	    if (piece.color == PieceColor.BLACK &&
+	    if (piece.color == PieceColor.DARK &&
 	        piece.getPosition().getIndex() >= 29 &&
 	        piece.getPosition().getIndex() <= 32) {
 	        return true;
@@ -170,7 +170,7 @@ public class GameState {
                 Piece piece = boardPieces[i][j];
                 char pieceIndicator = ' ';
                 if (piece != null) {
-                    if (piece.color == PieceColor.BLACK) {
+                    if (piece.color == PieceColor.DARK) {
                         if (piece.isCrowned())
                             pieceIndicator = 'B';
                         else
