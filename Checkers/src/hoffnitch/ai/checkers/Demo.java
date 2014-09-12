@@ -39,7 +39,7 @@ public class Demo
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 			
-			if (isOver(board)) {
+			if (isEliminated(white, board)) {
 				winner = black;
 				break;
 			}
@@ -57,8 +57,8 @@ public class Demo
 			board.doTurn(turn);
 			view.canvas.syncWithGameState();
 			
-			if (isOver(board)) {
-				winner = black;
+			if (isEliminated(black, board)) {
+				winner = white;
 				break;
 			}
 		}
@@ -68,5 +68,9 @@ public class Demo
 	
 	private static boolean isOver(GameState board) {
 		return false;
+	}
+	
+	private static boolean isEliminated(Player player, GameState board) {
+		return board.getPieces(player.color).size() == 0;
 	}
 }

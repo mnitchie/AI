@@ -2,7 +2,9 @@ package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.boardSetup.CheckersScenario;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class GameState {
 	
@@ -117,6 +119,18 @@ public class GameState {
 		
 		if (piece != null)
 			piece.setPosition(position);
+	}
+	
+	public List<Piece> getPieces(PieceColor color) {
+		ArrayList<Piece> pieces = new ArrayList<Piece>();
+		
+		for (int i = 1; i <= NUM_POSITIONS; i++) {
+			Piece piece = getPieceAtPosition(i);
+			if (piece != null && piece.color == color)
+				pieces.add(piece);
+		}
+		
+		return pieces;
 	}
 	
 	public Piece getPieceAtPosition(Position p) {
