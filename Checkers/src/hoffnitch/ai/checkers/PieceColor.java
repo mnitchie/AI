@@ -5,7 +5,7 @@ import java.awt.Color;
 public enum PieceColor {
 	LIGHT {
 	    public Color getGuiColor() {
-	        return Color.WHITE;
+	        return Color.RED;
 	    }
 	},
 	DARK {
