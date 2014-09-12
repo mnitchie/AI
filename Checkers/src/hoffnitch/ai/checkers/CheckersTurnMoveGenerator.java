@@ -42,16 +42,16 @@ public class CheckersTurnMoveGenerator {
     }
     
     /**
-     * Algorithm:
+     * Algorithm: <pre>
      * For each direction
-     *   IF piece can jump in that direction
+     *   IF piece can jump in that direction<br />
      *     Copy gameState and change the copy to reflect how the board would
      *     look after the jump move
      *     add that move to the list of possible moves
      *     execute the same algorithm from the new position with the new gameState
      *   ELSE
      *     IF there were any possible moves
-     *       create a new Turn with piece and the list of moves
+     *       create a new Turn with piece and the list of moves</pre>
      * @param piece The Piece object making the move. Will not change during a recursive call
      * @param position The current Position of the piece. Will change during recursive calls
      * @param gamestate The current game state. Will change to reflect the removal of jumped pieces

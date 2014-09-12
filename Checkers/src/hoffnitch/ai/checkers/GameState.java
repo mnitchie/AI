@@ -83,6 +83,30 @@ public class GameState {
 				current = next;
 			}
 		}
+		
+		if (shouldCrownPiece(turn.piece)) {
+		    turn.piece.setCrowned(true);
+		}
+	}
+	
+	private boolean shouldCrownPiece(Piece piece) {
+	    if (piece.isCrowned()) {
+	        return false;
+	    }
+	    
+	    if (piece.color == PieceColor.WHITE &&
+            piece.getPosition().getIndex() >= 0 &&
+            piece.getPosition().getIndex() <= 4) {
+                return true;
+	    }
+	    
+	    if (piece.color == PieceColor.BLACK &&
+	        piece.getPosition().getIndex() >= 29 &&
+	        piece.getPosition().getIndex() <= 32) {
+	        return true;
+	    }
+	    
+	    return false;
 	}
 	
 	public void setPiece(Piece piece, Position position) {
