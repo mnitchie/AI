@@ -22,6 +22,9 @@ public class CanvasView extends JFrame implements View {
 
 	public static final String LOAD = "Load";
 	public static final String SAVE = "Save";
+	public static final String NEW = "New";
+	public static final String UNDO = "Undo";
+	public static final String REDO = "Redo";
 	
 	public static final int WIDTH	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
 	public static final int HEIGHT	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
@@ -68,9 +71,30 @@ public class CanvasView extends JFrame implements View {
 		JMenu boardMenu = new JMenu("Board");
 		menuBar.add(boardMenu);
 		
+		// new
+		JMenuItem newGame = new JMenuItem(NEW, KeyEvent.VK_N); 
+		newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+		newGame.getAccessibleContext().setAccessibleDescription("Reset board");
+		gameMenu.add(newGame);
+		newGame.addActionListener(listener);
+		
+		// undo
+		JMenuItem undo = new JMenuItem(UNDO, KeyEvent.VK_Z); 
+		undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		undo.getAccessibleContext().setAccessibleDescription("Undo last move");
+		gameMenu.add(undo);
+		undo.addActionListener(listener);
+		
+		// redo
+		JMenuItem redo = new JMenuItem(UNDO, KeyEvent.VK_Y); 
+		redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		redo.getAccessibleContext().setAccessibleDescription("Redo move");
+		gameMenu.add(redo);
+		redo.addActionListener(listener);
+		
 		// load
-		JMenuItem load = new JMenuItem(LOAD, KeyEvent.VK_L); 
-		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
+		JMenuItem load = new JMenuItem(LOAD, KeyEvent.VK_O); 
+		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		load.getAccessibleContext().setAccessibleDescription("Load a board configuration");
 		boardMenu.add(load);
 		load.addActionListener(listener);
