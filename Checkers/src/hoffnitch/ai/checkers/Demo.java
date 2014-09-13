@@ -1,7 +1,9 @@
 package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.ai.RandomBot;
+import hoffnitch.ai.checkers.boardSetup.BoardInitializer;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
+import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 import hoffnitch.ai.checkers.gui.CanvasView;
 import hoffnitch.ai.checkers.gui.GuiPiece;
@@ -265,7 +267,6 @@ public class Demo implements MouseInputListener, ActionListener
 	{
 		JFileChooser fileChooser;
 		int returnValue;
-		System.out.println(e.getActionCommand());
 		
 		switch (e.getActionCommand()) {
 		case CanvasView.SAVE:
@@ -298,6 +299,11 @@ public class Demo implements MouseInputListener, ActionListener
 					System.out.println("Failed to load file");
 				}
 			}
+			break;
+		case CanvasView.NEW:
+			DefaultInitializer initializer = new DefaultInitializer();
+			initializer.setBoard(board);
+			start();
 			break;
 		}	
 	}
