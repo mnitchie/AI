@@ -99,7 +99,7 @@ public class CanvasView extends JFrame implements View {
 					try {
 						initializer.loadFile(file);
 						initializer.setBoard(parent.board);
-						canvas.initializePieces(parent.board);
+						//canvas.initializePieces(parent.board);
 					} catch (IOException e1) {
 						System.out.println("Failed to load file");
 					}

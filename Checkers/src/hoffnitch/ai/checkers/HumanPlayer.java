@@ -12,11 +12,5 @@ public class HumanPlayer extends Player
 		super(name, color);
 		this.view = view;
 	}
-	
-	@Override
-	public Turn getTurn(List<Turn> options)
-	{
-		return view.getTurn(options);
-	}
 
 }

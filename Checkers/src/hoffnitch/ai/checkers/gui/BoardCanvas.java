@@ -22,14 +22,12 @@ import javax.swing.event.MouseInputListener;
 /**
  * Canvas on which the board is drawn
  */
-public class BoardCanvas extends JComponent implements MouseInputListener {
+public class BoardCanvas extends JComponent {
 	private static final long serialVersionUID = 7300683785832599182L;
 	
 	public static final int TILE_SIZE		= 60;
 	public static final Color BOARD_BLACK	= Color.GRAY;
 	public static final Color BOARD_WHITE	= Color.WHITE;
-	public static final Color PIECE_BLACK	= Color.BLACK;
-	public static final Color PIECE_RED		= Color.RED;
 	
 	private GameState board;
 	private GuiPiece grabbedPiece;
@@ -44,78 +42,73 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	private List<Turn> possibleTurns;
 	
 	public BoardCanvas(GameState board) {
-		guiPieces = new LinkedList<GuiPiece>();
-		pieceMap = new HashMap<Piece, GuiPiece>();
-		turnIterators = new LinkedList<Iterator<Position>>();
-		
-		this.board = board;
-		
-		initializePieces(board);
-		addMouseListener(this);
-		addMouseMotionListener(this);
+//		guiPieces = new LinkedList<GuiPiece>();
+//		pieceMap = new HashMap<Piece, GuiPiece>();
+//		turnIterators = new LinkedList<Iterator<Position>>();
+//		
+//		this.board = board;
+//		
+//		//initializePieces(board);
 	}
 	
-	public Turn getTurn(List<Turn> possibleTurns) {
-		this.possibleTurns = possibleTurns;
-		
-		resetGetTurn();
-		canMove = true;
-		
-		// block until newTurn is set
-		while (newTurn == null);
-		
-		return newTurn;
-	}
+//	public Turn getTurn(List<Turn> possibleTurns) {
+//		this.possibleTurns = possibleTurns;
+//		
+//		resetGetTurn();
+//		canMove = true;
+//		
+//		// block until newTurn is set
+//		while (newTurn == null);
+//		
+//		return newTurn;
+//	}
 	
-	private void resetGetTurn() {
-		newTurn = null;
-		turnBeingBuilt = null;
-		grabbedPiece = null;
-		turnBeingBuilt = null;
-	}
-	
-	private void setBaseIterators(Piece piece) {
-		turnIterators.clear();
-		for (Turn turn: possibleTurns)
-			if (turn.piece == piece) {
-				Iterator<Position> iterator = turn.iterator();
-				turnIterators.add(iterator);
-				iterator.next();
-			}
-	}
-	
-	private void filterItertors(Position position) {
-		for (int i = turnIterators.size() - 1; i >= 0; i--) {
-			Iterator<Position> iterator = turnIterators.get(i);
-			Position next = iterator.next();
-			
-			if (!(next.equals(position)))
-				turnIterators.remove(i);
-		}
-	}
+//	private void resetGetTurn() {
+//		newTurn = null;
+//		turnBeingBuilt = null;
+//		grabbedPiece = null;
+//		turnBeingBuilt = null;
+//	}
+//	
+//	
+//	
+//	private void filterItertors(Position position) {
+//		for (int i = turnIterators.size() - 1; i >= 0; i--) {
+//			Iterator<Position> iterator = turnIterators.get(i);
+//			Position next = iterator.next();
+//			
+//			if (!(next.equals(position)))
+//				turnIterators.remove(i);
+//		}
+//	}
 	
 	/**
 	 * Generate a guiPieces based on pieces in gameState
 	 * @param board GameState to get pieces from
 	 */
-	public void initializePieces(GameState board) {
-		guiPieces.clear();
-		pieceMap.clear();
-		
-		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
-			Piece piece = board.getPieceAtPosition(new Position(i));
-			if (piece != null) {
-				GuiPiece guiPiece = new GuiPiece(piece, TILE_SIZE);
-				guiPieces.add(guiPiece);
-				pieceMap.put(piece, guiPiece);
-			}
-		}
-		repaint();
-	}
+//	public void initializePieces(GameState board) {
+//		guiPieces.clear();
+//		pieceMap.clear();
+//		
+//		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
+//			Piece piece = board.getPieceAtPosition(new Position(i));
+//			if (piece != null) {
+//				GuiPiece guiPiece = new GuiPiece(piece, TILE_SIZE);
+//				guiPieces.add(guiPiece);
+//				pieceMap.put(piece, guiPiece);
+//			}
+//		}
+//		repaint();
+//	}
 	
-	public void syncWithGameState() {
-		for (GuiPiece piece: guiPieces)
-			piece.setCoordinates();
+//	public void syncWithGameState() {
+//		for (GuiPiece piece: guiPieces)
+//			piece.setCoordinates();
+//		repaint();
+//	}
+	
+	public void repaint(List<GuiPiece> guiPieces) {
+		this.guiPieces = guiPieces;
 		repaint();
 	}
 	
@@ -175,84 +168,26 @@ public class BoardCanvas extends JComponent implements MouseInputListener {
 	}
 	
 	/**
-	 * Handler for mousePress.
-	 * Picks up a piece
-	 * @param e MouseEvent
+	 * Get the position corresponding to pixel coordinates
+	 * @param x x-coordinate (in pixels)
+	 * @param y y-coordinate (in pixels)
+	 * @return Position at given coordinates
 	 */
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if (canMove) {
-			int row = e.getY() / TILE_SIZE;
-			int column = e.getX() / TILE_SIZE;
+	public Position getPosition(int x, int y) {
+		int row = y / TILE_SIZE;
+		int column = x / TILE_SIZE;
+		
+		Position position = null;
+		
+		if (CheckerBoardLocationLookup.isValidPosition(row, column))
+			position = new Position(row, column);
 			
-			if (CheckerBoardLocationLookup.isValidPosition(row, column)) {
-				Position position = new Position(row, column);
-				
-				// if no grabbed piece, select the piece
-				if (grabbedPiece == null) {
-					Piece piece = board.getPieceAtPosition(position);
-					if (piece != null) {
-						setBaseIterators(piece);
-						
-						if (turnIterators.size() > 0) {
-							grabbedPiece = pieceMap.get(piece);
-							grabbedPiece.setMoving(true);
-							grabOffset = new Point(e.getX() % TILE_SIZE, e.getY() % TILE_SIZE);
-							turnBeingBuilt = new Turn(grabbedPiece.piece, position);
-						}
-					}
-				}
-				
-				// otherwise, selecting new position for piece
-				else {
-					filterItertors(position);
-					
-					// if no errors
-					if (turnIterators.size() > 0) {
-						
-						turnBeingBuilt.addMove(position);
-						
-						// if we got to an end point, we are done
-						if (turnIterators.size() == 1 && !turnIterators.get(0).hasNext()) {
-							
-							newTurn = turnBeingBuilt;
-							grabbedPiece = null;
-							grabOffset = null;
-							canMove = false;
-						}
-						
-					}
-					
-					// if we went to a bad location start over
-					else {
-						resetGetTurn();
-						repaint();
-					}
-					
-				}
-			}
-		}
+		return position;
 	}
 	
-	/**
-	 * Handler for dragging mouse.
-	 * Moves piece if one is grabbed.
-	 * @param e MouseEvent
-	 */
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		if (grabbedPiece != null) {
-			grabbedPiece.setCoordinates(new Point(e.getX() - grabOffset.x, e.getY() - grabOffset.y));
-		}
-		repaint();
+	public Point getPositionOffset(int x, int y) {
+		return new Point(x % TILE_SIZE, y % TILE_SIZE);
 	}
 	
-	/********************************************************
-	/** the stuff below is for MouseListener, but not used **
-	/*******************************************************/ 
-	@Override public void mouseReleased(MouseEvent e)  { }
-	@Override public void mouseClicked(MouseEvent e)  { }		
-	@Override public void mouseEntered(MouseEvent e) { }
-	@Override public void mouseExited(MouseEvent e) { }
-	@Override public void mouseDragged(MouseEvent e) { }
+	
 }

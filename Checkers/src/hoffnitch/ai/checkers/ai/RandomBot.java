@@ -1,12 +1,12 @@
 package hoffnitch.ai.checkers.ai;
 
-import java.util.List;
-
+import hoffnitch.ai.checkers.AIPlayer;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Player;
 import hoffnitch.ai.checkers.Turn;
 
-public class RandomBot extends Player {
+import java.util.List;
+
+public class RandomBot extends AIPlayer {
 
 	public RandomBot(String name, PieceColor color) {
 		super(name, color);

@@ -12,6 +12,4 @@ public abstract class Player
 		this.color = color;
 	}
 	
-	public abstract Turn getTurn(List<Turn> options);
-	
 }
