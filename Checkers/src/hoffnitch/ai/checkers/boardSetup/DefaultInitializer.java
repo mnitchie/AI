@@ -13,6 +13,8 @@ public class DefaultInitializer extends BoardInitializer
 	 */
 	public void setBoard(GameState board) {
 
+		clearBoard(board);
+		
 		// set black pieces
 		for (int positionIndex = 1; positionIndex < 13; positionIndex++) {
 			Position position = new Position(positionIndex);
