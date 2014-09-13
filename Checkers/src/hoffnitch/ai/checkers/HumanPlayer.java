@@ -2,8 +2,6 @@ package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 
-import java.util.List;
-
 public class HumanPlayer extends Player
 {
 	BoardCanvas view;

@@ -1,7 +1,6 @@
 package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.GameState;
-import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.checkers.View;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 
@@ -41,7 +40,7 @@ public class CanvasView extends JFrame implements View {
 		this.setLayout(new BorderLayout());
 		
 		this.board = initialBoard;
-		canvas = new BoardCanvas(initialBoard);
+		canvas = new BoardCanvas();
 		add(canvas, BorderLayout.CENTER);
 		
 		makeMenu();
@@ -62,20 +61,6 @@ public class CanvasView extends JFrame implements View {
 	    add(scrollPane, BorderLayout.PAGE_END);
 	}
 	
-	@Override
-	public Turn getTurn()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void updateBoard(Turn turn)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void makeMenu() {
 		// menu bar
 		menuBar = new JMenuBar();

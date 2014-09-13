@@ -117,10 +117,6 @@ public class Demo implements MouseInputListener
 		giveTurn(black);
 	}
 	
-	private static boolean isOver(GameState board) {
-		return false;
-	}
-	
 	private static boolean isEliminated(Player player, GameState board) {
 		return board.getPieces(player.color).size() == 0;
 	}

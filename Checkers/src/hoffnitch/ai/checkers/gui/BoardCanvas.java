@@ -2,22 +2,14 @@ package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
-import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.Position;
-import hoffnitch.ai.checkers.Turn;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
-import javax.swing.event.MouseInputListener;
 
 /**
  * Canvas on which the board is drawn
@@ -29,83 +21,11 @@ public class BoardCanvas extends JComponent {
 	public static final Color BOARD_BLACK	= Color.GRAY;
 	public static final Color BOARD_WHITE	= Color.WHITE;
 	
-	private GameState board;
-	private GuiPiece grabbedPiece;
-	private Point grabOffset;
 	private List<GuiPiece> guiPieces;
-	private Map<Piece, GuiPiece> pieceMap;
-	private boolean canMove;
-
-	private volatile Turn newTurn;
-	private Turn turnBeingBuilt;
-	private List<Iterator<Position>> turnIterators;
-	private List<Turn> possibleTurns;
 	
-	public BoardCanvas(GameState board) {
-//		guiPieces = new LinkedList<GuiPiece>();
-//		pieceMap = new HashMap<Piece, GuiPiece>();
-//		turnIterators = new LinkedList<Iterator<Position>>();
-//		
-//		this.board = board;
-//		
-//		//initializePieces(board);
+	public BoardCanvas() {
+		
 	}
-	
-//	public Turn getTurn(List<Turn> possibleTurns) {
-//		this.possibleTurns = possibleTurns;
-//		
-//		resetGetTurn();
-//		canMove = true;
-//		
-//		// block until newTurn is set
-//		while (newTurn == null);
-//		
-//		return newTurn;
-//	}
-	
-//	private void resetGetTurn() {
-//		newTurn = null;
-//		turnBeingBuilt = null;
-//		grabbedPiece = null;
-//		turnBeingBuilt = null;
-//	}
-//	
-//	
-//	
-//	private void filterItertors(Position position) {
-//		for (int i = turnIterators.size() - 1; i >= 0; i--) {
-//			Iterator<Position> iterator = turnIterators.get(i);
-//			Position next = iterator.next();
-//			
-//			if (!(next.equals(position)))
-//				turnIterators.remove(i);
-//		}
-//	}
-	
-	/**
-	 * Generate a guiPieces based on pieces in gameState
-	 * @param board GameState to get pieces from
-	 */
-//	public void initializePieces(GameState board) {
-//		guiPieces.clear();
-//		pieceMap.clear();
-//		
-//		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
-//			Piece piece = board.getPieceAtPosition(new Position(i));
-//			if (piece != null) {
-//				GuiPiece guiPiece = new GuiPiece(piece, TILE_SIZE);
-//				guiPieces.add(guiPiece);
-//				pieceMap.put(piece, guiPiece);
-//			}
-//		}
-//		repaint();
-//	}
-	
-//	public void syncWithGameState() {
-//		for (GuiPiece piece: guiPieces)
-//			piece.setCoordinates();
-//		repaint();
-//	}
 	
 	public void repaint(List<GuiPiece> guiPieces) {
 		this.guiPieces = guiPieces;
@@ -188,6 +108,5 @@ public class BoardCanvas extends JComponent {
 	public Point getPositionOffset(int x, int y) {
 		return new Point(x % TILE_SIZE, y % TILE_SIZE);
 	}
-	
 	
 }

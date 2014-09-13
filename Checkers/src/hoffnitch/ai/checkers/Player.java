@@ -1,7 +1,5 @@
 package hoffnitch.ai.checkers;
 
-import java.util.List;
-
 public abstract class Player
 {
 	public final String name;
