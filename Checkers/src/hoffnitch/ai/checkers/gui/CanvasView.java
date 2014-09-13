@@ -23,23 +23,27 @@ import javax.swing.KeyStroke;
 
 public class CanvasView extends JFrame implements View {
 	private static final long serialVersionUID = -5448930846329842670L;
+
+	public static final String LOAD = "Load";
+	public static final String SAVE = "Save";
 	
 	public static final int WIDTH	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
 	public static final int HEIGHT	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
 	
 	private JMenuBar menuBar;
 	private JMenu menu;
+	private ActionListener listener;
 	
 	public final BoardCanvas canvas;
 	public final JTextArea textArea;
-	private GameState board;
 	
-	public CanvasView(String title, GameState initialBoard) {
+	public CanvasView(String title, ActionListener listener) {
 		super(title);
+		
+		this.listener = listener;
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		
-		this.board = initialBoard;
 		canvas = new BoardCanvas();
 		add(canvas, BorderLayout.CENTER);
 		
@@ -70,55 +74,24 @@ public class CanvasView extends JFrame implements View {
 		final CanvasView parent = this;
 		
 		// load
-		JMenuItem load = new JMenuItem("Load", KeyEvent.VK_L); 
+		JMenuItem load = new JMenuItem(LOAD, KeyEvent.VK_L); 
 		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.getAccessibleContext().setAccessibleDescription("Load a board configuration");
-		load.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser("data");
-				int returnValue = fileChooser.showOpenDialog(parent);
-				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					BoardInitializerFromFile initializer = new BoardInitializerFromFile();
-					try {
-						initializer.loadFile(file);
-						initializer.setBoard(parent.board);
-						//canvas.initializePieces(parent.board);
-					} catch (IOException e1) {
-						System.out.println("Failed to load file");
-					}
-				}
-			}
-		});
 		menu.add(load);
+		load.addActionListener(listener);
 		
 		// save
-		JMenuItem save = new JMenuItem("Save", KeyEvent.VK_S); 
+		JMenuItem save = new JMenuItem(SAVE, KeyEvent.VK_S); 
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		save.getAccessibleContext().setAccessibleDescription("Save a board configuration");
-		save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser("data");
-				int returnValue = fileChooser.showSaveDialog(parent);
-				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					BoardInitializerFromFile initializer = new BoardInitializerFromFile();
-					try {
-						initializer.getBoard(parent.board);
-						initializer.saveFile(file);
-					} catch (IOException e1) {
-						System.out.println("Failed to save file");
-					}
-				}
-			}
-		});
 		menu.add(save);
+		save.addActionListener(listener);
 		
 		setJMenuBar(menuBar);
 	}
 	
-	
+	public JMenu getMenu() {
+		return menu;
+	}
 	
 }

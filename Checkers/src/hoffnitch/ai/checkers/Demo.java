@@ -1,22 +1,27 @@
 package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.ai.RandomBot;
+import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 import hoffnitch.ai.checkers.gui.CanvasView;
 import hoffnitch.ai.checkers.gui.GuiPiece;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JFileChooser;
 import javax.swing.event.MouseInputListener;
 
-
-public class Demo implements MouseInputListener
+public class Demo implements MouseInputListener, ActionListener
 {
 	private GameState board;
 	private CheckersTurnMoveGenerator moveGenerator;
@@ -50,7 +55,7 @@ public class Demo implements MouseInputListener
 		
 		board = new GameState();
 		moveGenerator = new CheckersTurnMoveGenerator(board);
-		view = new CanvasView("Checkers", board);
+		view = new CanvasView("Checkers", this);
 		
 		view.canvas.addMouseListener(this);
 		view.canvas.addMouseMotionListener(this);
@@ -73,10 +78,8 @@ public class Demo implements MouseInputListener
 		
 		else {
 			List<Turn> validTurns = moveGenerator.getMovesForTurn(player.color);
-			
 			if (validTurns.size() == 0)
 				endGame(getOpponent(player));
-			
 			else {
 				canMove = false;
 				
@@ -223,6 +226,7 @@ public class Demo implements MouseInputListener
 					// if we went to a bad location start over
 					else {
 						resetTurn();
+						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
 					}
 					
@@ -252,4 +256,49 @@ public class Demo implements MouseInputListener
 	@Override public void mouseEntered(MouseEvent e) { }
 	@Override public void mouseExited(MouseEvent e) { }
 	@Override public void mouseDragged(MouseEvent e) { }
+
+	/**
+	 * Listener for selecting menu items
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		JFileChooser fileChooser;
+		int returnValue;
+		System.out.println(e.getActionCommand());
+		
+		switch (e.getActionCommand()) {
+		case CanvasView.SAVE:
+			fileChooser = new JFileChooser("data");
+			returnValue = fileChooser.showSaveDialog(view);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				BoardInitializerFromFile initializer = new BoardInitializerFromFile();
+				try {
+					initializer.getBoard(board);
+					initializer.saveFile(file);
+				} catch (IOException e1) {
+					System.out.println("Failed to save file");
+				}
+			}
+			break;
+		case CanvasView.LOAD:
+			fileChooser = new JFileChooser("data");
+			returnValue = fileChooser.showOpenDialog(view);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				BoardInitializerFromFile initializer = new BoardInitializerFromFile();
+				try {
+					initializer.loadFile(file);
+					initializer.setBoard(board);
+					initializePieces(board);
+					// TODO: save/load color of current player
+					giveTurn(white);
+				} catch (IOException e1) {
+					System.out.println("Failed to load file");
+				}
+			}
+			break;
+		}	
+	}
 }
