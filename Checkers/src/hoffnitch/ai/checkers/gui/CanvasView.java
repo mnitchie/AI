@@ -2,17 +2,13 @@ package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.View;
-import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -31,7 +27,6 @@ public class CanvasView extends JFrame implements View {
 	public static final int HEIGHT	= GameState.WIDTH * BoardCanvas.TILE_SIZE;
 	
 	private JMenuBar menuBar;
-	private JMenu menu;
 	private ActionListener listener;
 	
 	public final BoardCanvas canvas;
@@ -66,32 +61,28 @@ public class CanvasView extends JFrame implements View {
 	}
 	
 	private void makeMenu() {
-		// menu bar
-		menuBar = new JMenuBar();
-		menu = new JMenu("Board");
-		menuBar.add(menu);
 		
-		final CanvasView parent = this;
+		menuBar = new JMenuBar();
+		JMenu gameMenu = new JMenu("Game");
+		menuBar.add(gameMenu);
+		JMenu boardMenu = new JMenu("Board");
+		menuBar.add(boardMenu);
 		
 		// load
 		JMenuItem load = new JMenuItem(LOAD, KeyEvent.VK_L); 
 		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, ActionEvent.CTRL_MASK));
 		load.getAccessibleContext().setAccessibleDescription("Load a board configuration");
-		menu.add(load);
+		boardMenu.add(load);
 		load.addActionListener(listener);
 		
 		// save
 		JMenuItem save = new JMenuItem(SAVE, KeyEvent.VK_S); 
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		save.getAccessibleContext().setAccessibleDescription("Save a board configuration");
-		menu.add(save);
+		boardMenu.add(save);
 		save.addActionListener(listener);
 		
 		setJMenuBar(menuBar);
-	}
-	
-	public JMenu getMenu() {
-		return menu;
 	}
 	
 }
