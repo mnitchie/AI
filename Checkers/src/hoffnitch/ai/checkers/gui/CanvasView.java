@@ -86,7 +86,7 @@ public class CanvasView extends JFrame implements View {
 		undo.addActionListener(listener);
 		
 		// redo
-		JMenuItem redo = new JMenuItem(UNDO, KeyEvent.VK_Y); 
+		JMenuItem redo = new JMenuItem(REDO, KeyEvent.VK_Y); 
 		redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		redo.getAccessibleContext().setAccessibleDescription("Redo move");
 		gameMenu.add(redo);
