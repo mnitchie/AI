@@ -42,6 +42,7 @@ public class Demo implements MouseInputListener, ActionListener
 	private List<Iterator<Position>> turnIterators;
 	private List<Turn> possibleTurns;
 	private boolean canMove;
+	private UndoManager undoManager;
 	
 	public static void main(String[] args) {
 		Demo demo = new Demo();
@@ -78,11 +79,12 @@ public class Demo implements MouseInputListener, ActionListener
 			endGame(getOpponent(player));
 		
 		else {
-			List<Turn> validTurns = moveGenerator.getMovesForTurn(player.color);
+			List<Turn> validTurns = moveGenerator.getMovesForTurn(player.color, board);
 			if (validTurns.size() == 0)
 				endGame(getOpponent(player));
 			else {
 				canMove = false;
+				grabbedPiece = null;
 				
 				// if ai, turn will be determined now
 				if (player instanceof AIPlayer)
@@ -105,6 +107,7 @@ public class Demo implements MouseInputListener, ActionListener
 		view.textArea.append(turn.toString() + "\n");
 		
 		board.doTurn(turn);
+		undoManager.addBoard(board);
 		syncGuiWithGameState();
 		giveTurn(getOpponent(currentPlayer));
 	}
@@ -116,9 +119,15 @@ public class Demo implements MouseInputListener, ActionListener
 			return white;
 	}
 	
-	public void start() {
+	public void start(Player player) {
 		initializePieces(board);
-		giveTurn(black);
+		undoManager = new UndoManager();
+		undoManager.addBoard(board);
+		giveTurn(player);
+	}
+	
+	public void start() {
+		start(black);
 	}
 	
 	private static boolean isEliminated(Player player, GameState board) {
@@ -282,6 +291,7 @@ public class Demo implements MouseInputListener, ActionListener
 				}
 			}
 			break;
+			
 		case CanvasView.LOAD:
 			fileChooser = new JFileChooser("data");
 			returnValue = fileChooser.showOpenDialog(view);
@@ -291,18 +301,44 @@ public class Demo implements MouseInputListener, ActionListener
 				try {
 					initializer.loadFile(file);
 					initializer.setBoard(board);
-					initializePieces(board);
 					// TODO: save/load color of current player
-					giveTurn(white);
+					start(white);
 				} catch (IOException e1) {
 					System.out.println("Failed to load file");
 				}
 			}
 			break;
+			
 		case CanvasView.NEW:
 			DefaultInitializer initializer = new DefaultInitializer();
 			initializer.setBoard(board);
 			start();
+			break;
+			
+		case CanvasView.UNDO:
+			if (undoManager.hasNextUndo()) {
+				board = undoManager.undo();
+				currentPlayer = getOpponent(currentPlayer);
+				
+				// go another step back if opponent is ai
+				if (currentPlayer instanceof AIPlayer && undoManager.hasNextUndo()) {
+					board = undoManager.undo();
+					currentPlayer = getOpponent(currentPlayer);
+				}
+				
+				initializePieces(board);
+				giveTurn(currentPlayer);
+			}
+			break;
+			
+		case CanvasView.REDO:
+			if (undoManager.hasNextRedo()) {
+				board = undoManager.redo();
+				currentPlayer = getOpponent(currentPlayer);
+				
+				initializePieces(board);
+				giveTurn(currentPlayer);
+			}
 			break;
 		}	
 	}

@@ -10,10 +10,12 @@ public class CheckersTurnMoveGenerator {
     private List<Turn> adjacentMovesForTurn;
     
     public CheckersTurnMoveGenerator(GameState gameState) {
-        this.gameState = gameState;
+        //this.gameState = gameState;
     }
     
-    public List<Turn> getMovesForTurn(PieceColor pieceColor) {
+    public List<Turn> getMovesForTurn(PieceColor pieceColor, GameState board) {
+    	gameState = board;
+    	
         jumpMovesForTurn = new ArrayList<Turn>();
         adjacentMovesForTurn = new ArrayList<Turn>();
         
