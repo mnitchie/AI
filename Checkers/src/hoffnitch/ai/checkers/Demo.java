@@ -3,6 +3,7 @@ package hoffnitch.ai.checkers;
 import hoffnitch.ai.checkers.ai.RandomBot;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
+import hoffnitch.ai.checkers.gui.Arrow;
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 import hoffnitch.ai.checkers.gui.CanvasView;
 import hoffnitch.ai.checkers.gui.GuiPiece;
@@ -14,7 +15,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	// Turn-related stuff
 	private Turn turnBeingBuilt;
-	private List<Iterator<Position>> turnIterators;
+	private List<Turn> filteredTurns;
 	private List<Turn> possibleTurns;
 	private boolean canMove;
 	private UndoManager undoManager;
@@ -58,7 +58,7 @@ public class Demo implements MouseInputListener, ActionListener
 
 		guiPieces = new LinkedList<GuiPiece>();
 		pieceMap = new HashMap<Piece, GuiPiece>();
-		turnIterators = new LinkedList<Iterator<Position>>();
+		filteredTurns = new LinkedList<Turn>();
 		
 		board = new GameState();
 		moveGenerator = new CheckersTurnMoveGenerator();
@@ -148,22 +148,21 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 	
 	private void setBaseIterators(Piece piece) {
-		turnIterators.clear();
+		filteredTurns.clear();
 		for (Turn turn: possibleTurns)
 			if (turn.piece == piece) {
-				Iterator<Position> iterator = turn.iterator();
-				turnIterators.add(iterator);
-				iterator.next();
+				turn.resetIterator();
+				filteredTurns.add(turn);
 			}
 	}
 	
 	private void filterItertors(Position position) {
-		for (int i = turnIterators.size() - 1; i >= 0; i--) {
-			Iterator<Position> iterator = turnIterators.get(i);
-			Position next = iterator.next();
+		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
+			Turn turn = filteredTurns.get(i);
+			Position next = turn.nextMove();
 			
 			if (!(next.equals(position)))
-				turnIterators.remove(i);
+				filteredTurns.remove(i);
 		}
 	}
 
@@ -192,6 +191,22 @@ public class Demo implements MouseInputListener, ActionListener
 		view.canvas.repaint(guiPieces);
 	}
 	
+	public void drawArrows()
+	{
+		List<Arrow> arrows = new LinkedList<Arrow>();
+		for (Turn turn: filteredTurns)
+		{
+			Point current = view.canvas.getCoordinates(turn.getCurrentPosition());
+			Point next = view.canvas.getCoordinates(turn.peekNextMove());
+			
+			double angle = Math.atan2(next.y - current.y, next.x - current.x);
+			
+			Point arrowPosition = new Point(current.x + 30, current.y + 30);
+			arrows.add(new Arrow(arrowPosition, angle));
+		}
+		view.canvas.setArrows(arrows);
+	}
+	
 	/**
 	 * Handler for mousePress.
 	 * Picks up a piece
@@ -211,8 +226,9 @@ public class Demo implements MouseInputListener, ActionListener
 					Piece piece = board.getPieceAtPosition(position);
 					if (piece != null) {
 						setBaseIterators(piece);
+						drawArrows();
 						
-						if (turnIterators.size() > 0) {
+						if (filteredTurns.size() > 0) {
 							grabbedPiece = pieceMap.get(piece);
 							grabbedPiece.setMoving(true);
 							grabOffset = view.canvas.getPositionOffset(e.getX(), e.getY());
@@ -226,18 +242,21 @@ public class Demo implements MouseInputListener, ActionListener
 					filterItertors(position);
 					
 					// if no errors
-					if (turnIterators.size() > 0) {
+					if (filteredTurns.size() > 0) {
 						
 						turnBeingBuilt.addMove(position);
 						
 						// if we got to an end point, we are done
-						if (turnIterators.size() == 1 && !turnIterators.get(0).hasNext()) {
+						if (filteredTurns.size() == 1 && !filteredTurns.get(0).hasNextMove()) {
 							
 							grabbedPiece = null;
 							grabOffset = null;
+							filteredTurns.clear();
+							drawArrows();
 							doTurn(turnBeingBuilt);
 						}
-						
+						else
+							drawArrows();
 					}
 					
 					// if we went to a bad location start over
@@ -245,6 +264,7 @@ public class Demo implements MouseInputListener, ActionListener
 						resetTurn();
 						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
+						drawArrows();
 					}
 					
 				}
@@ -357,7 +377,6 @@ public class Demo implements MouseInputListener, ActionListener
 	private class TurnAnimator implements ActionListener
 	{
 		private static final double distancePerFrame = 10.0;
-		private Iterator<Position> positions;
 		private Turn turn;
 		private Timer timer;
 		private Point goalPoint;
@@ -384,8 +403,8 @@ public class Demo implements MouseInputListener, ActionListener
 				movingPiece.setCoordinates(goalPoint);
 				
 				// if more positions in turn, get the next one
-				if (positions.hasNext())
-					goalPoint = view.canvas.getCoordinates(positions.next());
+				if (turn.hasNextMove())
+					goalPoint = view.canvas.getCoordinates(turn.nextMove());
 				
 				// else end the animation and call doMove
 				else
@@ -414,9 +433,8 @@ public class Demo implements MouseInputListener, ActionListener
 		public void animateTurn(Turn turn)
 		{
 			this.turn = turn;
-			positions = turn.iterator();
 			movingPiece = pieceMap.get(turn.piece);
-			goalPoint = view.canvas.getCoordinates(positions.next());
+			goalPoint = view.canvas.getCoordinates(turn.nextMove());
 			timer.start();
 		}
 		
