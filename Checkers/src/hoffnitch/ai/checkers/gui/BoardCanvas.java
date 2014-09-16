@@ -3,6 +3,7 @@ package hoffnitch.ai.checkers.gui;
 import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.checkers.RowAndColumn;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -103,6 +104,17 @@ public class BoardCanvas extends JComponent {
 			position = new Position(row, column);
 			
 		return position;
+	}
+	
+	/**
+	 * Get the coordinates of a position
+	 * @param position Position
+	 * @return Coordinates
+	 */
+	public Point getCoordinate(Position position)
+	{
+		RowAndColumn rowAndColumn = position.getRowAndColumn();
+		return new Point(rowAndColumn.column * TILE_SIZE, rowAndColumn.row * TILE_SIZE);
 	}
 	
 	public Point getPositionOffset(int x, int y) {
