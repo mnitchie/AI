@@ -9,9 +9,7 @@ public class CheckersTurnMoveGenerator {
     private List<Turn> jumpMovesForTurn;
     private List<Turn> adjacentMovesForTurn;
     
-    public CheckersTurnMoveGenerator(GameState gameState) {
-        //this.gameState = gameState;
-    }
+    public CheckersTurnMoveGenerator() {}
     
     public List<Turn> getMovesForTurn(PieceColor pieceColor, GameState board) {
     	gameState = board;
