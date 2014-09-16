@@ -111,7 +111,7 @@ public class BoardCanvas extends JComponent {
 	 * @param position Position
 	 * @return Coordinates
 	 */
-	public Point getCoordinate(Position position)
+	public Point getCoordinates(Position position)
 	{
 		RowAndColumn rowAndColumn = position.getRowAndColumn();
 		return new Point(rowAndColumn.column * TILE_SIZE, rowAndColumn.row * TILE_SIZE);
