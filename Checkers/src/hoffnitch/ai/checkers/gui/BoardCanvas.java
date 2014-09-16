@@ -21,8 +21,10 @@ public class BoardCanvas extends JComponent {
 	public static final int TILE_SIZE		= 60;
 	public static final Color BOARD_BLACK	= Color.GRAY;
 	public static final Color BOARD_WHITE	= Color.WHITE;
+	public static final Color ARROW_COLOR	= Color.GREEN;
 	
 	private List<GuiPiece> guiPieces;
+	private List<Arrow> arrows;
 	
 	public BoardCanvas() {
 		
@@ -30,6 +32,12 @@ public class BoardCanvas extends JComponent {
 	
 	public void repaint(List<GuiPiece> guiPieces) {
 		this.guiPieces = guiPieces;
+		repaint();
+	}
+	
+	public void setArrows(List<Arrow> arrows)
+	{
+		this.arrows = arrows;
 		repaint();
 	}
 	
@@ -44,8 +52,14 @@ public class BoardCanvas extends JComponent {
 		
 		for (GuiPiece piece: guiPieces)
 			drawPiece(g, piece);
+		
+		// draw arrows
+		g.setColor(ARROW_COLOR);
+		if (arrows != null)
+			for (Arrow arrow: arrows)
+				g.fillPolygon(arrow.toPolygon());
 	}
-
+	
 	/**
 	 * Draw the tiles of the board
 	 * @param g

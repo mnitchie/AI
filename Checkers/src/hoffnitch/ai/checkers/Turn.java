@@ -8,6 +8,9 @@ public class Turn {
 	
 	public final Piece piece;
 	private LinkedList<Position> moves = new LinkedList<Position>();
+	private Iterator<Position> iterator;
+	private Position currentPosition;
+	private Position nextPosition;
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
@@ -39,19 +42,48 @@ public class Turn {
 	    for (Position p : positions) {
 	        moves.offer(p); // This might be backwards.
 	    }
+	    resetIterator();
 	}
 
-	public Iterator<Position> iterator() {
-		return moves.iterator();
+//	public Iterator<Position> iterator() {
+//		return moves.iterator();
+//	}
+	
+	public void resetIterator()
+	{
+		iterator = moves.iterator();
+		currentPosition = iterator.next();
+		nextPosition = iterator.next();
 	}
 	
 	public Turn addMove(Position space) {
 		moves.offer(space);
+		if (moves.size() > 1)
+			resetIterator();
 		return this;
 	}
 	
-	public Position getNextMove() {
-		return moves.poll();
+	public Position getCurrentPosition() {
+		return currentPosition;
+	}
+	
+	public Position peekNextMove() {
+		return nextPosition;
+	}
+	
+	public boolean hasNextMove() {
+		return nextPosition != null;
+	}
+	
+	public Position nextMove() {
+		currentPosition = nextPosition;
+		
+		if (iterator.hasNext())
+			nextPosition = iterator.next();
+		else
+			nextPosition = null;
+		
+		return currentPosition;
 	}
 	
 	public int numPositions() {
