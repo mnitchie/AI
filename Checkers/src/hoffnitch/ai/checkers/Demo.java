@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
+import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 public class Demo implements MouseInputListener, ActionListener
@@ -36,6 +37,10 @@ public class Demo implements MouseInputListener, ActionListener
 	private Point grabOffset;
 	private List<GuiPiece> guiPieces;
 	private Map<Piece, GuiPiece> pieceMap;
+	
+	// animation stuff
+	private int fps = 60;
+	private TurnAnimator turnAnimator;
 	
 	// Turn-related stuff
 	private Turn turnBeingBuilt;
@@ -56,11 +61,13 @@ public class Demo implements MouseInputListener, ActionListener
 		turnIterators = new LinkedList<Iterator<Position>>();
 		
 		board = new GameState();
-		moveGenerator = new CheckersTurnMoveGenerator(board);
+		moveGenerator = new CheckersTurnMoveGenerator();
 		view = new CanvasView("Checkers", this);
 		
 		view.canvas.addMouseListener(this);
 		view.canvas.addMouseMotionListener(this);
+		
+		turnAnimator = new TurnAnimator();
 		
 		// human player
 		white = new HumanPlayer("Mike", PieceColor.LIGHT, view.canvas);
@@ -88,7 +95,7 @@ public class Demo implements MouseInputListener, ActionListener
 				
 				// if ai, turn will be determined now
 				if (player instanceof AIPlayer)
-					doTurn(((AIPlayer) player).getTurn(validTurns));
+					turnAnimator.animateTurn(((AIPlayer) player).getTurn(validTurns));
 				
 				// if human, enable moving pieces and wait for event to call doTurn
 				else {
@@ -341,5 +348,86 @@ public class Demo implements MouseInputListener, ActionListener
 			}
 			break;
 		}	
+	}
+	
+	/**
+	 * Turn animator
+	 * Animates a turn, and then calls Demo.doTurn()
+	 */
+	private class TurnAnimator implements ActionListener
+	{
+		private static final double distancePerFrame = 10.0;
+		private Iterator<Position> positions;
+		private Turn turn;
+		private Timer timer;
+		private Point goalPoint;
+		private GuiPiece movingPiece;
+		
+		public TurnAnimator()
+		{
+			timer = new Timer(1000 / fps, this);
+		}
+		
+		/**
+		 * Animate frame.
+		 * Triggered by timer
+		 * @param e
+		 */
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			double dist = getDistance(movingPiece.getCoordinates(), goalPoint);
+			
+			if (dist < distancePerFrame)
+			{
+				// put piece in place
+				movingPiece.setCoordinates(goalPoint);
+				
+				// if more positions in turn, get the next one
+				if (positions.hasNext())
+					goalPoint = view.canvas.getCoordinates(positions.next());
+				
+				// else end the animation and call doMove
+				else
+				{
+					timer.stop();
+					doTurn(turn);
+				}
+			}
+			else
+			{
+				double theta = getAngle(movingPiece.getCoordinates(), goalPoint);
+				int newX = movingPiece.getCoordinates().x + (int)(Math.cos(theta) * distancePerFrame);
+				int newY = movingPiece.getCoordinates().y + (int)(Math.sin(theta) * distancePerFrame);
+				movingPiece.setCoordinates(new Point(newX, newY));
+			}
+			
+			// redraw on each frame
+			view.canvas.repaint(guiPieces);
+		}
+		
+		/**
+		 * Store the turn and start the timer
+		 * Once the animation completes, turn is passed to doTurn()
+		 * @param turn Turn to animate
+		 */
+		public void animateTurn(Turn turn)
+		{
+			this.turn = turn;
+			positions = turn.iterator();
+			movingPiece = pieceMap.get(turn.piece);
+			goalPoint = view.canvas.getCoordinates(positions.next());
+			timer.start();
+		}
+		
+		private double getDistance(Point a, Point b)
+		{
+			return Math.sqrt(Math.pow(b.x - a.x,  2) + Math.pow(b.y - a.y, 2));
+		}
+		
+		private double getAngle(Point a, Point b)
+		{
+			return Math.atan2(b.y - a.y, b.x - a.x);
+		}
 	}
 }
