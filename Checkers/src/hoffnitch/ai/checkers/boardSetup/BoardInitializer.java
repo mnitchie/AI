@@ -1,7 +1,7 @@
 package hoffnitch.ai.checkers.boardSetup;
 
 import hoffnitch.ai.checkers.GameState;
-import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.checkers.Position2;
 
 public abstract class BoardInitializer
 {
@@ -9,6 +9,6 @@ public abstract class BoardInitializer
 	
 	public void clearBoard(GameState board) {
 		for (int i = 1; i < 33; i++)
-			board.setPiece(null, new Position(i));
+			board.setPiece(null, Position2.getPosition(i));
 	}
 }

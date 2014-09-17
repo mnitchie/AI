@@ -1,9 +1,7 @@
 package hoffnitch.ai.checkers.gui;
 
-import hoffnitch.ai.checkers.CheckerBoardLocationLookup;
 import hoffnitch.ai.checkers.GameState;
-import hoffnitch.ai.checkers.Position;
-import hoffnitch.ai.checkers.RowAndColumn;
+import hoffnitch.ai.checkers.Position2;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -11,6 +9,7 @@ import java.awt.Point;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.text.Position;
 
 /**
  * Canvas on which the board is drawn
@@ -108,16 +107,11 @@ public class BoardCanvas extends JComponent {
 	 * @param y y-coordinate (in pixels)
 	 * @return Position at given coordinates
 	 */
-	public Position getPosition(int x, int y) {
+	public Position2 getPosition(int x, int y) {
 		int row = y / TILE_SIZE;
 		int column = x / TILE_SIZE;
 		
-		Position position = null;
-		
-		if (CheckerBoardLocationLookup.isValidPosition(row, column))
-			position = new Position(row, column);
-			
-		return position;
+		return Position2.getPosition(row, column);
 	}
 	
 	/**
@@ -125,20 +119,17 @@ public class BoardCanvas extends JComponent {
 	 * @param position Position
 	 * @return Coordinates
 	 */
-	public Point getCoordinates(Position position)
-	{
-		RowAndColumn rowAndColumn = position.getRowAndColumn();
-		return new Point(rowAndColumn.column * TILE_SIZE, rowAndColumn.row * TILE_SIZE);
+	public Point getCoordinates(Position2 position) {
+		return new Point(position.column * TILE_SIZE, position.row * TILE_SIZE);
 	}
 	
 	public Point getPositionOffset(int x, int y) {
 		return new Point(x % TILE_SIZE, y % TILE_SIZE);
 	}
 	
-	public Point getCenter(Position position) {
-		RowAndColumn rowAndColumn = position.getRowAndColumn();
-		return new Point(TILE_SIZE / 2 + rowAndColumn.column * TILE_SIZE,
-				TILE_SIZE / 2 + rowAndColumn.row * TILE_SIZE);
+	public Point getCenter(Position2 position) {
+		return new Point(TILE_SIZE / 2 + position.column * TILE_SIZE,
+				TILE_SIZE / 2 + position.row * TILE_SIZE);
 	}
 	
 }

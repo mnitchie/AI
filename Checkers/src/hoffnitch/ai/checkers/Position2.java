@@ -39,6 +39,14 @@ public class Position2
 		}
 	}
 	
+	public Position2 getOffsetPosition(int row, int column) {
+		return getPosition(this.row + row, this.column + column);
+	}
+	
+	public Position2 getOffsetPosition(Direction direction) {
+		return getPosition(direction.rowAdjustment + row, direction.columnAdjustment + column);
+	}
+	
 	public String toString() {
 		return index + ":(" + row + "," + column + ")";
 	}

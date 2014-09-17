@@ -2,12 +2,12 @@ package hoffnitch.ai.checkers;
 
 public class Piece {
 	
-	private Position position;
+	private Position2 position;
 	private boolean crowned;
 	private boolean alive;
 	public final PieceColor color;
 	
-	public Piece(PieceColor color, Position position) {
+	public Piece(PieceColor color, Position2 position) {
 		this.color = color;
 		this.position = position;
 		this.crowned = false;
@@ -15,19 +15,17 @@ public class Piece {
 	}
 	
 	public Piece(Piece otherPiece) {
-	    this.position = new Position(otherPiece.position);
+	    this.position = otherPiece.position;
 	    this.color = otherPiece.color;
 	    this.crowned = otherPiece.crowned;
 	    this.alive = otherPiece.alive;
 	}
 	
-	public Position getPosition()
-	{
+	public Position2 getPosition() {
 		return position;
 	}
 
-	public void setPosition(Position position)
-	{
+	public void setPosition(Position2 position) {
 		this.position = position;
 	}
 

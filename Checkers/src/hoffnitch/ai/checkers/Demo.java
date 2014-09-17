@@ -1,6 +1,5 @@
 package hoffnitch.ai.checkers;
 
-import hoffnitch.ai.checkers.ai.RandomBot;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
 import hoffnitch.ai.checkers.gui.Arrow;
@@ -164,10 +163,10 @@ public class Demo implements MouseInputListener, ActionListener
 		}
 	}
 	
-	private void filterTurns(Position position) {
+	private void filterTurns(Position2 position) {
 		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
 			Turn turn = filteredTurns.get(i);
-			Position next = turn.nextMove();
+			Position2 next = turn.nextMove();
 			
 			if (!(next.equals(position)))
 				filteredTurns.remove(i);
@@ -189,7 +188,7 @@ public class Demo implements MouseInputListener, ActionListener
 		pieceMap.clear();
 		
 		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
-			Piece piece = board.getPieceAtPosition(new Position(i));
+			Piece piece = board.getPieceAtPosition(Position2.getPosition(i));
 			if (piece != null) {
 				GuiPiece guiPiece = new GuiPiece(piece, BoardCanvas.TILE_SIZE);
 				guiPieces.add(guiPiece);
@@ -225,7 +224,7 @@ public class Demo implements MouseInputListener, ActionListener
 		if (canMove) {
 			BoardCanvas gui = view.canvas;
 			
-			Position position = gui.getPosition(e.getX(), e.getY()); 
+			Position2 position = gui.getPosition(e.getX(), e.getY()); 
 			
 			if (position != null) {
 				
@@ -307,8 +306,7 @@ public class Demo implements MouseInputListener, ActionListener
 	 * Listener for selecting menu items
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
+	public void actionPerformed(ActionEvent e) {
 		JFileChooser fileChooser;
 		int returnValue;
 		

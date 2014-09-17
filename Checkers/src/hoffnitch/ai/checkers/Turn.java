@@ -7,27 +7,24 @@ import java.util.List;
 public class Turn {
 	
 	public final Piece piece;
-	private LinkedList<Position> moves = new LinkedList<Position>();
-	private Iterator<Position> iterator;
-	private Position currentPosition;
-	private Position nextPosition;
+	private LinkedList<Position2> moves = new LinkedList<Position2>();
+	private Iterator<Position2> iterator;
+	private Position2 currentPosition;
+	private Position2 nextPosition;
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
-		moves = new LinkedList<Position>();
+		moves = new LinkedList<Position2>();
 	}
 	
-	public Turn(Piece piece, Position move) {
+	public Turn(Piece piece, Position2 move) {
 	    this.piece = piece;
 	    addMove(move);
 	}
 	
 	public boolean containsJump() {
 		if (moves.size() == 2) {
-			RowAndColumn first = moves.get(0).getRowAndColumn();
-			RowAndColumn second = moves.get(1).getRowAndColumn();
-			
-			if (Math.abs(first.row - second.row) == 1)
+			if (Math.abs(moves.get(0).row - moves.get(1).row) == 1)
 				return false;
 			else
 				return true;
@@ -37,9 +34,9 @@ public class Turn {
 		}
 	}
 	
-	public Turn(Piece piece, List<Position> positions) {
+	public Turn(Piece piece, List<Position2> positions) {
 	    this.piece = piece;
-	    for (Position p : positions) {
+	    for (Position2 p : positions) {
 	        moves.offer(p); // This might be backwards.
 	    }
 	    resetIterator();
@@ -56,18 +53,18 @@ public class Turn {
 		nextPosition = iterator.next();
 	}
 	
-	public Turn addMove(Position space) {
+	public Turn addMove(Position2 space) {
 		moves.offer(space);
 		if (moves.size() > 1)
 			resetIterator();
 		return this;
 	}
 	
-	public Position getCurrentPosition() {
+	public Position2 getCurrentPosition() {
 		return currentPosition;
 	}
 	
-	public Position peekNextMove() {
+	public Position2 peekNextMove() {
 		return nextPosition;
 	}
 	
@@ -75,7 +72,7 @@ public class Turn {
 		return nextPosition != null;
 	}
 	
-	public Position nextMove() {
+	public Position2 nextMove() {
 		currentPosition = nextPosition;
 		
 		if (iterator.hasNext())
@@ -94,11 +91,11 @@ public class Turn {
 	    StringBuilder toReturn = new StringBuilder();
 	    toReturn.append(piece.color + ":");
 	    boolean first = true;
-	    for (Position p : moves) {
+	    for (Position2 p : moves) {
 	        if (!first) {
 	            toReturn.append("-");
 	        }
-	        toReturn.append(p.getIndex());
+	        toReturn.append(p.index);
 	        first = false;
 	    }
 	    return toReturn.toString();
