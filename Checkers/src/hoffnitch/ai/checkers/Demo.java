@@ -163,10 +163,10 @@ public class Demo implements MouseInputListener, ActionListener
 		}
 	}
 	
-	private void filterTurns(Position2 position) {
+	private void filterTurns(Position position) {
 		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
 			Turn turn = filteredTurns.get(i);
-			Position2 next = turn.nextMove();
+			Position next = turn.nextMove();
 			
 			if (!(next.equals(position)))
 				filteredTurns.remove(i);
@@ -188,7 +188,7 @@ public class Demo implements MouseInputListener, ActionListener
 		pieceMap.clear();
 		
 		for (short i = 1; i <= GameState.NUM_POSITIONS; i++) {
-			Piece piece = board.getPieceAtPosition(Position2.getPosition(i));
+			Piece piece = board.getPieceAtPosition(Position.getPosition(i));
 			if (piece != null) {
 				GuiPiece guiPiece = new GuiPiece(piece, BoardCanvas.TILE_SIZE);
 				guiPieces.add(guiPiece);
@@ -224,7 +224,7 @@ public class Demo implements MouseInputListener, ActionListener
 		if (canMove) {
 			BoardCanvas gui = view.canvas;
 			
-			Position2 position = gui.getPosition(e.getX(), e.getY()); 
+			Position position = gui.getPosition(e.getX(), e.getY()); 
 			
 			if (position != null) {
 				

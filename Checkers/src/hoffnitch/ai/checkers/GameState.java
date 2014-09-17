@@ -19,7 +19,7 @@ public class GameState {
 		boardPieces = new Piece[WIDTH][WIDTH];
 		
 		for (int i = 1; i <= NUM_POSITIONS; i++) {
-		    Position2 position = Position2.getPosition(i);
+		    Position position = Position.getPosition(i);
 		    
 		    if (i <= BLACK_START_INDEX) {
 		        boardPieces[position.row][position.column] = new Piece(PieceColor.DARK, position);
@@ -34,7 +34,7 @@ public class GameState {
 	public GameState(CheckersScenario scenario) {
 	    boardPieces = new Piece[WIDTH][WIDTH];
 	    for (int i = 1; i <= NUM_POSITIONS; i++) {
-	        setPiece(null, Position2.getPosition(i));
+	        setPiece(null, Position.getPosition(i));
 	    }
 	    for (Piece p : scenario.getScenario()) {
 	        setPiece(p, p.getPosition());
@@ -54,7 +54,7 @@ public class GameState {
 	public void doTurn(Turn turn) {
 		//Iterator<Position> positions = turn.iterator();
 		turn.resetIterator();
-		Position2 current = turn.getCurrentPosition();
+		Position current = turn.getCurrentPosition();
 		boolean isAdjacentMove = !turn.containsJump();
 		
 		// non-jump
@@ -68,12 +68,12 @@ public class GameState {
 			
 			while (turn.hasNextMove()) {
 				setPiece(null, current);
-				Position2 next = turn.nextMove();
+				Position next = turn.nextMove();
 				
 				int jumpedRow = (current.row + next.row) / 2;
 				int jumpedColumn = (current.column + next.column) / 2;
 				
-				Position2 jumped = Position2.getPosition(jumpedRow, jumpedColumn);
+				Position jumped = Position.getPosition(jumpedRow, jumpedColumn);
 				Piece removedPiece = getPieceAtPosition(jumped);
 				
 				removedPiece.setAlive(false);
@@ -110,7 +110,7 @@ public class GameState {
 	    return false;
 	}
 	
-	public void setPiece(Piece piece, Position2 position) {
+	public void setPiece(Piece piece, Position position) {
 		
 		// TODO add error checking
 	    // Or not... Perhaps we assume that any input to this class is valid?
@@ -132,14 +132,14 @@ public class GameState {
 		return pieces;
 	}
 	
-	public Piece getPieceAtPosition(Position2 p) {
+	public Piece getPieceAtPosition(Position p) {
 		if (p != null)
 			return boardPieces[p.row][p.column];
 		else return null;
 	}
 	
     public Piece getPieceAtPosition(int index) {
-    	return getPieceAtPosition(Position2.getPosition(index));   
+    	return getPieceAtPosition(Position.getPosition(index));   
     }
 	
 //	public Piece getPieceAtPosition(RowAndColumn rowAndColumn) {
@@ -148,7 +148,7 @@ public class GameState {
 //	}
 	
 	public Piece getPieceAtPosition(int row, int column) {
-		return getPieceAtPosition(Position2.getPosition(row, column));
+		return getPieceAtPosition(Position.getPosition(row, column));
     }
 	
 	public Piece[][] getBoard() {

@@ -21,7 +21,7 @@ public class CheckersTurnMoveGenerator {
             Piece piece = gameState.getPieceAtPosition(i);
             
             if (piece != null && piece.color == pieceColor) {
-                generateJumpMovesForPiece(piece, piece.getPosition(), gameState, new ArrayList<Position2>());
+                generateJumpMovesForPiece(piece, piece.getPosition(), gameState, new ArrayList<Position>());
                 
                 // Only look for adjacent moves if we don't have any jump moves yet.
                 if (jumpMovesForTurn.isEmpty()) {
@@ -57,20 +57,20 @@ public class CheckersTurnMoveGenerator {
      * @param gamestate The current game state. Will change to reflect the removal of jumped pieces
      * @param moves The list of positions piece has occupied during the jump sequence. Will change during recursive calls.
      */
-    public void generateJumpMovesForPiece(Piece piece, Position2 position, GameState currentGameState, List<Position2> moves) {
+    public void generateJumpMovesForPiece(Piece piece, Position position, GameState currentGameState, List<Position> moves) {
         boolean hasOption = false;
         for (Direction direction : Direction.values()) {
             if (pieceCanJumpInDirection(piece, position, direction, currentGameState)) {
                 hasOption = true;
                 GameState copy = new GameState(currentGameState);
                 // for clearing the jumped piece from the copied game state
-                Position2 adjacentPosition = position.getOffsetPosition(direction);
+                Position adjacentPosition = position.getOffsetPosition(direction);
                 // for placing the jumping piece after the piece is executed
-                Position2 farPosition = adjacentPosition.getOffsetPosition(direction);
+                Position farPosition = adjacentPosition.getOffsetPosition(direction);
                 copy.setPiece(null, position);
                 copy.setPiece(null, adjacentPosition);
                 copy.setPiece(new Piece(piece), farPosition);
-                List<Position2> movesForPiece = new ArrayList<Position2>(moves);
+                List<Position> movesForPiece = new ArrayList<Position>(moves);
                 movesForPiece.add(position);
                 generateJumpMovesForPiece(piece, farPosition, copy, movesForPiece);
             } 
@@ -90,7 +90,7 @@ public class CheckersTurnMoveGenerator {
      * @param gameState The current gameState
      * @return true of the piece can jump in the given direction. false otherwise.
      */
-    private boolean pieceCanJumpInDirection(Piece piece, Position2 position,
+    private boolean pieceCanJumpInDirection(Piece piece, Position position,
             Direction direction, GameState currentGameState) {
 
         // the piece can move in that direction
@@ -99,7 +99,7 @@ public class CheckersTurnMoveGenerator {
         }
         
         // if the adjacent place is in bounds
-        Position2 nextPosition = position.getOffsetPosition(direction.rowAdjustment, direction.columnAdjustment);
+        Position nextPosition = position.getOffsetPosition(direction.rowAdjustment, direction.columnAdjustment);
         if (nextPosition == null)
             return false;
         
@@ -115,7 +115,7 @@ public class CheckersTurnMoveGenerator {
         }
         
         // if the far position is valid
-        Position2 farPosition = nextPosition.getOffsetPosition(direction.rowAdjustment, direction.columnAdjustment);
+        Position farPosition = nextPosition.getOffsetPosition(direction.rowAdjustment, direction.columnAdjustment);
         if (farPosition == null)
             return false;
         
@@ -151,7 +151,7 @@ public class CheckersTurnMoveGenerator {
             return false;
         }
         
-        Position2 adjacentPosition = piece.getPosition().getOffsetPosition(direction);
+        Position adjacentPosition = piece.getPosition().getOffsetPosition(direction);
         if (adjacentPosition == null)
             return false;
         

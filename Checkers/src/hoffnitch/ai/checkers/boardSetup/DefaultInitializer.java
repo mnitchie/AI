@@ -3,7 +3,7 @@ package hoffnitch.ai.checkers.boardSetup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Position2;
+import hoffnitch.ai.checkers.Position;
 
 public class DefaultInitializer extends BoardInitializer
 {
@@ -17,14 +17,14 @@ public class DefaultInitializer extends BoardInitializer
 		
 		// set black pieces
 		for (int positionIndex = 1; positionIndex < 13; positionIndex++) {
-			Position2 position = Position2.getPosition(positionIndex);
+			Position position = Position.getPosition(positionIndex);
 			Piece piece = new Piece(PieceColor.DARK, position);
 			board.setPiece(piece, position);
 		}
 		
 		// set red pieces
 		for (int positionIndex = 21; positionIndex < 33; positionIndex++) {
-			Position2 position = Position2.getPosition(positionIndex);
+			Position position = Position.getPosition(positionIndex);
 			Piece piece = new Piece(PieceColor.LIGHT, position);
 			board.setPiece(piece, position);
 		}

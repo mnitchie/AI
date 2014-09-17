@@ -1,7 +1,7 @@
 package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.Piece;
-import hoffnitch.ai.checkers.Position2;
+import hoffnitch.ai.checkers.Position;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -22,7 +22,7 @@ public class GuiPiece {
 	}
 	
 	public void setCoordinates() {
-		Position2 position = piece.getPosition();
+		Position position = piece.getPosition();
 		coordinates = new Point(size * position.column, size * position.row);
 	}
 

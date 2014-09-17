@@ -3,7 +3,7 @@ package hoffnitch.ai.checkers.boardSetup;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Position2;
+import hoffnitch.ai.checkers.Position;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -51,7 +51,7 @@ public class BoardInitializerFromFile extends BoardInitializer
 	
 	private void setPieces(GameState board, ArrayList<Integer> indices, PieceColor color, boolean isCrowned) {
 		for (int index: indices) {
-			Position2 position = Position2.getPosition(index);
+			Position position = Position.getPosition(index);
 			Piece piece = new Piece(color, position);
 			piece.setCrowned(isCrowned);
 			board.setPiece(piece, position);

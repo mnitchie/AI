@@ -7,17 +7,17 @@ import java.util.List;
 public class Turn {
 	
 	public final Piece piece;
-	private LinkedList<Position2> moves = new LinkedList<Position2>();
-	private Iterator<Position2> iterator;
-	private Position2 currentPosition;
-	private Position2 nextPosition;
+	private LinkedList<Position> moves = new LinkedList<Position>();
+	private Iterator<Position> iterator;
+	private Position currentPosition;
+	private Position nextPosition;
 	
 	public Turn(Piece piece) {
 		this.piece = piece;
-		moves = new LinkedList<Position2>();
+		moves = new LinkedList<Position>();
 	}
 	
-	public Turn(Piece piece, Position2 move) {
+	public Turn(Piece piece, Position move) {
 	    this.piece = piece;
 	    addMove(move);
 	}
@@ -34,9 +34,9 @@ public class Turn {
 		}
 	}
 	
-	public Turn(Piece piece, List<Position2> positions) {
+	public Turn(Piece piece, List<Position> positions) {
 	    this.piece = piece;
-	    for (Position2 p : positions) {
+	    for (Position p : positions) {
 	        moves.offer(p); // This might be backwards.
 	    }
 	    resetIterator();
@@ -53,18 +53,18 @@ public class Turn {
 		nextPosition = iterator.next();
 	}
 	
-	public Turn addMove(Position2 space) {
+	public Turn addMove(Position space) {
 		moves.offer(space);
 		if (moves.size() > 1)
 			resetIterator();
 		return this;
 	}
 	
-	public Position2 getCurrentPosition() {
+	public Position getCurrentPosition() {
 		return currentPosition;
 	}
 	
-	public Position2 peekNextMove() {
+	public Position peekNextMove() {
 		return nextPosition;
 	}
 	
@@ -72,7 +72,7 @@ public class Turn {
 		return nextPosition != null;
 	}
 	
-	public Position2 nextMove() {
+	public Position nextMove() {
 		currentPosition = nextPosition;
 		
 		if (iterator.hasNext())
@@ -91,7 +91,7 @@ public class Turn {
 	    StringBuilder toReturn = new StringBuilder();
 	    toReturn.append(piece.color + ":");
 	    boolean first = true;
-	    for (Position2 p : moves) {
+	    for (Position p : moves) {
 	        if (!first) {
 	            toReturn.append("-");
 	        }

@@ -1,7 +1,7 @@
 package hoffnitch.ai.checkers.gui;
 
 import hoffnitch.ai.checkers.GameState;
-import hoffnitch.ai.checkers.Position2;
+import hoffnitch.ai.checkers.Position;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,7 +9,6 @@ import java.awt.Point;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.text.Position;
 
 /**
  * Canvas on which the board is drawn
@@ -107,11 +106,11 @@ public class BoardCanvas extends JComponent {
 	 * @param y y-coordinate (in pixels)
 	 * @return Position at given coordinates
 	 */
-	public Position2 getPosition(int x, int y) {
+	public Position getPosition(int x, int y) {
 		int row = y / TILE_SIZE;
 		int column = x / TILE_SIZE;
 		
-		return Position2.getPosition(row, column);
+		return Position.getPosition(row, column);
 	}
 	
 	/**
@@ -119,7 +118,7 @@ public class BoardCanvas extends JComponent {
 	 * @param position Position
 	 * @return Coordinates
 	 */
-	public Point getCoordinates(Position2 position) {
+	public Point getCoordinates(Position position) {
 		return new Point(position.column * TILE_SIZE, position.row * TILE_SIZE);
 	}
 	
@@ -127,7 +126,7 @@ public class BoardCanvas extends JComponent {
 		return new Point(x % TILE_SIZE, y % TILE_SIZE);
 	}
 	
-	public Point getCenter(Position2 position) {
+	public Point getCenter(Position position) {
 		return new Point(TILE_SIZE / 2 + position.column * TILE_SIZE,
 				TILE_SIZE / 2 + position.row * TILE_SIZE);
 	}
