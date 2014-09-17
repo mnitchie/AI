@@ -5,10 +5,11 @@ import java.awt.Polygon;
 
 public class Arrow
 {
-	private static int length = 80;
-	private static int lineWidth = 12;
-	private static int headWidth = 40;
-	private static int headLength = 30;
+	private static int length 		= 30;
+	private static int lineWidth 	= 6;
+	private static int headWidth 	= 20;
+	private static int headLength 	= 15;
+	private static int offset		= 40;
 	static int xBase[];
 	static int yBase[];
 	
@@ -22,16 +23,16 @@ public class Arrow
 		xBase = new int[7];
 		yBase = new int[7];
 		
-		xBase[0] = 0;
+		xBase[0] = offset;
 		yBase[0] = lineWidth / 2;
 
-		xBase[1] = length - headLength;
+		xBase[1] = offset + length - headLength;
 		yBase[1] = yBase[0];
 
 		xBase[2] = xBase[1];
 		yBase[2] = headWidth / 2;
 		
-		xBase[3] = length;
+		xBase[3] = offset + length;
 		yBase[3] = 0;
 		
 		// fill the rest with the mirror of the first 3 points

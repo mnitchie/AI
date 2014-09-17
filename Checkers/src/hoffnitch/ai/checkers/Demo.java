@@ -209,7 +209,7 @@ public class Demo implements MouseInputListener, ActionListener
 			
 			double angle = Math.atan2(next.y - current.y, next.x - current.x);
 			
-			Point arrowPosition = new Point(current.x + 30, current.y + 30);
+			Point arrowPosition = view.canvas.getCenter(turn.getCurrentPosition());
 			arrows.add(new Arrow(arrowPosition, angle));
 		}
 		view.canvas.setArrows(arrows);

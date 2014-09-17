@@ -21,7 +21,7 @@ public class BoardCanvas extends JComponent {
 	public static final int TILE_SIZE		= 60;
 	public static final Color BOARD_BLACK	= Color.GRAY;
 	public static final Color BOARD_WHITE	= Color.WHITE;
-	public static final Color ARROW_COLOR	= Color.GREEN;
+	public static final Color ARROW_COLOR	= Color.CYAN;
 	
 	private List<GuiPiece> guiPieces;
 	private List<Arrow> arrows;
@@ -133,6 +133,12 @@ public class BoardCanvas extends JComponent {
 	
 	public Point getPositionOffset(int x, int y) {
 		return new Point(x % TILE_SIZE, y % TILE_SIZE);
+	}
+	
+	public Point getCenter(Position position) {
+		RowAndColumn rowAndColumn = position.getRowAndColumn();
+		return new Point(TILE_SIZE / 2 + rowAndColumn.column * TILE_SIZE,
+				TILE_SIZE / 2 + rowAndColumn.row * TILE_SIZE);
 	}
 	
 }
