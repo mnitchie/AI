@@ -70,10 +70,10 @@ public class Demo implements MouseInputListener, ActionListener
 		turnAnimator = new TurnAnimator();
 		
 		// human player
-		white = new HumanPlayer("Mike", PieceColor.LIGHT, view.canvas);
+		white = new HumanPlayer("Tyler", PieceColor.LIGHT, view.canvas);
 		
 		// AI Player
-		black = new RandomBot("Brad", PieceColor.DARK);
+		black = new HumanPlayer("Erin", PieceColor.DARK, view.canvas);
 		
 		view.setVisible(true);
 	}
@@ -100,6 +100,8 @@ public class Demo implements MouseInputListener, ActionListener
 				// if human, enable moving pieces and wait for event to call doTurn
 				else {
 					possibleTurns = validTurns;
+					setTurns();
+					drawArrows();
 					canMove = true;
 				}
 			}
@@ -147,16 +149,22 @@ public class Demo implements MouseInputListener, ActionListener
 		turnBeingBuilt = null;
 	}
 	
-	private void setBaseIterators(Piece piece) {
-		filteredTurns.clear();
-		for (Turn turn: possibleTurns)
-			if (turn.piece == piece) {
-				turn.resetIterator();
-				filteredTurns.add(turn);
-			}
+	private void filterTurns(Piece piece) {
+		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
+			if (filteredTurns.get(i).piece != piece)
+				filteredTurns.remove(i);
+		}
 	}
 	
-	private void filterItertors(Position position) {
+	private void setTurns() {
+		filteredTurns.clear();
+		for (Turn turn: possibleTurns) {
+			turn.resetIterator();
+			filteredTurns.add(turn);
+		}
+	}
+	
+	private void filterTurns(Position position) {
 		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
 			Turn turn = filteredTurns.get(i);
 			Position next = turn.nextMove();
@@ -225,7 +233,7 @@ public class Demo implements MouseInputListener, ActionListener
 				if (grabbedPiece == null) {
 					Piece piece = board.getPieceAtPosition(position);
 					if (piece != null) {
-						setBaseIterators(piece);
+						filterTurns(piece);
 						drawArrows();
 						
 						if (filteredTurns.size() > 0) {
@@ -239,7 +247,7 @@ public class Demo implements MouseInputListener, ActionListener
 				
 				// otherwise, selecting new position for piece
 				else {
-					filterItertors(position);
+					filterTurns(position);
 					
 					// if no errors
 					if (filteredTurns.size() > 0) {
@@ -262,6 +270,7 @@ public class Demo implements MouseInputListener, ActionListener
 					// if we went to a bad location start over
 					else {
 						resetTurn();
+						setTurns();
 						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
 						drawArrows();
@@ -374,16 +383,14 @@ public class Demo implements MouseInputListener, ActionListener
 	 * Turn animator
 	 * Animates a turn, and then calls Demo.doTurn()
 	 */
-	private class TurnAnimator implements ActionListener
-	{
+	private class TurnAnimator implements ActionListener {
 		private static final double distancePerFrame = 10.0;
 		private Turn turn;
 		private Timer timer;
 		private Point goalPoint;
 		private GuiPiece movingPiece;
 		
-		public TurnAnimator()
-		{
+		public TurnAnimator() {
 			timer = new Timer(1000 / fps, this);
 		}
 		
@@ -393,12 +400,10 @@ public class Demo implements MouseInputListener, ActionListener
 		 * @param e
 		 */
 		@Override
-		public void actionPerformed(ActionEvent e)
-		{
+		public void actionPerformed(ActionEvent e) {
 			double dist = getDistance(movingPiece.getCoordinates(), goalPoint);
 			
-			if (dist < distancePerFrame)
-			{
+			if (dist < distancePerFrame) {
 				// put piece in place
 				movingPiece.setCoordinates(goalPoint);
 				
@@ -412,9 +417,7 @@ public class Demo implements MouseInputListener, ActionListener
 					timer.stop();
 					doTurn(turn);
 				}
-			}
-			else
-			{
+			} else {
 				double theta = getAngle(movingPiece.getCoordinates(), goalPoint);
 				int newX = movingPiece.getCoordinates().x + (int)(Math.cos(theta) * distancePerFrame);
 				int newY = movingPiece.getCoordinates().y + (int)(Math.sin(theta) * distancePerFrame);
@@ -430,21 +433,18 @@ public class Demo implements MouseInputListener, ActionListener
 		 * Once the animation completes, turn is passed to doTurn()
 		 * @param turn Turn to animate
 		 */
-		public void animateTurn(Turn turn)
-		{
+		public void animateTurn(Turn turn) {
 			this.turn = turn;
 			movingPiece = pieceMap.get(turn.piece);
 			goalPoint = view.canvas.getCoordinates(turn.nextMove());
 			timer.start();
 		}
 		
-		private double getDistance(Point a, Point b)
-		{
+		private double getDistance(Point a, Point b) {
 			return Math.sqrt(Math.pow(b.x - a.x,  2) + Math.pow(b.y - a.y, 2));
 		}
 		
-		private double getAngle(Point a, Point b)
-		{
+		private double getAngle(Point a, Point b) {
 			return Math.atan2(b.y - a.y, b.x - a.x);
 		}
 	}
