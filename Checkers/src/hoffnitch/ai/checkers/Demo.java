@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers;
 
+import hoffnitch.ai.checkers.ai.RandomBot;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
 import hoffnitch.ai.checkers.gui.Arrow;
@@ -72,7 +73,7 @@ public class Demo implements MouseInputListener, ActionListener
 		white = new HumanPlayer("Tyler", PieceColor.LIGHT, view.canvas);
 		
 		// AI Player
-		black = new HumanPlayer("Erin", PieceColor.DARK, view.canvas);
+		black = new RandomBot("Hal", PieceColor.DARK);
 		
 		view.setVisible(true);
 	}
