@@ -11,4 +11,14 @@ public class HumanPlayer extends Player
 		this.view = view;
 	}
 
+    @Override
+    public PlayerType getType() {
+        return PlayerType.HUMAN;
+    }
+
+    @Override
+    public int getVersion() {
+        return 1;
+    }
+
 }

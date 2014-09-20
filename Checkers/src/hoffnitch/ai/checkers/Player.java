@@ -10,4 +10,8 @@ public abstract class Player
 		this.color = color;
 	}
 	
+	public abstract PlayerType getType();
+	
+	public abstract int getVersion();
+	
 }

@@ -1,4 +1,8 @@
-package hoffnitch.ai.checkers;
+package hoffnitch.ai.checkers.ai;
+
+import hoffnitch.ai.checkers.PieceColor;
+import hoffnitch.ai.checkers.Player;
+import hoffnitch.ai.checkers.Turn;
 
 import java.util.List;
 
