@@ -37,19 +37,16 @@ public class AutomatedGameSession {
         
         Long start = System.currentTimeMillis();
         for (int i = 0; i < numGames; i++) {
-            System.out.print("Game " + (i + 1) + ": ");
             int numMoves = 0;
             board = new GameState();
             while (true) {
                 if (numMoves > DRAW_THRESHHOLD) {
                     draws++;
-                    System.out.println("Draw");
                     break;
                 }
                 
                 moves = moveGenerator.getMovesForTurn(PieceColor.DARK, board);
                 if (moves.size() == 0) {
-                    System.out.println("Light wins");
                     lightWins++;
                     break;
                 }
@@ -60,7 +57,6 @@ public class AutomatedGameSession {
                 moves = moveGenerator.getMovesForTurn(PieceColor.LIGHT, board);
                 if (moves.size() == 0) {
                     darkWins++;
-                    System.out.println("Dark wins");
                     break;
                 }
                 turn = lightPlayer.getTurn(moves);
@@ -70,8 +66,8 @@ public class AutomatedGameSession {
         }
         Long end = System.currentTimeMillis();
         System.out.println(numGames + " games took " + (end - start) + " ms");
-        System.out.println("Dark won: " + darkWins);
-        System.out.println("Light won: " + lightWins);
+        System.out.println(darkPlayer.name + " won: " + darkWins);
+        System.out.println(lightPlayer.name + " won: " + lightWins);
         System.out.println("Draws: " + draws);
     }
 }
