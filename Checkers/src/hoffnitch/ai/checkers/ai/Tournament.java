@@ -5,9 +5,9 @@ import hoffnitch.ai.checkers.db.DBConnection;
 
 public class Tournament {
     public static void main(String[] args) {
-//        DBConnection db = new DBConnection();
-        AutomatedGameSession random = new AutomatedGameSession(new EagerBot(
-                PieceColor.DARK), new EagerBot(PieceColor.LIGHT), 1);
+        DBConnection db = new DBConnection();
+        AutomatedGameSession random = new AutomatedGameSession(new RandomBot(
+                PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 1);
         
         random.play();
     }
