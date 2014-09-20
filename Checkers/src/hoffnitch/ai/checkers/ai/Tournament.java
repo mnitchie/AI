@@ -4,7 +4,7 @@ import hoffnitch.ai.checkers.PieceColor;
 
 public class Tournament {
     public static void main(String[] args) {
-        AutomatedGameSession random = new AutomatedGameSession(new RandomBot(
+        AutomatedGameSession random = new AutomatedGameSession(new EagerBot(
                 PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 1000000);
         
         random.play();
