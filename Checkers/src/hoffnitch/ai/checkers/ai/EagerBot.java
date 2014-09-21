@@ -1,7 +1,6 @@
 package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.PlayerType;
 import hoffnitch.ai.checkers.Turn;
 
 import java.util.List;
@@ -17,14 +16,9 @@ public class EagerBot extends AIPlayer {
     public Turn getTurn(List<Turn> options) {
         return options.get(0);
     }
-
+    
     @Override
-    public PlayerType getType() {
-        return PlayerType.AI;
-    }
-
-    @Override
-    public int getVersion() {
-        return 1;
+    public String getName() {
+        return HEURISTIC_DESCRIPTION;
     }
 }

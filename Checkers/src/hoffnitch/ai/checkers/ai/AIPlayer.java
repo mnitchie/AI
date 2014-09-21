@@ -13,5 +13,7 @@ public abstract class AIPlayer extends Player {
 	}
 	
 	public abstract Turn getTurn(List<Turn> options);
+	
+	public abstract String getName();
 
 }

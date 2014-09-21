@@ -22,6 +22,10 @@ public class Turn {
 	    addMove(move);
 	}
 	
+	public List<Position> getMoves() {
+	    return moves;
+	}
+	
 	public boolean containsJump() {
 		if (moves.size() == 2) {
 			if (Math.abs(moves.get(0).row - moves.get(1).row) == 1)
@@ -101,7 +105,16 @@ public class Turn {
 	    return toReturn.toString();
 	}
 	
-	// TODO: Generate an equals method to test if the attempted move is one of the 
-	// available moves.
-	
+	public String getRawList() {
+	    StringBuilder toReturn = new StringBuilder();
+	    boolean first = true;
+        for (Position p : moves) {
+            if (!first) {
+                toReturn.append("-");
+            }
+            toReturn.append(p.index);
+            first = false;
+        }
+        return toReturn.toString();
+	}
 }

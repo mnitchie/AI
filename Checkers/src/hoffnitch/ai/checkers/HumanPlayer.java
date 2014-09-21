@@ -10,15 +10,4 @@ public class HumanPlayer extends Player
 		super(name, color);
 		this.view = view;
 	}
-
-    @Override
-    public PlayerType getType() {
-        return PlayerType.HUMAN;
-    }
-
-    @Override
-    public int getVersion() {
-        return 1;
-    }
-
 }

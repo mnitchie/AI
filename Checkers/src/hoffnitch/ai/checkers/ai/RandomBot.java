@@ -1,7 +1,6 @@
 package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.PlayerType;
 import hoffnitch.ai.checkers.Turn;
 
 import java.util.List;
@@ -19,15 +18,9 @@ public class RandomBot extends AIPlayer {
 		int random = (int)Math.floor(Math.random() * options.size());
 		return options.get(random);
 	}
-
-    @Override
-    public PlayerType getType() {
-        return PlayerType.AI;
+	
+	@Override
+    public String getName() {
+        return HEURISTIC_DESCRIPTION;
     }
-
-    @Override
-    public int getVersion() {
-        return 1;
-    }
-
 }

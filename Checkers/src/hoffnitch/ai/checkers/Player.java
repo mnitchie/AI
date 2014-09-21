@@ -9,9 +9,4 @@ public abstract class Player
 		this.name = name;
 		this.color = color;
 	}
-	
-	public abstract PlayerType getType();
-	
-	public abstract int getVersion();
-	
 }
