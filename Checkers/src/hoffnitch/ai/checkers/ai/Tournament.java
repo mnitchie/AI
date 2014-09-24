@@ -7,7 +7,7 @@ public class Tournament {
     public static void main(String[] args) {
         DBConnection db = new DBConnection();
         AutomatedGameSession random = new AutomatedGameSession(new RandomBot(
-                PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 10);
+                PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 10000);
         
         random.play();
     }
