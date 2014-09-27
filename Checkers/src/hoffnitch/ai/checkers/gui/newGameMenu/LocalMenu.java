@@ -28,13 +28,14 @@ public class LocalMenu extends JPanel implements ActionListener {
 		JPanel togglerPanel = new JPanel();
 		togglerPanel.add(colorToggler);
 		add(togglerPanel, BorderLayout.PAGE_END);
+		colorToggler.addActionListener(this);
 		
 		players = new JPanel();
 		players.setLayout(new GridLayout(1, 2));
 		add(players);
 		
-		player1Panel = new PlayerPanel(PieceColor.DARK, DEFAULT_P1_NAME);
-		player2Panel = new PlayerPanel(PieceColor.LIGHT, DEFAULT_P2_NAME);
+		player1Panel = new PlayerPanel(DEFAULT_P1_NAME, PieceColor.DARK);
+		player2Panel = new PlayerPanel(DEFAULT_P2_NAME, PieceColor.LIGHT);
 		players.add(player1Panel);
 		players.add(player2Panel);
 	}
@@ -44,8 +45,17 @@ public class LocalMenu extends JPanel implements ActionListener {
 	{
 		switch (e.getActionCommand()) {
 		case TOGGLE_COLORS:
-			
-		}
-		
+			PieceColor temp = player1Panel.getColor();
+			player1Panel.setColor(player2Panel.getColor());
+			player2Panel.setColor(temp);
+		}	
+	}
+	
+	public PlayerInfo getPlayer1() {
+		return player1Panel.getPlayerInfo();
+	}
+	
+	public PlayerInfo getPlayer2() {
+		return player2Panel.getPlayerInfo();
 	}
 }

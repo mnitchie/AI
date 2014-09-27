@@ -16,38 +16,41 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	public static final String LOCAL = "Local";
 	public static final String REMOTE = "Remote";
 
-	private ButtonGroup localOrRemoteGroup;
 	private JRadioButton local;
 	private JRadioButton remote;
+	private String gameType;
 	
-	private JPanel localOrRemoteChoicePanel;
-	private JPanel localOrRemotePanel;
-	private CardLayout localOrRemoteLayout;
+	private JPanel gameTypeChoicePanel;
+	private JPanel gamePanel;
+	private CardLayout gameTypeLayout;
 	
 	public NewGameMenu() {
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(400, 170));
 		
+		// default game type
+		gameType = LOCAL;
+		
 		// setup local or remote panel
-		localOrRemoteChoicePanel = new JPanel();
-		localOrRemoteGroup = new ButtonGroup();
+		gameTypeChoicePanel = new JPanel();
+		ButtonGroup localOrRemoteGroup = new ButtonGroup();
 		local = new JRadioButton(LOCAL, true);
 		remote = new JRadioButton(REMOTE);
 		local.addActionListener(this);
 		remote.addActionListener(this);
 		localOrRemoteGroup.add(local);
 		localOrRemoteGroup.add(remote);
-		localOrRemoteChoicePanel.add(local);
-		localOrRemoteChoicePanel.add(remote);
+		gameTypeChoicePanel.add(local);
+		gameTypeChoicePanel.add(remote);
 		
-		add(localOrRemoteChoicePanel, BorderLayout.PAGE_START);
+		add(gameTypeChoicePanel, BorderLayout.PAGE_START);
 		
-		localOrRemoteLayout = new CardLayout();
-		localOrRemotePanel = new JPanel(localOrRemoteLayout);
-		localOrRemotePanel.add(new LocalMenu(), LOCAL);
-		localOrRemotePanel.add(new RemoteMenu(), REMOTE);
+		gameTypeLayout = new CardLayout();
+		gamePanel = new JPanel(gameTypeLayout);
+		gamePanel.add(new LocalMenu(), LOCAL);
+		gamePanel.add(new RemoteMenu(), REMOTE);
 		
-		add(localOrRemotePanel);
+		add(gamePanel);
 	}
 
 	/**
@@ -56,7 +59,11 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		localOrRemoteLayout.show(localOrRemotePanel, e.getActionCommand());
+		gameTypeLayout.show(gamePanel, e.getActionCommand());
+	}
+	
+	public String getGameType() {
+		return gameType;
 	}
 	
 }
