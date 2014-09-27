@@ -18,6 +18,9 @@ public class NewGameMenu extends JPanel implements ActionListener {
 
 	private JRadioButton local;
 	private JRadioButton remote;
+	private LocalMenu localMenu;
+	private RemoteMenu remoteMenu;
+	
 	private String gameType;
 	
 	private JPanel gameTypeChoicePanel;
@@ -44,11 +47,13 @@ public class NewGameMenu extends JPanel implements ActionListener {
 		gameTypeChoicePanel.add(remote);
 		
 		add(gameTypeChoicePanel, BorderLayout.PAGE_START);
-		
+
+		localMenu = new LocalMenu();
+		remoteMenu = new RemoteMenu();
 		gameTypeLayout = new CardLayout();
 		gamePanel = new JPanel(gameTypeLayout);
-		gamePanel.add(new LocalMenu(), LOCAL);
-		gamePanel.add(new RemoteMenu(), REMOTE);
+		gamePanel.add(localMenu, LOCAL);
+		gamePanel.add(remoteMenu, REMOTE);
 		
 		add(gamePanel);
 	}
@@ -66,4 +71,19 @@ public class NewGameMenu extends JPanel implements ActionListener {
 		return gameType;
 	}
 	
+	public PlayerInfo getPlayer1() {
+		if (gameType == LOCAL) {
+			return localMenu.getPlayer1();
+		}
+		
+		return null;
+	}
+	
+	public PlayerInfo getPlayer2() {
+		if (gameType == LOCAL) {
+			return localMenu.getPlayer2();
+		}
+		
+		return null;
+	}
 }

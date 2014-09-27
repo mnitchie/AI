@@ -41,5 +41,8 @@ public class PlayerInfo
 		this.isLocal = isLocal;
 	}
 	
+	public String toString() {
+		return playerName + "[" + color + "] " + playerType; 
+	}
 	
 }

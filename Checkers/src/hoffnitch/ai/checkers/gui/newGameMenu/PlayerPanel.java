@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers.gui.newGameMenu;
 
 import hoffnitch.ai.checkers.PieceColor;
+import hoffnitch.ai.checkers.ai.PlayerFactory;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -17,12 +18,6 @@ public class PlayerPanel extends JPanel {
 	private static final int NAME_FIELD_COLUMNS = 15;
 	private static final boolean IS_LOCAL = true;
 	
-	// TODO: Generate player type list elsewhere
-	private static final String HUMAN = "Human";
-	private static final String RANDOM_BOT = "Randombot";
-	private static final String FIRST_BOT = "Firstbot";
-	private static final String[] PLAYER_TYPES = {HUMAN, RANDOM_BOT, FIRST_BOT};
-
 	private PlayerInfo playerInfo;
 	
 	private JLabel colorLabel;
@@ -55,10 +50,9 @@ public class PlayerPanel extends JPanel {
 		
 		// type selector
 		JPanel typePanel = new JPanel();
-		playerTypes = new JComboBox<String>(PLAYER_TYPES);
+		playerTypes = new JComboBox<String>(new PlayerFactory().getTypes());
 		typePanel.add(playerTypes);
 		add(typePanel);
-		
 	}
 	
 	/**
