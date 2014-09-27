@@ -21,7 +21,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.MouseInputListener;
 
 public class Demo implements MouseInputListener, ActionListener
@@ -57,6 +60,12 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	public Demo() {
 
+		// attempt to set look and feel to match OS
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			// no big deal if it throws an exception
+		}
 		guiPieces = new LinkedList<GuiPiece>();
 		pieceMap = new HashMap<Piece, GuiPiece>();
 		filteredTurns = new LinkedList<Turn>();
@@ -344,6 +353,7 @@ public class Demo implements MouseInputListener, ActionListener
 			break;
 			
 		case CanvasView.NEW:
+			JOptionPane.showMessageDialog(view, "Hello?");
 			DefaultInitializer initializer = new DefaultInitializer();
 			initializer.setBoard(board);
 			start();
