@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.ai.AIPlayer;
+import hoffnitch.ai.checkers.ai.PlayerFactory;
 import hoffnitch.ai.checkers.ai.RandomBot;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
@@ -8,6 +9,8 @@ import hoffnitch.ai.checkers.gui.Arrow;
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 import hoffnitch.ai.checkers.gui.CanvasView;
 import hoffnitch.ai.checkers.gui.GuiPiece;
+import hoffnitch.ai.checkers.gui.newGameMenu.NewGameMenu;
+import hoffnitch.ai.checkers.gui.newGameMenu.PlayerInfo;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -29,12 +32,15 @@ import javax.swing.event.MouseInputListener;
 
 public class Demo implements MouseInputListener, ActionListener
 {
+	private static final String NEW_GAME = "New game";
+	
 	private GameState board;
 	private CheckersTurnMoveGenerator moveGenerator;
 	private CanvasView view;
 	private Player white;
 	private Player black;
 	private Player currentPlayer;
+	private PlayerFactory playerFactory;
 
 	// Gui-related stuff
 	private GuiPiece grabbedPiece;
@@ -55,7 +61,7 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	public static void main(String[] args) {
 		Demo demo = new Demo();
-		demo.start();
+		//demo.start();
 	}
 	
 	public Demo() {
@@ -66,6 +72,8 @@ public class Demo implements MouseInputListener, ActionListener
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			// no big deal if it throws an exception
 		}
+		
+		playerFactory = new PlayerFactory();
 		guiPieces = new LinkedList<GuiPiece>();
 		pieceMap = new HashMap<Piece, GuiPiece>();
 		filteredTurns = new LinkedList<Turn>();
@@ -73,19 +81,19 @@ public class Demo implements MouseInputListener, ActionListener
 		board = new GameState();
 		moveGenerator = new CheckersTurnMoveGenerator();
 		view = new CanvasView("Checkers", this);
+
+		// default players
+		black = new HumanPlayer("Tyler", PieceColor.DARK, view.canvas);
+		white = new HumanPlayer("Mike", PieceColor.LIGHT, view.canvas);
 		
 		view.canvas.addMouseListener(this);
 		view.canvas.addMouseMotionListener(this);
 		
 		turnAnimator = new TurnAnimator();
 		
-		// human player
-		white = new HumanPlayer("Tyler", PieceColor.LIGHT, view.canvas);
-		
-		// AI Player
-		black = new RandomBot(PieceColor.DARK);
-		
 		view.setVisible(true);
+		
+		start();
 	}
 	
 	private void giveTurn(Player player) {
@@ -111,7 +119,7 @@ public class Demo implements MouseInputListener, ActionListener
 				else {
 					possibleTurns = validTurns;
 					setTurns();
-					drawArrows();
+					drawArrows(true);
 					canMove = true;
 				}
 			}
@@ -138,6 +146,10 @@ public class Demo implements MouseInputListener, ActionListener
 			return white;
 	}
 	
+	public void start() {
+		start(black);
+	}
+	
 	public void start(Player player) {
 		initializePieces(board);
 		undoManager = new UndoManager();
@@ -145,7 +157,18 @@ public class Demo implements MouseInputListener, ActionListener
 		giveTurn(player);
 	}
 	
-	public void start() {
+	public void start(PlayerInfo player1, PlayerInfo player2) {
+		
+		if (player1.getColor() == PieceColor.DARK) {
+			black = playerFactory.getPlayer(player1, view.canvas);
+			white = playerFactory.getPlayer(player2, view.canvas);
+		}
+		else {
+			black = playerFactory.getPlayer(player2, view.canvas);
+			white = playerFactory.getPlayer(player1, view.canvas);
+			
+		}
+		
 		start(black);
 	}
 	
@@ -209,20 +232,24 @@ public class Demo implements MouseInputListener, ActionListener
 		view.canvas.repaint(guiPieces);
 	}
 	
-	public void drawArrows()
+	public void drawArrows(boolean doDraw)
 	{
-		List<Arrow> arrows = new LinkedList<Arrow>();
-		for (Turn turn: filteredTurns)
-		{
-			Point current = view.canvas.getCoordinates(turn.getCurrentPosition());
-			Point next = view.canvas.getCoordinates(turn.peekNextMove());
-			
-			double angle = Math.atan2(next.y - current.y, next.x - current.x);
-			
-			Point arrowPosition = view.canvas.getCenter(turn.getCurrentPosition());
-			arrows.add(new Arrow(arrowPosition, angle));
+		if (doDraw) {
+			List<Arrow> arrows = new LinkedList<Arrow>();
+			for (Turn turn: filteredTurns)
+			{
+				Point current = view.canvas.getCoordinates(turn.getCurrentPosition());
+				Point next = view.canvas.getCoordinates(turn.peekNextMove());
+				
+				double angle = Math.atan2(next.y - current.y, next.x - current.x);
+				
+				Point arrowPosition = view.canvas.getCenter(turn.getCurrentPosition());
+				arrows.add(new Arrow(arrowPosition, angle));
+			}
+			view.canvas.setArrows(arrows);
+		} else {
+			view.canvas.setArrows(null);
 		}
-		view.canvas.setArrows(arrows);
 	}
 	
 	/**
@@ -243,7 +270,7 @@ public class Demo implements MouseInputListener, ActionListener
 					Piece piece = board.getPieceAtPosition(position);
 					if (piece != null) {
 						filterTurns(piece);
-						drawArrows();
+						drawArrows(true);
 						
 						if (filteredTurns.size() > 0) {
 							grabbedPiece = pieceMap.get(piece);
@@ -269,11 +296,11 @@ public class Demo implements MouseInputListener, ActionListener
 							grabbedPiece = null;
 							grabOffset = null;
 							filteredTurns.clear();
-							drawArrows();
+							drawArrows(true);
 							doTurn(turnBeingBuilt);
 						}
 						else
-							drawArrows();
+							drawArrows(true);
 					}
 					
 					// if we went to a bad location start over
@@ -282,7 +309,7 @@ public class Demo implements MouseInputListener, ActionListener
 						setTurns();
 						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
-						drawArrows();
+						drawArrows(true);
 					}
 					
 				}
@@ -353,10 +380,25 @@ public class Demo implements MouseInputListener, ActionListener
 			break;
 			
 		case CanvasView.NEW:
-			JOptionPane.showMessageDialog(view, "Hello?");
-			DefaultInitializer initializer = new DefaultInitializer();
-			initializer.setBoard(board);
-			start();
+			Object[] options = {"Cancel", "Okay"};
+			NewGameMenu newGameMenu = new NewGameMenu();
+			int response = JOptionPane.showOptionDialog(view, newGameMenu, NEW_GAME, 
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+			
+			if (response == 1) {
+				// User chose to start a new game
+				PlayerInfo player1Info = null;
+				PlayerInfo player2Info = null;
+				if (newGameMenu.getGameType() == NewGameMenu.LOCAL) {
+					player1Info = newGameMenu.getPlayer1();
+					player2Info = newGameMenu.getPlayer2();
+				}
+				drawArrows(false);
+				DefaultInitializer initializer = new DefaultInitializer();
+				initializer.setBoard(board);
+				start(player1Info, player2Info);
+			}
+			
 			break;
 			
 		case CanvasView.UNDO:
