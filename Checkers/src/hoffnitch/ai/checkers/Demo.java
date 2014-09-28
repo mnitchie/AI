@@ -2,7 +2,7 @@ package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.ai.AIPlayer;
 import hoffnitch.ai.checkers.ai.PlayerFactory;
-import hoffnitch.ai.checkers.ai.RandomBot;
+import hoffnitch.ai.checkers.ai.RemotePlayer;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
 import hoffnitch.ai.checkers.gui.Arrow;
@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.rmi.server.RemoteCall;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,9 +32,15 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.MouseInputListener;
 
+import checkersRemote.CheckersConnector;
+import checkersRemote.RemotePlayerInfo;
+
 public class Demo implements MouseInputListener, ActionListener
 {
-	private static final String NEW_GAME = "New game";
+	private static final String NEW_GAME 		= "New game";
+	private static final String LOBBY_ADDRESS 	= "127.0.0.1";
+	private static final int LOBBY_PORT			= 5555;
+	
 	
 	private GameState board;
 	private CheckersTurnMoveGenerator moveGenerator;
@@ -97,9 +105,7 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 	
 	private void giveTurn(Player player) {
-		
 		currentPlayer = player;
-		
 		if (isEliminated(player, board))
 			endGame(getOpponent(player));
 		
@@ -111,17 +117,28 @@ public class Demo implements MouseInputListener, ActionListener
 				canMove = false;
 				grabbedPiece = null;
 				
-				// if ai, turn will be determined now
-				if (player instanceof AIPlayer)
-					turnAnimator.animateTurn(((AIPlayer) player).getTurn(validTurns));
-				
 				// if human, enable moving pieces and wait for event to call doTurn
-				else {
+				if (player instanceof HumanPlayer) {
 					possibleTurns = validTurns;
 					setTurns();
 					drawArrows(true);
 					canMove = true;
 				}
+				
+				// if remote player, get turn from them
+				else if (player instanceof RemotePlayer) {
+					RemotePlayer remotePlayer = (RemotePlayer)player;
+					String action = remotePlayer.getOpponentAction();
+					if (action.equals(CheckersConnector.MOVE))
+						turnAnimator.animateTurn(remotePlayer.getTurn(board));
+					else
+						System.out.println("???");
+				}
+				
+				// if ai, turn will be determined now
+				else
+					turnAnimator.animateTurn(((AIPlayer) player).getTurn(validTurns));
+				
 			}
 		}
 	}
@@ -136,7 +153,12 @@ public class Demo implements MouseInputListener, ActionListener
 		board.doTurn(turn);
 		undoManager.addBoard(board);
 		syncGuiWithGameState();
-		giveTurn(getOpponent(currentPlayer));
+		
+		Player opponent = getOpponent(currentPlayer);
+		if (opponent instanceof RemotePlayer)
+			((RemotePlayer)opponent).sendTurn(turn);
+		
+		giveTurn(opponent);
 	}
 	
 	private Player getOpponent(Player player) {
@@ -157,16 +179,15 @@ public class Demo implements MouseInputListener, ActionListener
 		giveTurn(player);
 	}
 	
-	public void start(PlayerInfo player1, PlayerInfo player2) {
+	public void start(Player player1, Player player2) {
 		
-		if (player1.getColor() == PieceColor.DARK) {
-			black = playerFactory.getPlayer(player1, view.canvas);
-			white = playerFactory.getPlayer(player2, view.canvas);
+		if (player1.color == PieceColor.DARK) {
+			black = player1;
+			white = player2;
 		}
 		else {
-			black = playerFactory.getPlayer(player2, view.canvas);
-			white = playerFactory.getPlayer(player1, view.canvas);
-			
+			black = player2;
+			white = player1;
 		}
 		
 		start(black);
@@ -293,10 +314,10 @@ public class Demo implements MouseInputListener, ActionListener
 						// if we got to an end point, we are done
 						if (filteredTurns.size() == 1 && !filteredTurns.get(0).hasNextMove()) {
 							
+							grabbedPiece.setCoordinates(view.canvas.getCoordinates(position));
 							grabbedPiece = null;
 							grabOffset = null;
 							filteredTurns.clear();
-							drawArrows(true);
 							doTurn(turnBeingBuilt);
 						}
 						else
@@ -382,21 +403,45 @@ public class Demo implements MouseInputListener, ActionListener
 		case CanvasView.NEW:
 			Object[] options = {"Cancel", "Okay"};
 			NewGameMenu newGameMenu = new NewGameMenu();
+			drawArrows(false);
 			int response = JOptionPane.showOptionDialog(view, newGameMenu, NEW_GAME, 
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 			
 			if (response == 1) {
 				// User chose to start a new game
-				PlayerInfo player1Info = null;
-				PlayerInfo player2Info = null;
+				Player player1 = null;
+				Player player2 = null;
+				System.out.println(newGameMenu.getGameType());
 				if (newGameMenu.getGameType() == NewGameMenu.LOCAL) {
-					player1Info = newGameMenu.getPlayer1();
-					player2Info = newGameMenu.getPlayer2();
+					// local game
+					PlayerInfo player1Info = newGameMenu.getPlayer1();
+					PlayerInfo player2Info = newGameMenu.getPlayer2();
+
+					player1 = playerFactory.getPlayer(player1Info, view.canvas);
+					player2 = playerFactory.getPlayer(player2Info, view.canvas);
+				} else {
+					// remote game
+					PlayerInfo player1Info = newGameMenu.getPlayer1();
+					try {
+						int lobbyPort = newGameMenu.getLocalPort();
+						CheckersConnector remoteConnector = CheckersConnector.enterLobby(LOBBY_ADDRESS, LOBBY_PORT, 
+								player1Info.getPlayerName(), lobbyPort);
+						RemotePlayerInfo remotePlayerInfo = remoteConnector.getOpponent();
+						System.out.println("opponent: "+remotePlayerInfo);
+						player2 = new RemotePlayer(remoteConnector, remotePlayerInfo);
+						System.out.println("opponent is " + player2.color);
+						
+						player1Info.setColor(PieceColor.opposite(player2.color));
+						player1 = playerFactory.getPlayer(player1Info, view.canvas);
+						System.out.println("You are color " + player1.color);
+					} catch (IOException e1) { /* player2 doesn't get set on Exceptions*/}
 				}
-				drawArrows(false);
-				DefaultInitializer initializer = new DefaultInitializer();
-				initializer.setBoard(board);
-				start(player1Info, player2Info);
+				
+				if (player2 != null) {
+					DefaultInitializer initializer = new DefaultInitializer();
+					initializer.setBoard(board);
+					start(player1, player2);
+				}
 			}
 			
 			break;
@@ -456,10 +501,12 @@ public class Demo implements MouseInputListener, ActionListener
 			if (dist < distancePerFrame) {
 				// put piece in place
 				movingPiece.setCoordinates(goalPoint);
+				view.canvas.repaint(guiPieces);
 				
 				// if more positions in turn, get the next one
-				if (turn.hasNextMove())
+				if (turn.hasNextMove()) {
 					goalPoint = view.canvas.getCoordinates(turn.nextMove());
+				}
 				
 				// else end the animation and call doMove
 				else
@@ -472,10 +519,8 @@ public class Demo implements MouseInputListener, ActionListener
 				int newX = movingPiece.getCoordinates().x + (int)(Math.cos(theta) * distancePerFrame);
 				int newY = movingPiece.getCoordinates().y + (int)(Math.sin(theta) * distancePerFrame);
 				movingPiece.setCoordinates(new Point(newX, newY));
+				view.canvas.repaint(guiPieces);
 			}
-			
-			// redraw on each frame
-			view.canvas.repaint(guiPieces);
 		}
 		
 		/**

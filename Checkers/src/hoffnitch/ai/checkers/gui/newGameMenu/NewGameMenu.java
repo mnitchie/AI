@@ -64,7 +64,8 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		gameTypeLayout.show(gamePanel, e.getActionCommand());
+		gameType = e.getActionCommand();
+		gameTypeLayout.show(gamePanel, gameType);
 	}
 	
 	public String getGameType() {
@@ -74,16 +75,20 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	public PlayerInfo getPlayer1() {
 		if (gameType == LOCAL) {
 			return localMenu.getPlayer1();
+		} else {
+			return remoteMenu.getPlayer1();
 		}
-		
-		return null;
 	}
 	
 	public PlayerInfo getPlayer2() {
 		if (gameType == LOCAL) {
 			return localMenu.getPlayer2();
+		} else {
+			return remoteMenu.getPlayer2();
 		}
-		
-		return null;
+	}
+	
+	public int getLocalPort() {
+		return remoteMenu.getLobbyPort();
 	}
 }

@@ -23,4 +23,8 @@ public enum PieceColor {
 	public String toString() {
 		return name;
 	}
+	
+	public static PieceColor opposite(PieceColor color) {
+		return (color == PieceColor.LIGHT)? PieceColor.DARK: PieceColor.LIGHT;
+	}
 }
