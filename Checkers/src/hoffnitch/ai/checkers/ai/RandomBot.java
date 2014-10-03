@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers.ai;
 
+import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
 
@@ -17,6 +18,11 @@ public class RandomBot extends AIPlayer {
 	public Turn getTurn(List<Turn> options) {
 		int random = (int)Math.floor(Math.random() * options.size());
 		return options.get(random);
+	}
+	
+	@Override
+	public double evaluateBoard(GameState board) {
+	    return 0;
 	}
 	
 	@Override

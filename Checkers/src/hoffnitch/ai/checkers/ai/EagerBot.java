@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers.ai;
 
+import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
 
@@ -15,6 +16,11 @@ public class EagerBot extends AIPlayer {
     @Override
     public Turn getTurn(List<Turn> options) {
         return options.get(0);
+    }
+    
+    @Override
+    public double evaluateBoard(GameState board) {
+        return 0;
     }
     
     @Override

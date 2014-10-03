@@ -19,9 +19,7 @@ public abstract class AIPlayer extends Player {
 	 * @param board
 	 * @return
 	 */
-	public double evaluateBoard(GameState board) {
-		return 0;
-	}
+	public abstract double evaluateBoard(GameState board);
 	
 	/**
 	 * 
