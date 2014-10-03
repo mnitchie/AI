@@ -221,6 +221,7 @@ public class Demo implements MouseInputListener, ActionListener
 	 * Picks up a piece
 	 * @param e MouseEvent
 	 */
+	@Override
 	public void mousePressed(MouseEvent e) {
 		if (canMove) {
 			BoardCanvas gui = view.canvas;
@@ -286,6 +287,7 @@ public class Demo implements MouseInputListener, ActionListener
 	 * Moves piece if one is grabbed.
 	 * @param e MouseEvent
 	 */
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		if (grabbedPiece != null) {
 			grabbedPiece.setCoordinates(new Point(e.getX() - grabOffset.x, e.getY() - grabOffset.y));
