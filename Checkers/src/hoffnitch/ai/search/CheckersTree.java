@@ -14,15 +14,21 @@ public class CheckersTree
 {
 	private SearchNode root;
 	private int maxDepth;
+	private final PieceColor playerColor;
+	private final PieceColor opponentColor;
 	
-	public CheckersTree(GameState initialBoard, PieceColor firstColor, int maxDepth) {
+	public CheckersTree(GameState initialBoard, PieceColor playerColor, PieceColor firstColor, int maxDepth) {
 		root = new SearchNode(initialBoard);
 		this.maxDepth = maxDepth;
-		
+		this.playerColor = playerColor;
+		this.opponentColor = PieceColor.opposite(playerColor);
 		generate(root, firstColor, maxDepth);
 	}
 	
 	private void generate(SearchNode node, PieceColor color, int depth) {
+		if (node.turn != null && node.turn.pieceColor == color)
+			System.out.println("SHIT");
+		
 		if (depth > 0) {
 			PieceColor opponentColor = PieceColor.opposite(color);
 			
@@ -113,7 +119,10 @@ public class CheckersTree
 		}
 		root = bestNode;
 		
-		generate(root, root.turn.piece.color, maxDepth);
+		// generate turns (opponent goes next)
+		generate(root, opponentColor, maxDepth);
+		
+		root.turn.resetIterator();
 		return root.turn;
 	}
 	
@@ -131,7 +140,9 @@ public class CheckersTree
 			throw new InvalidTurnException();
 		} else {
 			root = node;
-			generate(root, root.turn.piece.color, maxDepth);
+			
+			// generate turns (you go next)
+			generate(root, playerColor, maxDepth);
 		}
 	}
 	

@@ -57,10 +57,12 @@ public class GameState {
 		Position current = turn.getCurrentPosition();
 		boolean isAdjacentMove = !turn.containsJump();
 		
+		Piece piece = getPieceAtPosition(turn.piecePositionIndex);
+		
 		// non-jump
 		if (isAdjacentMove) {
 			setPiece(null, current);
-			setPiece(turn.piece, turn.nextMove());
+			setPiece(piece, turn.nextMove());
 		}
 		
 		// jump
@@ -79,14 +81,14 @@ public class GameState {
 				removedPiece.setAlive(false);
 				setPiece(null, jumped);
 				
-				setPiece(turn.piece, next);
+				setPiece(piece, next);
 				
 				current = next;
 			}
 		}
 		
-		if (shouldCrownPiece(turn.piece)) {
-		    turn.piece.setCrowned(true);
+		if (shouldCrownPiece(piece)) {
+		    piece.setCrowned(true);
 		}
 	}
 	

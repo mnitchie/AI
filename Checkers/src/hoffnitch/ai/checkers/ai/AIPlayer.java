@@ -17,12 +17,16 @@ public abstract class AIPlayer extends Player {
 		super(name, color);
 	}
 	
-	public void setBoard(GameState initialBoard, PieceColor firstColor, int maxDepth) {
-		turnTree = new CheckersTree(initialBoard, firstColor, maxDepth);
+	public void setBoard(GameState initialBoard, PieceColor yourColor, PieceColor firstColor, int maxDepth) {
+		turnTree = new CheckersTree(initialBoard, yourColor, firstColor, maxDepth);
 	}
 	
 	public void getOpponentTurn(Turn turn) throws InvalidTurnException {
 		turnTree.doOpponentTurn(turn);
+		turnTree.evaluateNodes(this);
+	}
+	
+	public void evaluateTurns() {
 		turnTree.evaluateNodes(this);
 	}
 	
@@ -39,5 +43,14 @@ public abstract class AIPlayer extends Player {
 	 */
 	@Deprecated
 	public abstract Turn getTurn(List<Turn> options);
+	
+	/**
+	 * Get the best turn.
+	 * The assumes evaluateTurns() has already been called.
+	 * @return Returns the best turn
+	 */
+	public Turn getTurn() {
+		return turnTree.getBestTurn();
+	}
 	
 }
