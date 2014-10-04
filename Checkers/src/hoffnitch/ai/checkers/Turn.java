@@ -91,6 +91,27 @@ public class Turn {
 		return moves.size();
 	}
 	
+	public boolean equals(Turn other) {
+		boolean isEqual = true;
+		
+		// check that sizes are equal
+		if (moves.size() != other.moves.size()) {
+			isEqual = false;
+		}
+			
+		// check that each index is equal
+		else {
+			for (int i = 0; i < moves.size(); i++) {
+				if (moves.get(i).index != other.moves.get(i).index) {
+					isEqual = false;
+					break;
+				}
+			}
+		}
+		
+		return isEqual;
+	}
+	
 	public String toString() {
 	    StringBuilder toReturn = new StringBuilder();
 	    toReturn.append(piece.color + ":");
