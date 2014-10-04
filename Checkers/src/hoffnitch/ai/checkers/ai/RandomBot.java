@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class RandomBot extends AIPlayer {
     
-    private static final String HEURISTIC_DESCRIPTION = "Random Bot";
-    public static final Random generator = new Random();
+    public static final String HEURISTIC_DESCRIPTION = "Random Bot";
+    private static final Random generator = new Random();
 
 	public RandomBot(PieceColor color) {
 		super(HEURISTIC_DESCRIPTION, color);
@@ -28,9 +28,4 @@ public class RandomBot extends AIPlayer {
 	    double num = generator.nextDouble();
 	    return negative ? -num : num;
 	}
-	
-	@Override
-    public String getName() {
-        return HEURISTIC_DESCRIPTION;
-    }
 }

@@ -29,6 +29,4 @@ public abstract class AIPlayer extends Player {
 	@Deprecated
 	public abstract Turn getTurn(List<Turn> options);
 	
-	public abstract String getName();
-
 }
