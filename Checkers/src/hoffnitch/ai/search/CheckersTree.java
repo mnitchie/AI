@@ -48,6 +48,7 @@ public class CheckersTree
 	
 	public void evaluateNodes(AIPlayer ai) {
 		max(root, ai);
+		System.out.println(root);
 	}
 	
 	private void miniMax(SearchNode node, AIPlayer ai) {
@@ -60,13 +61,13 @@ public class CheckersTree
 		else {
 			// recursively evaluate children
 			for (SearchNode child: node.children) {
-				miniMax(child, ai);
+				max(child, ai);
 			}
 			
 			// select the max
-			double min = root.children.get(0).score;
-			for (int i = 1; i < root.children.size(); i++) {
-				SearchNode child = root.children.get(i);
+			double min = node.children.get(0).score;
+			for (int i = 1; i < node.children.size(); i++) {
+				SearchNode child = node.children.get(i);
 				if (child.score < min) {
 					min = child.score;
 				}
@@ -89,9 +90,9 @@ public class CheckersTree
 			}
 			
 			// select the max
-			double max = root.children.get(0).score;
-			for (int i = 1; i < root.children.size(); i++) {
-				SearchNode child = root.children.get(i);
+			double max = node.children.get(0).score;
+			for (int i = 1; i < node.children.size(); i++) {
+				SearchNode child = node.children.get(i);
 				if (child.score > max) {
 					max = child.score;
 				}
@@ -134,6 +135,10 @@ public class CheckersTree
 		
 		public boolean isLeaf() {
 			return children.size() == 0;
+		}
+		
+		public String toString() {
+			return "" + this.score;
 		}
 	}
 }
