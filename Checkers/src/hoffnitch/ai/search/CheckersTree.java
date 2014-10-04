@@ -5,6 +5,7 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.checkers.ai.AIPlayer;
+import hoffnitch.ai.checkers.exceptions.InvalidTurnException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +115,24 @@ public class CheckersTree
 		
 		generate(root, root.turn.piece.color, maxDepth);
 		return root.turn;
+	}
+	
+	public void doOpponentTurn(Turn turn) throws InvalidTurnException {
+		SearchNode node = null;
+		
+		for (SearchNode child: root.children) {
+			if (child.turn.equals(turn)) {
+				node = child;
+				break;
+			}
+		}
+		
+		if (node == null) {
+			throw new InvalidTurnException();
+		} else {
+			root = node;
+			generate(root, root.turn.piece.color, maxDepth);
+		}
 	}
 	
 	private class SearchNode
