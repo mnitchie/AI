@@ -6,19 +6,24 @@ import java.util.List;
 
 public class Turn {
 	
-	public final Piece piece;
-	private LinkedList<Position> moves = new LinkedList<Position>();
+	//public final Piece piece;
+	public final int piecePositionIndex;
+	public final PieceColor pieceColor;
+	
+	private LinkedList<Position> moves;
 	private Iterator<Position> iterator;
 	private Position currentPosition;
 	private Position nextPosition;
 	
 	public Turn(Piece piece) {
-		this.piece = piece;
+		this.piecePositionIndex = piece.getPosition().index;
+		this.pieceColor = piece.color;
+		
 		moves = new LinkedList<Position>();
 	}
 	
 	public Turn(Piece piece, Position move) {
-	    this.piece = piece;
+	    this(piece);
 	    addMove(move);
 	}
 	
@@ -39,16 +44,12 @@ public class Turn {
 	}
 	
 	public Turn(Piece piece, List<Position> positions) {
-	    this.piece = piece;
+	    this(piece);
 	    for (Position p : positions) {
 	        moves.offer(p); // This might be backwards.
 	    }
 	    resetIterator();
 	}
-
-//	public Iterator<Position> iterator() {
-//		return moves.iterator();
-//	}
 	
 	public void resetIterator()
 	{
@@ -114,7 +115,7 @@ public class Turn {
 	
 	public String toString() {
 	    StringBuilder toReturn = new StringBuilder();
-	    toReturn.append(piece.color + ":");
+	    toReturn.append(pieceColor + ":");
 	    boolean first = true;
 	    for (Position p : moves) {
 	        if (!first) {
