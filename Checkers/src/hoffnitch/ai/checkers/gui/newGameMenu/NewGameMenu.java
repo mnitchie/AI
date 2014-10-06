@@ -29,7 +29,7 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	
 	public NewGameMenu() {
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(400, 170));
+		setPreferredSize(new Dimension(400, 210));
 		
 		// default game type
 		gameType = LOCAL;
@@ -89,6 +89,14 @@ public class NewGameMenu extends JPanel implements ActionListener {
 	}
 	
 	public int getLocalPort() {
+		return remoteMenu.getLocalPort();
+	}
+	
+	public int getLobbyPort() {
 		return remoteMenu.getLobbyPort();
+	}
+	
+	public String getLobbyAddress() {
+		return remoteMenu.getLobbyAddress();
 	}
 }

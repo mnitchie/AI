@@ -9,4 +9,8 @@ public abstract class Player
 		this.name = name;
 		this.color = color;
 	}
+	
+	public String getName() {
+		return name;
+	}
 }

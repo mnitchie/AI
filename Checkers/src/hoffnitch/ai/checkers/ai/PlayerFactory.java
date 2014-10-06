@@ -11,7 +11,6 @@ public class PlayerFactory {
 
 	public static final String HUMAN 			= "Human Player";
 	public static final String REMOTE_PLAYER	= "Remote Player";
-	public static final String RANDOM_BOT 		= "RandomBot";
 	
 	private ArrayList<String> playerTypes;
 	
@@ -19,15 +18,18 @@ public class PlayerFactory {
 		playerTypes = new ArrayList<String>();
 
 		playerTypes.add(HUMAN);
-		playerTypes.add(RANDOM_BOT);
+		playerTypes.add(RandomBot.HEURISTIC_DESCRIPTION);
+		playerTypes.add(RatioBot.HEURISTIC_DESCRIPTION);
 	}
 	
 	public Player getPlayer(PlayerInfo playerInfo, BoardCanvas view) {
 		switch(playerInfo.getPlayerType()) {
 		case HUMAN:
 			return new HumanPlayer(playerInfo.getPlayerName(), playerInfo.getColor(), view);
-		case RANDOM_BOT:
+		case RandomBot.HEURISTIC_DESCRIPTION:
 			return new RandomBot(playerInfo.getColor());
+		case RatioBot.HEURISTIC_DESCRIPTION:
+			return new RatioBot(playerInfo.getColor());
 		}
 		return null;
 	}

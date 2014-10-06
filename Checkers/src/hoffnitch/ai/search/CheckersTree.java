@@ -5,6 +5,7 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.checkers.ai.AIPlayer;
+import hoffnitch.ai.checkers.exceptions.InvalidTurnException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +14,21 @@ public class CheckersTree
 {
 	private SearchNode root;
 	private int maxDepth;
+	private final PieceColor playerColor;
+	private final PieceColor opponentColor;
 	
-	public CheckersTree(GameState initialBoard, PieceColor firstColor, int maxDepth) {
+	public CheckersTree(GameState initialBoard, PieceColor playerColor, PieceColor firstColor, int maxDepth) {
 		root = new SearchNode(initialBoard);
 		this.maxDepth = maxDepth;
-		
+		this.playerColor = playerColor;
+		this.opponentColor = PieceColor.opposite(playerColor);
 		generate(root, firstColor, maxDepth);
 	}
 	
 	private void generate(SearchNode node, PieceColor color, int depth) {
+		if (node.turn != null && node.turn.pieceColor == color)
+			System.out.println("SHIT");
+		
 		if (depth > 0) {
 			PieceColor opponentColor = PieceColor.opposite(color);
 			
@@ -48,6 +55,7 @@ public class CheckersTree
 	
 	public void evaluateNodes(AIPlayer ai) {
 		max(root, ai);
+		System.out.println(root);
 	}
 	
 	private void miniMax(SearchNode node, AIPlayer ai) {
@@ -60,13 +68,13 @@ public class CheckersTree
 		else {
 			// recursively evaluate children
 			for (SearchNode child: node.children) {
-				miniMax(child, ai);
+				max(child, ai);
 			}
 			
 			// select the max
-			double min = root.children.get(0).score;
-			for (int i = 1; i < root.children.size(); i++) {
-				SearchNode child = root.children.get(i);
+			double min = node.children.get(0).score;
+			for (int i = 1; i < node.children.size(); i++) {
+				SearchNode child = node.children.get(i);
 				if (child.score < min) {
 					min = child.score;
 				}
@@ -89,9 +97,9 @@ public class CheckersTree
 			}
 			
 			// select the max
-			double max = root.children.get(0).score;
-			for (int i = 1; i < root.children.size(); i++) {
-				SearchNode child = root.children.get(i);
+			double max = node.children.get(0).score;
+			for (int i = 1; i < node.children.size(); i++) {
+				SearchNode child = node.children.get(i);
 				if (child.score > max) {
 					max = child.score;
 				}
@@ -111,8 +119,31 @@ public class CheckersTree
 		}
 		root = bestNode;
 		
-		generate(root, root.turn.piece.color, maxDepth);
+		// generate turns (opponent goes next)
+		generate(root, opponentColor, maxDepth);
+		
+		root.turn.resetIterator();
 		return root.turn;
+	}
+	
+	public void doOpponentTurn(Turn turn) throws InvalidTurnException {
+		SearchNode node = null;
+		
+		for (SearchNode child: root.children) {
+			if (child.turn.equals(turn)) {
+				node = child;
+				break;
+			}
+		}
+		
+		if (node == null) {
+			throw new InvalidTurnException();
+		} else {
+			root = node;
+			
+			// generate turns (you go next)
+			generate(root, playerColor, maxDepth);
+		}
 	}
 	
 	private class SearchNode
@@ -134,6 +165,10 @@ public class CheckersTree
 		
 		public boolean isLeaf() {
 			return children.size() == 0;
+		}
+		
+		public String toString() {
+			return "" + this.score;
 		}
 	}
 }

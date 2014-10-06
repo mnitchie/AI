@@ -5,6 +5,7 @@ import hoffnitch.ai.checkers.ai.PlayerFactory;
 import hoffnitch.ai.checkers.ai.RemotePlayer;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
 import hoffnitch.ai.checkers.boardSetup.DefaultInitializer;
+import hoffnitch.ai.checkers.exceptions.InvalidTurnException;
 import hoffnitch.ai.checkers.gui.Arrow;
 import hoffnitch.ai.checkers.gui.BoardCanvas;
 import hoffnitch.ai.checkers.gui.CanvasView;
@@ -41,6 +42,7 @@ public class Demo implements MouseInputListener, ActionListener
 	private static final String LOBBY_ADDRESS 	= "127.0.0.1";
 	private static final int LOBBY_PORT			= 5555;
 	
+	private static final int MAX_TREE_DEPTH		= 6;
 	
 	private GameState board;
 	private CheckersTurnMoveGenerator moveGenerator;
@@ -136,14 +138,19 @@ public class Demo implements MouseInputListener, ActionListener
 				}
 				
 				// if ai, turn will be determined now
-				else
-					turnAnimator.animateTurn(((AIPlayer) player).getTurn(validTurns));
-				
+				else {
+					//Turn turn = ((AIPlayer) player).getTurn(validTurns);
+					AIPlayer ai = (AIPlayer)player;
+					ai.evaluateTurns();
+					Turn turn = ai.getTurn();
+					turnAnimator.animateTurn(turn);
+				}
 			}
 		}
 	}
 	
 	private void endGame(Player winner) {
+		drawArrows(false);
 		System.out.println(winner.color.toString() + " wins");
 	}
 	
@@ -155,8 +162,19 @@ public class Demo implements MouseInputListener, ActionListener
 		syncGuiWithGameState();
 		
 		Player opponent = getOpponent(currentPlayer);
-		if (opponent instanceof RemotePlayer)
+		
+		if (opponent instanceof RemotePlayer) {
 			((RemotePlayer)opponent).sendTurn(turn);
+		} else if (opponent instanceof AIPlayer) {
+			try
+			{
+				((AIPlayer)opponent).getOpponentTurn(turn);
+			} catch (InvalidTurnException e)
+			{
+				System.out.println("INVALID MOVE DETECTED");
+				e.printStackTrace();
+			}
+		}
 		
 		giveTurn(opponent);
 	}
@@ -193,6 +211,16 @@ public class Demo implements MouseInputListener, ActionListener
 		start(black);
 	}
 	
+	private void initializeAITree(AIPlayer player) {
+		initializeAITree(player, PieceColor.DARK);
+	}
+	private void initializeAITree(AIPlayer player, PieceColor firstColor) {
+		if (player instanceof AIPlayer) {
+			player.setBoard(board, player.color, firstColor, MAX_TREE_DEPTH);
+			player.evaluateTurns();
+		}
+	}
+	
 	private static boolean isEliminated(Player player, GameState board) {
 		return board.getPieces(player.color).size() == 0;
 	}
@@ -204,8 +232,9 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 	
 	private void filterTurns(Piece piece) {
+		int pieceIndex = piece.getPosition().index;
 		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
-			if (filteredTurns.get(i).piece != piece)
+			if (filteredTurns.get(i).piecePositionIndex != pieceIndex)
 				filteredTurns.remove(i);
 		}
 	}
@@ -394,7 +423,14 @@ public class Demo implements MouseInputListener, ActionListener
 				try {
 					initializer.loadFile(file);
 					initializer.setBoard(board);
+
 					// TODO: save/load color of current player
+
+					if (white instanceof AIPlayer)
+						initializeAITree((AIPlayer)white, white.color);
+					if (black instanceof AIPlayer)
+						initializeAITree((AIPlayer)black, white.color);
+					
 					start(white);
 				} catch (IOException e1) {
 					System.out.println("Failed to load file");
@@ -425,9 +461,11 @@ public class Demo implements MouseInputListener, ActionListener
 					// remote game
 					PlayerInfo player1Info = newGameMenu.getPlayer1();
 					try {
-						int lobbyPort = newGameMenu.getLocalPort();
-						CheckersConnector remoteConnector = CheckersConnector.enterLobby(LOBBY_ADDRESS, LOBBY_PORT, 
-								player1Info.getPlayerName(), lobbyPort);
+						int yourPort = newGameMenu.getLocalPort();
+						int lobbyPort = newGameMenu.getLobbyPort();
+						String lobbyAddress = newGameMenu.getLobbyAddress();
+						CheckersConnector remoteConnector = CheckersConnector.enterLobby(lobbyAddress, lobbyPort, 
+								player1Info.getPlayerName(), yourPort);
 						RemotePlayerInfo remotePlayerInfo = remoteConnector.getOpponent();
 						System.out.println("opponent: "+remotePlayerInfo);
 						player2 = new RemotePlayer(remoteConnector, remotePlayerInfo);
@@ -442,6 +480,12 @@ public class Demo implements MouseInputListener, ActionListener
 				if (player2 != null) {
 					DefaultInitializer initializer = new DefaultInitializer();
 					initializer.setBoard(board);
+					
+					if (player1 instanceof AIPlayer)
+						initializeAITree((AIPlayer)player1);
+					if (player2 instanceof AIPlayer)
+						initializeAITree((AIPlayer)player2);
+					
 					start(player1, player2);
 				}
 			}
@@ -451,6 +495,7 @@ public class Demo implements MouseInputListener, ActionListener
 		case CanvasView.UNDO:
 			if (undoManager.hasNextUndo()) {
 				board = undoManager.undo();
+				Player lastPlayer = currentPlayer;
 				currentPlayer = getOpponent(currentPlayer);
 				
 				// go another step back if opponent is ai
@@ -460,6 +505,12 @@ public class Demo implements MouseInputListener, ActionListener
 				}
 				
 				initializePieces(board);
+				
+				if (currentPlayer instanceof AIPlayer)
+					initializeAITree((AIPlayer)currentPlayer, currentPlayer.color);
+				if (lastPlayer instanceof AIPlayer)
+					initializeAITree((AIPlayer)lastPlayer, currentPlayer.color);
+				
 				giveTurn(currentPlayer);
 			}
 			break;
@@ -467,9 +518,16 @@ public class Demo implements MouseInputListener, ActionListener
 		case CanvasView.REDO:
 			if (undoManager.hasNextRedo()) {
 				board = undoManager.redo();
+				Player lastPlayer = currentPlayer;
 				currentPlayer = getOpponent(currentPlayer);
 				
 				initializePieces(board);
+				
+				if (currentPlayer instanceof AIPlayer)
+					initializeAITree((AIPlayer)currentPlayer, currentPlayer.color);
+				if (lastPlayer instanceof AIPlayer)
+					initializeAITree((AIPlayer)lastPlayer, currentPlayer.color);
+				
 				giveTurn(currentPlayer);
 			}
 			break;
@@ -532,7 +590,9 @@ public class Demo implements MouseInputListener, ActionListener
 		 */
 		public void animateTurn(Turn turn) {
 			this.turn = turn;
-			movingPiece = pieceMap.get(turn.piece);
+			int positionIndex = turn.getCurrentPosition().index;
+			Piece piece = board.getPieceAtPosition(positionIndex);
+			movingPiece = pieceMap.get(piece);
 			goalPoint = view.canvas.getCoordinates(turn.nextMove());
 			timer.start();
 		}

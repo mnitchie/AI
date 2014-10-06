@@ -5,17 +5,15 @@ import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
 
 import java.util.List;
-import java.util.Random;
 
-public class RandomBot extends AIPlayer {
-    
-    public static final String HEURISTIC_DESCRIPTION = "Random Bot";
-    private static final Random generator = new Random();
-
-	public RandomBot(PieceColor color) {
+public class RatioBot extends AIPlayer
+{
+	public static final String HEURISTIC_DESCRIPTION = "Count Bot";
+	
+	public RatioBot(PieceColor color) {
 		super(HEURISTIC_DESCRIPTION, color);
 	}
-
+	
 	@Override
 	public Turn getTurn(List<Turn> options) {
 		int random = (int)Math.floor(Math.random() * options.size());
@@ -24,8 +22,9 @@ public class RandomBot extends AIPlayer {
 	
 	@Override
 	public double evaluateBoard(GameState board) {
-	    boolean negative = generator.nextInt(2) == 1 ? true : false;
-	    double num = generator.nextDouble();
-	    return negative ? -num : num;
+	    double numBotPieces = board.getPieces(color).size();
+	    double numOpponentPieces = board.getPieces(PieceColor.opposite(color)).size();
+	    
+	    return numBotPieces / (numBotPieces + numOpponentPieces);
 	}
 }
