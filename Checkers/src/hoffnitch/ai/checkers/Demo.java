@@ -461,9 +461,11 @@ public class Demo implements MouseInputListener, ActionListener
 					// remote game
 					PlayerInfo player1Info = newGameMenu.getPlayer1();
 					try {
-						int lobbyPort = newGameMenu.getLocalPort();
-						CheckersConnector remoteConnector = CheckersConnector.enterLobby(LOBBY_ADDRESS, LOBBY_PORT, 
-								player1Info.getPlayerName(), lobbyPort);
+						int yourPort = newGameMenu.getLocalPort();
+						int lobbyPort = newGameMenu.getLobbyPort();
+						String lobbyAddress = newGameMenu.getLobbyAddress();
+						CheckersConnector remoteConnector = CheckersConnector.enterLobby(lobbyAddress, lobbyPort, 
+								player1Info.getPlayerName(), yourPort);
 						RemotePlayerInfo remotePlayerInfo = remoteConnector.getOpponent();
 						System.out.println("opponent: "+remotePlayerInfo);
 						player2 = new RemotePlayer(remoteConnector, remotePlayerInfo);
