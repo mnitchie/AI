@@ -12,7 +12,7 @@ public class MinimaxTest {
         GameState board = new GameState();
         AIPlayer randomDark = new RandomBot(PieceColor.DARK);
         
-        CheckersTree tree = new CheckersTree(board, PieceColor.DARK, 6);
+        CheckersTree tree = new CheckersTree(board, PieceColor.DARK, PieceColor.DARK, 6);
         System.out.println("Wait here...");
         
         tree.evaluateNodes(randomDark);
