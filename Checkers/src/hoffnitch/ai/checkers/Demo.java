@@ -215,10 +215,8 @@ public class Demo implements MouseInputListener, ActionListener
 		initializeAITree(player, PieceColor.DARK);
 	}
 	private void initializeAITree(AIPlayer player, PieceColor firstColor) {
-		if (player instanceof AIPlayer) {
-			player.setBoard(board, player.color, firstColor, MAX_TREE_DEPTH);
-			player.evaluateTurns();
-		}
+		player.setBoard(board, player.color, firstColor, MAX_TREE_DEPTH);
+		player.evaluateTurns();
 	}
 	
 	private static boolean isEliminated(Player player, GameState board) {
@@ -501,11 +499,13 @@ public class Demo implements MouseInputListener, ActionListener
 				// go another step back if opponent is ai
 				if (currentPlayer instanceof AIPlayer && undoManager.hasNextUndo()) {
 					board = undoManager.undo();
+					lastPlayer = currentPlayer;
 					currentPlayer = getOpponent(currentPlayer);
 				}
 				
 				initializePieces(board);
 				
+				System.out.println(currentPlayer.color);
 				if (currentPlayer instanceof AIPlayer)
 					initializeAITree((AIPlayer)currentPlayer, currentPlayer.color);
 				if (lastPlayer instanceof AIPlayer)
@@ -558,7 +558,12 @@ public class Demo implements MouseInputListener, ActionListener
 		public void actionPerformed(ActionEvent e) {
 			double dist = getDistance(movingPiece.getCoordinates(), goalPoint);
 			
-			if (dist < distancePerFrame) {
+			if (dist == 0)
+			{
+				timer.stop();
+				doTurn(turn);
+			}
+			else if (dist < distancePerFrame) {
 				// put piece in place
 				movingPiece.setCoordinates(goalPoint);
 				view.canvas.repaint(guiPieces);
@@ -571,8 +576,10 @@ public class Demo implements MouseInputListener, ActionListener
 				// else end the animation and call doMove
 				else
 				{
-					timer.stop();
-					doTurn(turn);
+					//timer.stop();
+					movingPiece.setCoordinates(goalPoint);
+					view.canvas.repaint(guiPieces);
+					//doTurn(turn);
 				}
 			} else {
 				double theta = getAngle(movingPiece.getCoordinates(), goalPoint);
