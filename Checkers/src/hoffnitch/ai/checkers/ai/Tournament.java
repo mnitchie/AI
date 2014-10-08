@@ -4,10 +4,10 @@ import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.db.DBConnection;
 
 public class Tournament {
-    public static void main(String[] args) {
-        DBConnection db = new DBConnection();
-        AutomatedGameSession random = new AutomatedGameSession(new RandomBot(
-                PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 10000);
+    public static void main(String[] args) throws Exception {
+//        DBConnection db = new DBConnection();
+        AutomatedGameSession random = new AutomatedGameSession(new RatioBot(
+                PieceColor.DARK), new RandomBot(PieceColor.LIGHT), 5);
         
         random.play();
     }

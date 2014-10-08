@@ -55,7 +55,7 @@ public class CheckersTree
 	
 	public void evaluateNodes(AIPlayer ai) {
 		max(root, ai);
-		System.out.println(root);
+//		System.out.println(root);
 	}
 	
 	private void miniMax(SearchNode node, AIPlayer ai) {

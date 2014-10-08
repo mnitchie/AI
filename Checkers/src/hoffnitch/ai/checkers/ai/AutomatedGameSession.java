@@ -20,7 +20,7 @@ public class AutomatedGameSession {
     private int draws;
     private int numGames = 1000;
     
-    private static DBConnection db = new DBConnection();
+//    private static DBConnection db = new DBConnection();
     
     private static final int DRAW_THRESHHOLD = 500;
     
@@ -35,9 +35,9 @@ public class AutomatedGameSession {
         this.numGames = numGames;
     }
     
-    public void play() {
+    public void play() throws Exception{
         List<Turn> moves;
-        Turn turn;
+        Turn turn = null;
         GameState board;
         Game game;
         
@@ -45,7 +45,13 @@ public class AutomatedGameSession {
         for (int i = 0; i < numGames; i++) {
             int numMoves = 0;
             board = new GameState();
+            darkPlayer.setBoard(board, PieceColor.DARK, PieceColor.DARK, 6);
+            darkPlayer.evaluateBoard(board);
+            lightPlayer.setBoard(board, PieceColor.LIGHT, PieceColor.DARK, 6);
+            lightPlayer.evaluateBoard(board);
+            moveGenerator = new CheckersTurnMoveGenerator();
             game = new Game(darkPlayer.getName(), lightPlayer.getName());
+            
             while (true) {
                 if (numMoves > DRAW_THRESHHOLD) {
                     draws++;
@@ -56,10 +62,16 @@ public class AutomatedGameSession {
                 moves = moveGenerator.getMovesForTurn(PieceColor.DARK, board);
                 if (moves.size() == 0) {
                     lightWins++;
+                    System.out.println("Light Wins");
                     game.setResult(GameResult.LIGHT_WIN);
                     break;
                 }
-                turn = darkPlayer.getTurn(moves);
+                
+                if (turn != null) {
+                    darkPlayer.getOpponentTurn(turn);
+                }
+                darkPlayer.evaluateTurns();
+                turn = darkPlayer.getTurn();
                 board.doTurn(turn);
                 game.addTurn(turn);
                 numMoves++;
@@ -68,14 +80,18 @@ public class AutomatedGameSession {
                 if (moves.size() == 0) {
                     darkWins++;
                     game.setResult(GameResult.DARK_WIN);
+                    System.out.println("Dark wins");
                     break;
                 }
-                turn = lightPlayer.getTurn(moves);
+                lightPlayer.getOpponentTurn(turn);
+                lightPlayer.evaluateTurns();
+                turn = lightPlayer.getTurn();
                 board.doTurn(turn);
                 game.addTurn(turn);
                 numMoves++;
             }
-            db.save(game);
+            turn = null;
+//            db.save(game);
         }
         Long end = System.currentTimeMillis();
         System.out.println(numGames + " games took " + (end - start) + " ms");
