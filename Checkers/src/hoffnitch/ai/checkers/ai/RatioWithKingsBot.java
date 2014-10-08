@@ -4,10 +4,11 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
 
 public class RatioWithKingsBot extends AIPlayer {
+    
+    public static final String HEURISTIC_DESCRIPTION = "Piece Ratio With Kings";
 
-    public RatioWithKingsBot(String name, PieceColor color) {
-        super(name, color);
-        // TODO Auto-generated constructor stub
+    public RatioWithKingsBot(PieceColor color) {
+        super(HEURISTIC_DESCRIPTION, color);
     }
     
     public RatioWithKingsBot(String name, PieceColor color, double ratioWeight,

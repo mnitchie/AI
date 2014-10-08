@@ -22,7 +22,7 @@ public class AutomatedGameSession {
     
 //    private static DBConnection db = new DBConnection();
     
-    private static final int DRAW_THRESHHOLD = 500;
+    private static final int DRAW_THRESHHOLD = 100;
     
     public AutomatedGameSession(AIPlayer darkPlayer, AIPlayer lightPlayer) {
         this.darkPlayer = darkPlayer;
@@ -56,6 +56,7 @@ public class AutomatedGameSession {
                 if (numMoves > DRAW_THRESHHOLD) {
                     draws++;
                     game.setResult(GameResult.DRAW);
+                    System.out.println("Draw!");
                     break;
                 }
                 
