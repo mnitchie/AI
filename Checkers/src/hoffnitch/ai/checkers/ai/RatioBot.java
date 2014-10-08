@@ -22,9 +22,6 @@ public class RatioBot extends AIPlayer
 	
 	@Override
 	public double evaluateBoard(GameState board) {
-	    double numBotPieces = board.getPieces(color).size();
-	    double numOpponentPieces = board.getPieces(PieceColor.opposite(color)).size();
-	    
-	    return numBotPieces / (numBotPieces + numOpponentPieces);
+	    return getRatioWeight() * scoreBoardOnPieceRatio(board);
 	}
 }
