@@ -2,9 +2,6 @@ package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Turn;
-
-import java.util.List;
 
 public class RatioBot extends AIPlayer
 {

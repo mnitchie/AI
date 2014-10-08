@@ -2,9 +2,7 @@ package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Turn;
 
-import java.util.List;
 import java.util.Random;
 
 public class RandomBot extends AIPlayer {

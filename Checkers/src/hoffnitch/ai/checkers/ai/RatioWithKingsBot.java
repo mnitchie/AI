@@ -2,9 +2,6 @@ package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Turn;
-
-import java.util.List;
 
 public class RatioWithKingsBot extends AIPlayer {
 
@@ -20,7 +17,7 @@ public class RatioWithKingsBot extends AIPlayer {
 
     @Override
     public double evaluateBoard(GameState board) {
-        // TODO Auto-generated method stub
-        return 0;
+        return (getRatioWeight() * scoreBoardOnPieceRatio(board))
+                + (getKingWeight() * scoreBoardOnNumKings(board));
     }
 }
