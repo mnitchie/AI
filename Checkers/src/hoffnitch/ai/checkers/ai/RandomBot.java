@@ -15,12 +15,6 @@ public class RandomBot extends AIPlayer {
 	public RandomBot(PieceColor color) {
 		super(HEURISTIC_DESCRIPTION, color);
 	}
-
-	@Override
-	public Turn getTurn(List<Turn> options) {
-		int random = (int)Math.floor(Math.random() * options.size());
-		return options.get(random);
-	}
 	
 	@Override
 	public double evaluateBoard(GameState board) {

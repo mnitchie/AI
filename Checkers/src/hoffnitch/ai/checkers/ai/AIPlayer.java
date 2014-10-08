@@ -24,7 +24,8 @@ public abstract class AIPlayer extends Player {
         distanceWeight = 1;
     }
     
-    public AIPlayer(String name, PieceColor color, double ratioWeight, double kingWeight, double distanceWeight) {
+    public AIPlayer(String name, PieceColor color, double ratioWeight,
+            double kingWeight, double distanceWeight) {
         super(name, color);
         this.ratioWeight = ratioWeight;
         this.kingWeight = kingWeight;
@@ -74,13 +75,6 @@ public abstract class AIPlayer extends Player {
 	 * @return Returns double representing board evaluation (higher values are better)
 	 */
 	public abstract double evaluateBoard(GameState board);
-	
-	/**
-	 * @param options
-	 * @return
-	 */
-	@Deprecated
-	public abstract Turn getTurn(List<Turn> options);
 	
 	/**
 	 * Get the best turn.

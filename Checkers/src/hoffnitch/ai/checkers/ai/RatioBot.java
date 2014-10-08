@@ -15,12 +15,6 @@ public class RatioBot extends AIPlayer
 	}
 	
 	@Override
-	public Turn getTurn(List<Turn> options) {
-		int random = (int)Math.floor(Math.random() * options.size());
-		return options.get(random);
-	}
-	
-	@Override
 	public double evaluateBoard(GameState board) {
 	    return getRatioWeight() * scoreBoardOnPieceRatio(board);
 	}
