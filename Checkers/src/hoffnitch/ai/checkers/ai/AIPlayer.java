@@ -96,11 +96,14 @@ public abstract class AIPlayer extends Player {
 	    List<Piece> botPieces = board.getPieces(color);
 	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(color));
 	    
-	    double numBotKings = countKings(botPieces);
+	    int numBotKings = countKings(botPieces);
 	    
-	    double numOpponentKings = countKings(opponentPieces);
+	    int numOpponentKings = countKings(opponentPieces);
+
+	    int totalKings = numBotKings + numOpponentKings;
+	    totalKings = totalKings == 0 ? 1 : totalKings;
 	    
-	    return numBotKings / (numBotKings + numOpponentKings);
+	    return numBotKings / (double) totalKings;
 	}
 	
 	private int countKings(List<Piece> pieces) {

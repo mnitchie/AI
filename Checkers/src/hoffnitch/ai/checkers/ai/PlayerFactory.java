@@ -21,6 +21,7 @@ public class PlayerFactory {
 		playerTypes.add(RandomBot.HEURISTIC_DESCRIPTION);
 		playerTypes.add(RatioBot.HEURISTIC_DESCRIPTION);
 		playerTypes.add(RatioWithKingsBot.HEURISTIC_DESCRIPTION);
+		playerTypes.add(KingBot.HEURISTIC_DESCRIPTION);
 	}
 	
 	public Player getPlayer(PlayerInfo playerInfo, BoardCanvas view) {
@@ -33,6 +34,8 @@ public class PlayerFactory {
 			return new RatioBot(playerInfo.getColor());
 		case RatioWithKingsBot.HEURISTIC_DESCRIPTION:
 		    return new RatioWithKingsBot(playerInfo.getColor());
+		case KingBot.HEURISTIC_DESCRIPTION:
+		    return new KingBot(playerInfo.getColor());
 		}
 		return null;
 	}
