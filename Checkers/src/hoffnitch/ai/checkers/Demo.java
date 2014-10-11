@@ -19,8 +19,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
-import java.rmi.server.RemoteCall;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,9 +37,6 @@ import checkersRemote.RemotePlayerInfo;
 public class Demo implements MouseInputListener, ActionListener
 {
 	private static final String NEW_GAME 		= "New game";
-	private static final String LOBBY_ADDRESS 	= "127.0.0.1";
-	private static final int LOBBY_PORT			= 5555;
-	
 	private static final int MAX_TREE_DEPTH		= 6;
 	
 	private GameState board;
