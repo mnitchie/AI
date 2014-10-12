@@ -128,14 +128,39 @@ public abstract class AIPlayer extends Player {
 	}
 	
 	/**
-	 * Scores the board based on the aggregate distance of all player pieces
+	 * Scores the board based on the aggregate mahattan distance of all player pieces
 	 * to all opponent pieces. The purpose is to 'nudge' the piece nearer
 	 * to the opponent to avoid a stupid stalemate of pieces moving back and forth.
+	 * 
+	 * Distances represented in terms of percent of board size (i.e. 1.0 indicates
+	 * the pieces are on opposite corners of the board.
+	 * 
+	 * The returned score averaged. Thus, the returned score should be a value
+	 * between 0.0 and 1.0.
+	 * 
 	 * @param board
-	 * @return
+	 * @return Score representing manhattan distance
 	 */
 	protected double scoreBoardOnDistanceToOpponent(GameState board) {
-	    return 0;
+		// the farthest distance is 7 rows away and 7 columns away
+		final int MAX_DIST = 14;
+		
+		List<Piece> botPieces = board.getPieces(color);
+	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(color));
+	    
+	    double distanceScore = 0;
+		for (Piece playerPiece: botPieces) {
+			for (Piece opponentPiece: opponentPieces) {
+				int rowDist = opponentPiece.getPosition().row - playerPiece.getPosition().row;
+				int colDist = opponentPiece.getPosition().column - playerPiece.getPosition().column;
+				distanceScore += Math.abs(rowDist) + Math.abs(colDist) / MAX_DIST;
+			}
+		}
+		
+		// average it
+		distanceScore /= botPieces.size() * opponentPieces.size();
+	    
+	    return distanceScore;
 	}
 	
 	/**
