@@ -36,11 +36,13 @@ import checkersRemote.RemotePlayerInfo;
 
 public class Demo implements MouseInputListener, ActionListener
 {
-	private static final String NEW_GAME 		= "New game";
-	private static final int MAX_TREE_DEPTH		= 6;
+	private static final String NEW_GAME 				= "New game";
+	private static final int MAX_TREE_DEPTH				= 6;
+	private static final int REPETITIONS_FOR_STALEMATE 	= 3;
 	
 	private GameState board;
 	private CheckersTurnMoveGenerator moveGenerator;
+	private StalemateDetector stalemateDetector;
 	private CanvasView view;
 	private Player white;
 	private Player black;
@@ -80,6 +82,7 @@ public class Demo implements MouseInputListener, ActionListener
 		guiPieces = new LinkedList<GuiPiece>();
 		pieceMap = new HashMap<Piece, GuiPiece>();
 		turnValidator = new TurnValidator();
+		stalemateDetector = new StalemateDetector(REPETITIONS_FOR_STALEMATE);
 		//filteredTurns = new LinkedList<Turn>();
 		
 		board = new GameState();
@@ -143,7 +146,14 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	private void endGame(Player winner) {
 		drawArrows(false);
-		System.out.println(winner.color.toString() + " wins");
+		
+		if (winner != null) {
+			System.out.println(winner.color.toString() + " wins");
+		}
+		
+		else {
+			System.out.println("Stalemate!");
+		}
 	}
 	
 	private void doTurn(Turn turn) {
@@ -151,6 +161,12 @@ public class Demo implements MouseInputListener, ActionListener
 		
 		board.doTurn(turn);
 		undoManager.addBoard(board);
+		stalemateDetector.addTurn(turn);
+		if (stalemateDetector.isStalemate()) {
+			endGame(null);
+			return;
+		}
+		
 		syncGuiWithGameState();
 		
 		Player opponent = getOpponent(currentPlayer);
@@ -183,6 +199,7 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 	
 	public void start(Player player) {
+		stalemateDetector.reset();
 		initializePieces(board);
 		undoManager = new UndoManager();
 		undoManager.addBoard(board);
@@ -299,11 +316,9 @@ public class Demo implements MouseInputListener, ActionListener
 				
 				// otherwise, selecting new position for piece
 				else {
-					//filterTurns(position);
 					turnValidator.filterTurns(position);
 					
 					// if no errors
-					//if (filteredTurns.size() > 0) {
 					if (turnValidator.numFilteredTurns() > 0) {
 						turnValidator.addPositionToTurn(position);
 						
@@ -471,6 +486,7 @@ public class Demo implements MouseInputListener, ActionListener
 					currentPlayer = getOpponent(currentPlayer);
 				}
 				
+				stalemateDetector.reset();
 				initializePieces(board);
 				
 				System.out.println(currentPlayer.color);
@@ -488,7 +504,8 @@ public class Demo implements MouseInputListener, ActionListener
 				board = undoManager.redo();
 				Player lastPlayer = currentPlayer;
 				currentPlayer = getOpponent(currentPlayer);
-				
+
+				stalemateDetector.reset();
 				initializePieces(board);
 				
 				if (currentPlayer instanceof AIPlayer)
