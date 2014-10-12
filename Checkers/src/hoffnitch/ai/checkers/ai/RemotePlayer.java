@@ -40,11 +40,12 @@ public class RemotePlayer extends NonHumanPlayer {
 			remotePlayerInfo = new RemotePlayerInfo(remotePlayerInfo.name, remoteConnector.getOpponentColor());
 			setColor(getPieceColor(remotePlayerInfo));
 		}
-		return remoteConnector.getOpponentAction();
+		return action;
 	}
 	
-	public void reset() {
-		remoteConnector.restart(getColorString(getColor()));
+	public void restart() {
+		PieceColor opponentColor = PieceColor.opposite(getColor());
+		remoteConnector.restart(getColorString(opponentColor));
 	}
 	
 	@Override

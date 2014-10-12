@@ -129,11 +129,15 @@ public class Demo implements MouseInputListener, ActionListener
 					// if remote player, check that they actually want to move
 					if (player instanceof RemotePlayer) {
 						RemotePlayer remotePlayer = (RemotePlayer)player;
+						
+						System.out.print("getting action.. ");
 						String action = remotePlayer.getOpponentAction();
+						System.out.println(action);
 						
 						// check for restart
 						if (action.equals(CheckersConnector.RESTART)) {
 							Player opponent = getOpponent(remotePlayer);
+							System.out.println("Opponent color: " + remotePlayer.getColor());
 							opponent.setColor(PieceColor.opposite(remotePlayer.getColor()));
 							
 							restartGame(remotePlayer, opponent);
@@ -507,15 +511,15 @@ public class Demo implements MouseInputListener, ActionListener
 			// TODO: make color selection non-random
 			PieceColor player1Color = (Math.random() < 0.5)? PieceColor.LIGHT: PieceColor.DARK;
 			PieceColor player2Color = PieceColor.opposite(player1Color);
-
+			
 			player1.setColor(player1Color);
 			player2.setColor(player2Color);
 			
 			if (player1 instanceof RemotePlayer) {
-				((RemotePlayer) player1).reset();
+				((RemotePlayer) player1).restart();
 			}
 			if (player2 instanceof RemotePlayer) {
-				((RemotePlayer) player2).reset();
+				((RemotePlayer) player2).restart();
 			}
 			
 			restartGame(player1, player2);
