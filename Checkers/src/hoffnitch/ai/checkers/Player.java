@@ -3,7 +3,7 @@ package hoffnitch.ai.checkers;
 public abstract class Player
 {
 	public final String name;
-	public final PieceColor color;
+	private PieceColor color;
 	
 	public Player(String name, PieceColor color) {
 		this.name = name;
@@ -12,5 +12,13 @@ public abstract class Player
 	
 	public String getName() {
 		return name;
+	}
+	
+	public PieceColor getColor() {
+		return color;
+	}
+	
+	public void setColor(PieceColor color) {
+		this.color = color;
 	}
 }

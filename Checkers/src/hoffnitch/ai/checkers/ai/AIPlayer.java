@@ -93,8 +93,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * @return A double representing the ratio of playerPieces:totalPieces
 	 */
 	protected double scoreBoardOnPieceRatio(GameState board) {
-	    double numBotPieces = board.getPieces(color).size();
-        double numOpponentPieces = board.getPieces(PieceColor.opposite(color)).size();
+	    double numBotPieces = board.getPieces(getColor()).size();
+        double numOpponentPieces = board.getPieces(PieceColor.opposite(getColor())).size();
         
         return numBotPieces / (numBotPieces + numOpponentPieces);
 	}
@@ -105,8 +105,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
      * @return A double representing the ratio of playerKings:totalKings
      */
 	protected double scoreBoardOnNumKings(GameState board) {
-	    List<Piece> botPieces = board.getPieces(color);
-	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(color));
+	    List<Piece> botPieces = board.getPieces(getColor());
+	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
 	    
 	    int numBotKings = countKings(botPieces);
 	    
@@ -147,8 +147,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		// the farthest distance is 7 rows away and 7 columns away
 		final int MAX_DIST = 14;
 		
-		List<Piece> botPieces = board.getPieces(color);
-	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(color));
+		List<Piece> botPieces = board.getPieces(getColor());
+	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
 	    
 	    double distanceScore = 0;
 		for (Piece playerPiece: botPieces) {
@@ -175,7 +175,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	    int numProtectors = 0;
 	    int min = 0;
 	    int max = 0;
-	    switch (color) {
+	    switch (getColor()) {
 	    case DARK:
 	        min = 1;
 	        max = 4;
@@ -187,7 +187,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	    }
 	    
 	    for (int i = min; i <= max; i++) {
-            if (board.getPieceAtPosition(i).color.equals(color)) {
+            if (board.getPieceAtPosition(i).color.equals(getColor())) {
                 numProtectors++;
             }
         }

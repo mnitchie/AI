@@ -83,7 +83,6 @@ public class Demo implements MouseInputListener, ActionListener
 		pieceMap = new HashMap<Piece, GuiPiece>();
 		turnValidator = new TurnValidator();
 		stalemateDetector = new StalemateDetector(REPETITIONS_FOR_STALEMATE);
-		//filteredTurns = new LinkedList<Turn>();
 		
 		board = new GameState();
 		moveGenerator = new CheckersTurnMoveGenerator();
@@ -109,7 +108,7 @@ public class Demo implements MouseInputListener, ActionListener
 			endGame(getOpponent(player));
 		
 		else {
-			List<Turn> validTurns = moveGenerator.getMovesForTurn(player.color, board);
+			List<Turn> validTurns = moveGenerator.getMovesForTurn(player.getColor(), board);
 			if (validTurns.size() == 0)
 				endGame(getOpponent(player));
 			else {
@@ -131,7 +130,18 @@ public class Demo implements MouseInputListener, ActionListener
 					if (player instanceof RemotePlayer) {
 						RemotePlayer remotePlayer = (RemotePlayer)player;
 						String action = remotePlayer.getOpponentAction();
-						if (!action.equals(CheckersConnector.MOVE)) {
+						
+						// check for restart
+						if (action.equals(CheckersConnector.RESTART)) {
+							Player opponent = getOpponent(remotePlayer);
+							opponent.setColor(PieceColor.opposite(remotePlayer.getColor()));
+							
+							restartGame(remotePlayer, opponent);
+							return;
+						}
+						
+						// check for disconnect
+						else if (action.equals(CheckersConnector.DISCONNECT)) {
 							endGame(null);
 							return;
 						}
@@ -140,29 +150,29 @@ public class Demo implements MouseInputListener, ActionListener
 					// get turn from non-human
 					Turn turn = nonHumanPlayer.getTurn();
 					turnAnimator.animateTurn(turn);
-//					
-//							turnAnimator.animateTurn(remotePlayer.getTurn(board));
-//						else
-//							System.out.println("???");
-//					}
-//					
-//					// if ai, turn will be determined now
-//					else {
-//						AIPlayer ai = (AIPlayer)player;
-//						ai.evaluateTurns();
-//						Turn turn = ai.getTurn();
-//						turnAnimator.animateTurn(turn);
-//					}
 				}
 			}
 		}
+	}
+	
+	private void restartGame(Player player1, Player player2) {
+		
+		DefaultInitializer initializer = new DefaultInitializer();
+		initializer.setBoard(board);
+		
+		if (player1 instanceof AIPlayer)
+			initializeAITree((AIPlayer)player1);
+		if (player2 instanceof AIPlayer)
+			initializeAITree((AIPlayer)player2);
+		
+		start(player1, player2);
 	}
 	
 	private void endGame(Player winner) {
 		drawArrows(false);
 		
 		if (winner != null) {
-			System.out.println(winner.color.toString() + " wins");
+			System.out.println(winner.getColor().toString() + " wins");
 		}
 		
 		else {
@@ -184,20 +194,6 @@ public class Demo implements MouseInputListener, ActionListener
 		syncGuiWithGameState();
 		
 		Player opponent = getOpponent(currentPlayer);
-		
-		// TODO: Refactor for NonHumanPlayer
-//		if (opponent instanceof RemotePlayer) {
-//			((RemotePlayer)opponent).sendTurn(turn);
-//		} else if (opponent instanceof AIPlayer) {
-//			try
-//			{
-//				((AIPlayer)opponent).getOpponentTurn(turn);
-//			} catch (InvalidTurnException e)
-//			{
-//				System.out.println("INVALID MOVE DETECTED");
-//				e.printStackTrace();
-//			}
-//		}
 		
 		if (opponent instanceof NonHumanPlayer) {
 			NonHumanPlayer nonHumanPlayer = (NonHumanPlayer)opponent;
@@ -235,7 +231,7 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	public void start(Player player1, Player player2) {
 		
-		if (player1.color == PieceColor.DARK) {
+		if (player1.getColor() == PieceColor.DARK) {
 			black = player1;
 			white = player2;
 		}
@@ -251,12 +247,12 @@ public class Demo implements MouseInputListener, ActionListener
 		initializeAITree(player, PieceColor.DARK);
 	}
 	private void initializeAITree(AIPlayer player, PieceColor firstColor) {
-		player.setBoard(board, player.color, firstColor, MAX_TREE_DEPTH);
+		player.setBoard(board, player.getColor(), firstColor, MAX_TREE_DEPTH);
 		player.evaluateTurns();
 	}
 	
 	private static boolean isEliminated(Player player, GameState board) {
-		return board.getPieces(player.color).size() == 0;
+		return board.getPieces(player.getColor()).size() == 0;
 	}
 
 	private void resetTurn() {
@@ -408,6 +404,8 @@ public class Demo implements MouseInputListener, ActionListener
 	public void actionPerformed(ActionEvent e) {
 		JFileChooser fileChooser;
 		int returnValue;
+		Player player1 = null;
+		Player player2 = null;
 		
 		switch (e.getActionCommand()) {
 		case CanvasView.SAVE:
@@ -438,9 +436,9 @@ public class Demo implements MouseInputListener, ActionListener
 					// TODO: save/load color of current player
 
 					if (white instanceof AIPlayer)
-						initializeAITree((AIPlayer)white, white.color);
+						initializeAITree((AIPlayer)white, white.getColor());
 					if (black instanceof AIPlayer)
-						initializeAITree((AIPlayer)black, white.color);
+						initializeAITree((AIPlayer)black, white.getColor());
 					
 					start(white);
 				} catch (IOException e1) {
@@ -458,9 +456,7 @@ public class Demo implements MouseInputListener, ActionListener
 			
 			if (response == 1) {
 				// User chose to start a new game
-				Player player1 = null;
-				Player player2 = null;
-				System.out.println(newGameMenu.getGameType());
+				
 				if (newGameMenu.getGameType() == NewGameMenu.LOCAL) {
 					// local game
 					PlayerInfo player1Info = newGameMenu.getPlayer1();
@@ -480,11 +476,11 @@ public class Demo implements MouseInputListener, ActionListener
 						RemotePlayerInfo remotePlayerInfo = remoteConnector.getOpponent();
 						System.out.println("opponent: "+remotePlayerInfo);
 						player2 = new RemotePlayer(remoteConnector, remotePlayerInfo);
-						System.out.println("opponent is " + player2.color);
+						System.out.println("opponent is " + player2.getColor());
 						
-						player1Info.setColor(PieceColor.opposite(player2.color));
+						player1Info.setColor(PieceColor.opposite(player2.getColor()));
 						player1 = playerFactory.getPlayer(player1Info, view.canvas);
-						System.out.println("You are color " + player1.color);
+						System.out.println("You are color " + player1.getColor());
 					} catch (IOException e1) { /* player2 doesn't get set on Exceptions*/}
 				}
 				
@@ -500,6 +496,29 @@ public class Demo implements MouseInputListener, ActionListener
 					start(player1, player2);
 				}
 			}
+			
+			break;
+			
+		case CanvasView.RESTART:
+			
+			player1 = white;
+			player2 = black;
+			
+			// TODO: make color selection non-random
+			PieceColor player1Color = (Math.random() < 0.5)? PieceColor.LIGHT: PieceColor.DARK;
+			PieceColor player2Color = PieceColor.opposite(player1Color);
+
+			player1.setColor(player1Color);
+			player2.setColor(player2Color);
+			
+			if (player1 instanceof RemotePlayer) {
+				((RemotePlayer) player1).reset();
+			}
+			if (player2 instanceof RemotePlayer) {
+				((RemotePlayer) player2).reset();
+			}
+			
+			restartGame(player1, player2);
 			
 			break;
 			
@@ -519,11 +538,10 @@ public class Demo implements MouseInputListener, ActionListener
 				stalemateDetector.reset();
 				initializePieces(board);
 				
-				System.out.println(currentPlayer.color);
 				if (currentPlayer instanceof AIPlayer)
-					initializeAITree((AIPlayer)currentPlayer, currentPlayer.color);
+					initializeAITree((AIPlayer)currentPlayer, currentPlayer.getColor());
 				if (lastPlayer instanceof AIPlayer)
-					initializeAITree((AIPlayer)lastPlayer, currentPlayer.color);
+					initializeAITree((AIPlayer)lastPlayer, currentPlayer.getColor());
 				
 				giveTurn(currentPlayer);
 			}
@@ -539,9 +557,9 @@ public class Demo implements MouseInputListener, ActionListener
 				initializePieces(board);
 				
 				if (currentPlayer instanceof AIPlayer)
-					initializeAITree((AIPlayer)currentPlayer, currentPlayer.color);
+					initializeAITree((AIPlayer)currentPlayer, currentPlayer.getColor());
 				if (lastPlayer instanceof AIPlayer)
-					initializeAITree((AIPlayer)lastPlayer, currentPlayer.color);
+					initializeAITree((AIPlayer)lastPlayer, currentPlayer.getColor());
 				
 				giveTurn(currentPlayer);
 			}

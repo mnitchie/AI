@@ -21,6 +21,7 @@ public class CanvasView extends JFrame implements View {
 	private static final long serialVersionUID = -5448930846329842670L;
 
 	public static final String LOAD = "Load";
+	public static final String RESTART = "Restart";
 	public static final String SAVE = "Save";
 	public static final String NEW = "New";
 	public static final String UNDO = "Undo";
@@ -74,9 +75,16 @@ public class CanvasView extends JFrame implements View {
 		// new
 		JMenuItem newGame = new JMenuItem(NEW, KeyEvent.VK_N); 
 		newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-		newGame.getAccessibleContext().setAccessibleDescription("Reset board");
+		newGame.getAccessibleContext().setAccessibleDescription("New game");
 		gameMenu.add(newGame);
 		newGame.addActionListener(listener);
+
+		// restart
+		JMenuItem restartGame = new JMenuItem(RESTART, KeyEvent.VK_R); 
+		restartGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+		restartGame.getAccessibleContext().setAccessibleDescription("Restart board");
+		gameMenu.add(restartGame);
+		restartGame.addActionListener(listener);
 		
 		// undo
 		JMenuItem undo = new JMenuItem(UNDO, KeyEvent.VK_Z); 
