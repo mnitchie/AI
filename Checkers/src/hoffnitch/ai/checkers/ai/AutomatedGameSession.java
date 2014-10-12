@@ -69,7 +69,7 @@ public class AutomatedGameSession {
                 }
                 
                 if (turn != null) {
-                    darkPlayer.getOpponentTurn(turn);
+                    darkPlayer.receiveOpponentTurn(turn);
                 }
                 darkPlayer.evaluateTurns();
                 turn = darkPlayer.getTurn();
@@ -84,7 +84,7 @@ public class AutomatedGameSession {
                     System.out.println("Dark wins");
                     break;
                 }
-                lightPlayer.getOpponentTurn(turn);
+                lightPlayer.receiveOpponentTurn(turn);
                 lightPlayer.evaluateTurns();
                 turn = lightPlayer.getTurn();
                 board.doTurn(turn);

@@ -15,11 +15,15 @@ public class Turn {
 	private Position currentPosition;
 	private Position nextPosition;
 	
-	public Turn(Piece piece) {
-		this.piecePositionIndex = piece.getPosition().index;
-		this.pieceColor = piece.color;
+	public Turn(int piecePositionIndex, PieceColor pieceColor) {
+		this.piecePositionIndex = piecePositionIndex;
+		this.pieceColor = pieceColor;
 		
 		moves = new LinkedList<Position>();
+	}
+	
+	public Turn(Piece piece) {
+		this(piece.getPosition().index, piece.color);
 	}
 	
 	public Turn(Piece piece, Position move) {

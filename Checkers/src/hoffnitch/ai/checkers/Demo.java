@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers;
 
 import hoffnitch.ai.checkers.ai.AIPlayer;
+import hoffnitch.ai.checkers.ai.NonHumanPlayer;
 import hoffnitch.ai.checkers.ai.PlayerFactory;
 import hoffnitch.ai.checkers.ai.RemotePlayer;
 import hoffnitch.ai.checkers.boardSetup.BoardInitializerFromFile;
@@ -66,7 +67,6 @@ public class Demo implements MouseInputListener, ActionListener
 	
 	public static void main(String[] args) {
 		Demo demo = new Demo();
-		//demo.start();
 	}
 	
 	public Demo() {
@@ -123,22 +123,36 @@ public class Demo implements MouseInputListener, ActionListener
 					canMove = true;
 				}
 				
-				// if remote player, get turn from them
-				else if (player instanceof RemotePlayer) {
-					RemotePlayer remotePlayer = (RemotePlayer)player;
-					String action = remotePlayer.getOpponentAction();
-					if (action.equals(CheckersConnector.MOVE))
-						turnAnimator.animateTurn(remotePlayer.getTurn(board));
-					else
-						System.out.println("???");
-				}
-				
-				// if ai, turn will be determined now
+				// if non-human player, get turn from them
 				else {
-					AIPlayer ai = (AIPlayer)player;
-					ai.evaluateTurns();
-					Turn turn = ai.getTurn();
+					NonHumanPlayer nonHumanPlayer = (NonHumanPlayer)player;
+					
+					// if remote player, check that they actually want to move
+					if (player instanceof RemotePlayer) {
+						RemotePlayer remotePlayer = (RemotePlayer)player;
+						String action = remotePlayer.getOpponentAction();
+						if (!action.equals(CheckersConnector.MOVE)) {
+							endGame(null);
+							return;
+						}
+					}
+					
+					// get turn from non-human
+					Turn turn = nonHumanPlayer.getTurn();
 					turnAnimator.animateTurn(turn);
+//					
+//							turnAnimator.animateTurn(remotePlayer.getTurn(board));
+//						else
+//							System.out.println("???");
+//					}
+//					
+//					// if ai, turn will be determined now
+//					else {
+//						AIPlayer ai = (AIPlayer)player;
+//						ai.evaluateTurns();
+//						Turn turn = ai.getTurn();
+//						turnAnimator.animateTurn(turn);
+//					}
 				}
 			}
 		}
@@ -171,15 +185,28 @@ public class Demo implements MouseInputListener, ActionListener
 		
 		Player opponent = getOpponent(currentPlayer);
 		
-		if (opponent instanceof RemotePlayer) {
-			((RemotePlayer)opponent).sendTurn(turn);
-		} else if (opponent instanceof AIPlayer) {
+		// TODO: Refactor for NonHumanPlayer
+//		if (opponent instanceof RemotePlayer) {
+//			((RemotePlayer)opponent).sendTurn(turn);
+//		} else if (opponent instanceof AIPlayer) {
+//			try
+//			{
+//				((AIPlayer)opponent).getOpponentTurn(turn);
+//			} catch (InvalidTurnException e)
+//			{
+//				System.out.println("INVALID MOVE DETECTED");
+//				e.printStackTrace();
+//			}
+//		}
+		
+		if (opponent instanceof NonHumanPlayer) {
+			NonHumanPlayer nonHumanPlayer = (NonHumanPlayer)opponent;
 			try
 			{
-				((AIPlayer)opponent).getOpponentTurn(turn);
+				nonHumanPlayer.receiveOpponentTurn(turn);
 			} catch (InvalidTurnException e)
 			{
-				System.out.println("INVALID MOVE DETECTED");
+				System.out.println("Invalid turn detected");
 				e.printStackTrace();
 			}
 		}
@@ -233,7 +260,7 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 
 	private void resetTurn() {
-		turnValidator.setTurnBeingBuilt(null);
+		turnValidator.reset();
 		grabbedPiece = null;
 	}
 
@@ -302,15 +329,20 @@ public class Demo implements MouseInputListener, ActionListener
 					Piece piece = board.getPieceAtPosition(position);
 					if (piece != null) {
 						turnValidator.filterTurns(piece);
-						drawArrows(true);
 						
+						// if the piece has moves, start building the turn
 						if (turnValidator.numFilteredTurns() > 0) {
 							grabbedPiece = pieceMap.get(piece);
 							grabbedPiece.setMoving(true);
 							grabOffset = view.canvas.getPositionOffset(e.getX(), e.getY());
-							//turnBeingBuilt = new Turn(grabbedPiece.piece, position);
 							turnValidator.setTurnBeingBuilt(new Turn(grabbedPiece.piece, position));
 						}
+						
+						// otherwise reset the validator
+						else {
+							resetTurn();
+						}
+						drawArrows(true);
 					}
 				}
 				
@@ -337,8 +369,6 @@ public class Demo implements MouseInputListener, ActionListener
 					// if we went to a bad location start over
 					else {
 						resetTurn();
-						//setTurns();
-						turnValidator.setTurns(null);
 						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
 						drawArrows(true);

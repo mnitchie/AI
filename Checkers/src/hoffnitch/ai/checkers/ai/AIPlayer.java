@@ -3,14 +3,13 @@ package hoffnitch.ai.checkers.ai;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
-import hoffnitch.ai.checkers.Player;
 import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.checkers.exceptions.InvalidTurnException;
 import hoffnitch.ai.search.CheckersTree;
 
 import java.util.List;
 
-public abstract class AIPlayer extends Player {
+public abstract class AIPlayer extends NonHumanPlayer {
 	
 	private CheckersTree turnTree;
 	private double ratioWeight;
@@ -60,11 +59,6 @@ public abstract class AIPlayer extends Player {
 		turnTree = new CheckersTree(initialBoard, yourColor, firstColor, maxDepth);
 	}
 	
-	public void getOpponentTurn(Turn turn) throws InvalidTurnException {
-		turnTree.doOpponentTurn(turn);
-		turnTree.evaluateNodes(this);
-	}
-	
 	public void evaluateTurns() {
 		turnTree.evaluateNodes(this);
 	}
@@ -81,8 +75,16 @@ public abstract class AIPlayer extends Player {
 	 * The assumes evaluateTurns() has already been called.
 	 * @return Returns the best turn
 	 */
+	@Override
 	public Turn getTurn() {
+		evaluateTurns();
 		return turnTree.getBestTurn();
+	}
+	
+	@Override
+	public void receiveOpponentTurn(Turn turn) throws InvalidTurnException {
+		turnTree.doOpponentTurn(turn);
+		turnTree.evaluateNodes(this);
 	}
 	
 	/**

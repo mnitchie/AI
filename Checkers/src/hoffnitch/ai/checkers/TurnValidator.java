@@ -11,6 +11,7 @@ public class TurnValidator
 	
 	public TurnValidator() {
 		filteredTurns = new LinkedList<Turn>();
+		possibleTurns = new LinkedList<Turn>();
 	}
 	
 	public Turn getTurnBeingBuild() {
@@ -60,12 +61,23 @@ public class TurnValidator
 	}
 	
 	public void setTurns(List<Turn> validTurns) {
+		possibleTurns.clear();
 		filteredTurns.clear();
 		if (validTurns != null) {
 			for (Turn turn: validTurns) {
 				turn.resetIterator();
 				filteredTurns.add(turn);
+				possibleTurns.add(turn);
 			}
 		}
+	}
+	
+	public void reset() {
+		filteredTurns.clear();
+		for (Turn turn: possibleTurns) {
+			turn.resetIterator();
+			filteredTurns.add(turn);
+		}
+		turnBeingBuilt = null;
 	}
 }
