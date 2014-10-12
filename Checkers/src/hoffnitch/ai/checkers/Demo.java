@@ -58,9 +58,7 @@ public class Demo implements MouseInputListener, ActionListener
 	private TurnAnimator turnAnimator;
 	
 	// Turn-related stuff
-	private Turn turnBeingBuilt;
-	private List<Turn> filteredTurns;
-	private List<Turn> possibleTurns;
+	private TurnValidator turnValidator;
 	private boolean canMove;
 	private UndoManager undoManager;
 	
@@ -81,7 +79,8 @@ public class Demo implements MouseInputListener, ActionListener
 		playerFactory = new PlayerFactory();
 		guiPieces = new LinkedList<GuiPiece>();
 		pieceMap = new HashMap<Piece, GuiPiece>();
-		filteredTurns = new LinkedList<Turn>();
+		turnValidator = new TurnValidator();
+		//filteredTurns = new LinkedList<Turn>();
 		
 		board = new GameState();
 		moveGenerator = new CheckersTurnMoveGenerator();
@@ -116,8 +115,7 @@ public class Demo implements MouseInputListener, ActionListener
 				
 				// if human, enable moving pieces and wait for event to call doTurn
 				if (player instanceof HumanPlayer) {
-					possibleTurns = validTurns;
-					setTurns();
+					turnValidator.setTurns(validTurns);
 					drawArrows(true);
 					canMove = true;
 				}
@@ -134,7 +132,6 @@ public class Demo implements MouseInputListener, ActionListener
 				
 				// if ai, turn will be determined now
 				else {
-					//Turn turn = ((AIPlayer) player).getTurn(validTurns);
 					AIPlayer ai = (AIPlayer)player;
 					ai.evaluateTurns();
 					Turn turn = ai.getTurn();
@@ -219,35 +216,8 @@ public class Demo implements MouseInputListener, ActionListener
 	}
 
 	private void resetTurn() {
-		turnBeingBuilt = null;
+		turnValidator.setTurnBeingBuilt(null);
 		grabbedPiece = null;
-		turnBeingBuilt = null;
-	}
-	
-	private void filterTurns(Piece piece) {
-		int pieceIndex = piece.getPosition().index;
-		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
-			if (filteredTurns.get(i).piecePositionIndex != pieceIndex)
-				filteredTurns.remove(i);
-		}
-	}
-	
-	private void setTurns() {
-		filteredTurns.clear();
-		for (Turn turn: possibleTurns) {
-			turn.resetIterator();
-			filteredTurns.add(turn);
-		}
-	}
-	
-	private void filterTurns(Position position) {
-		for (int i = filteredTurns.size() - 1; i >= 0; i--) {
-			Turn turn = filteredTurns.get(i);
-			Position next = turn.nextMove();
-			
-			if (!(next.equals(position)))
-				filteredTurns.remove(i);
-		}
 	}
 
 	public void syncGuiWithGameState() {
@@ -279,7 +249,8 @@ public class Demo implements MouseInputListener, ActionListener
 	{
 		if (doDraw) {
 			List<Arrow> arrows = new LinkedList<Arrow>();
-			for (Turn turn: filteredTurns)
+			
+			for (Turn turn: turnValidator.getFilteredTurns())
 			{
 				Point current = view.canvas.getCoordinates(turn.getCurrentPosition());
 				Point next = view.canvas.getCoordinates(turn.peekNextMove());
@@ -313,35 +284,36 @@ public class Demo implements MouseInputListener, ActionListener
 				if (grabbedPiece == null) {
 					Piece piece = board.getPieceAtPosition(position);
 					if (piece != null) {
-						filterTurns(piece);
+						turnValidator.filterTurns(piece);
 						drawArrows(true);
 						
-						if (filteredTurns.size() > 0) {
+						if (turnValidator.numFilteredTurns() > 0) {
 							grabbedPiece = pieceMap.get(piece);
 							grabbedPiece.setMoving(true);
 							grabOffset = view.canvas.getPositionOffset(e.getX(), e.getY());
-							turnBeingBuilt = new Turn(grabbedPiece.piece, position);
+							//turnBeingBuilt = new Turn(grabbedPiece.piece, position);
+							turnValidator.setTurnBeingBuilt(new Turn(grabbedPiece.piece, position));
 						}
 					}
 				}
 				
 				// otherwise, selecting new position for piece
 				else {
-					filterTurns(position);
+					//filterTurns(position);
+					turnValidator.filterTurns(position);
 					
 					// if no errors
-					if (filteredTurns.size() > 0) {
-						
-						turnBeingBuilt.addMove(position);
+					//if (filteredTurns.size() > 0) {
+					if (turnValidator.numFilteredTurns() > 0) {
+						turnValidator.addPositionToTurn(position);
 						
 						// if we got to an end point, we are done
-						if (filteredTurns.size() == 1 && !filteredTurns.get(0).hasNextMove()) {
-							
+						if (turnValidator.hasNextMove()) {
 							grabbedPiece.setCoordinates(view.canvas.getCoordinates(position));
 							grabbedPiece = null;
 							grabOffset = null;
-							filteredTurns.clear();
-							doTurn(turnBeingBuilt);
+							turnValidator.setTurns(null);
+							doTurn(turnValidator.getTurnBeingBuild());
 						}
 						else
 							drawArrows(true);
@@ -350,7 +322,8 @@ public class Demo implements MouseInputListener, ActionListener
 					// if we went to a bad location start over
 					else {
 						resetTurn();
-						setTurns();
+						//setTurns();
+						turnValidator.setTurns(null);
 						syncGuiWithGameState();
 						view.canvas.repaint(guiPieces);
 						drawArrows(true);
