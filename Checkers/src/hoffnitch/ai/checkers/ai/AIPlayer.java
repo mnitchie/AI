@@ -347,5 +347,19 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	    return 0;
 	}
 	
+	protected double scoreBoardOnCornerProtection(GameState board) {
+		final int TOP_LEFT = 1;
+		final int BOTTOM_RIGHT = 32;
+		Piece piece = null;
+		switch (getColor()) {
+		case DARK:
+			piece = board.getPieceAtPosition(TOP_LEFT);
+			break;
+		case LIGHT:
+			piece = board.getPieceAtPosition(BOTTOM_RIGHT);
+			break;
+		}
+		return (piece != null && !piece.isCrowned() && piece.color == getColor())? 1: 0;
+	}
 	
 }
