@@ -14,8 +14,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	private CheckersTree turnTree;
 	private double ratioWeight;
 	private double kingWeight;
+	private double pawnWeight;
 	private double distanceWeight;
-	
 	public AIPlayer(String name, PieceColor color) {
         super(name, color);
         ratioWeight = 1;
@@ -46,8 +46,18 @@ public abstract class AIPlayer extends NonHumanPlayer {
     public void setKingWeight(double kingWeight) {
         this.kingWeight = kingWeight;
     }
+    
+    public double getPawnWeight()
+	{
+		return pawnWeight;
+	}
 
-    public double getDistanceWeight() {
+	public void setPawnWeight(double pawnWeight)
+	{
+		this.pawnWeight = pawnWeight;
+	}
+
+	public double getDistanceWeight() {
         return distanceWeight;
     }
 
@@ -100,6 +110,28 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	}
 	
 	/**
+	 * Scores the board based on the ratio of player pieces to opponent pieces
+	 * Kings are given higher values than pawns
+	 * @param board The current game board
+	 * @return A double representing the ratio of playerPieces:totalPieces
+	 */
+	protected double scoreBoardOnWeightedRatio(GameState board) {
+		List<Piece> botPieces = board.getPieces(getColor());
+		List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
+		
+		int numBotPieces = botPieces.size();
+        int numOpponentPieces = opponentPieces.size();
+
+        int numBotKings = countKings(botPieces);
+        int numOpponentKings = countKings(opponentPieces);
+        
+        double botScore = pawnWeight * numBotPieces + numBotKings * kingWeight;
+        double opponentScore = pawnWeight * numOpponentPieces + numOpponentKings * kingWeight;
+        
+        return botScore / (botScore + opponentScore);
+	}
+	
+	/**
      * Scores the board based on the ratio of player kings to opponent kings
      * @param board The current game board
      * @return A double representing the ratio of playerKings:totalKings
@@ -141,7 +173,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * between 0.0 and 1.0.
 	 * 
 	 * @param board
-	 * @return Score representing manhattan distance
+	 * @return Score representing the reciprocal manhattan distance
 	 */
 	protected double scoreBoardOnDistanceToOpponent(GameState board) {
 		// the farthest distance is 7 rows away and 7 columns away
@@ -162,7 +194,56 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		// average it
 		distanceScore /= botPieces.size() * opponentPieces.size();
 	    
-	    return distanceScore;
+		// return the reciprocal
+	    return -distanceScore;
+	}
+	
+	protected double scoreBoardOnDistanceToOpponentKings(GameState board) {
+		// the farthest distance is 7 rows away and 7 columns away
+		final int MAX_DIST = 14;
+		
+		List<Piece> botPieces = board.getPieces(getColor());
+	    List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
+
+	    int numBotKings = countKings(botPieces);
+	    int numOpponentKings = countKings(opponentPieces);
+	    
+	    if (numOpponentKings == 0 || numBotKings == 0)
+	    	return 0;
+	    
+	    double distanceScore = 0;
+		for (Piece playerPiece: botPieces) {
+			if (playerPiece.isCrowned()) {
+				for (Piece opponentPiece: opponentPieces) {
+					if (opponentPiece.isCrowned()) {
+						int rowDist = opponentPiece.getPosition().row - playerPiece.getPosition().row;
+						int colDist = opponentPiece.getPosition().column - playerPiece.getPosition().column;
+						distanceScore += Math.abs(rowDist) + Math.abs(colDist) / MAX_DIST;
+					}
+				}
+			}
+		}
+		
+		// average it
+		distanceScore /= numBotKings * numOpponentKings;
+	    
+		// return the reciprocal
+	    return -distanceScore;
+	}
+	
+	protected double scoreBoardOnDistanceToCenter(GameState board) {
+		final double MAX_DISTANCE = 3.5;
+		
+		double distance = 0;
+		List<Piece> pieces = board.getPieces(getColor());
+		for (Piece piece: pieces) {
+			distance += Math.abs(3.5 - piece.getPosition().row)
+					+ Math.abs(3.5 - piece.getPosition().column);
+		}
+		distance /= (MAX_DISTANCE);
+		distance /= (pieces.size());
+		
+		return -distance;
 	}
 	
 	/**
@@ -202,10 +283,40 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * @param board
 	 * @return
 	 */
-	protected int scoreBoardOnDistanceToPromotion(GameState board) {
-	    // The distance should be inversed. That is, if a piece is
-	    // 10 spaces away, the value should be 1/10. 
-	    return 0;
+	protected double scoreBoardOnDistanceToPromotion(GameState board) {
+		
+		final double MAX_PAWNS = 12;
+		final double MAX_ROWS = 7;
+		
+		// dark tries to get to row 7; light tries to get to row 0
+		int goalRow = (getColor() == PieceColor.DARK)? 7: 0;
+		double aggregateDistance = 0;
+		
+		List<Piece> pieces = board.getPieces(getColor());
+		for (Piece piece: pieces) {
+			if (!piece.isCrowned()) {
+				// add to aggregate distance. Normalize to between 0 and 1
+				aggregateDistance += Math.abs(goalRow - piece.getPosition().row) / MAX_ROWS;
+			}
+		}
+		
+		/*
+		 * Add max distance for dead pieces so that losing pieces doesn't up this score.
+		 * Does that sound reasonable?
+		 */
+		aggregateDistance += MAX_PAWNS - pieces.size();
+		
+		// get average
+		aggregateDistance /= MAX_PAWNS;
+		
+	    // prevent division by 0
+		if (aggregateDistance == 0) {
+			return 1;
+		} else {
+			// The distance should be inversed. That is, if a piece is
+		    // 10 spaces away, the value should be 1/10. 
+			return 1.0 / aggregateDistance;
+		}
 	}
 	
 	/**
