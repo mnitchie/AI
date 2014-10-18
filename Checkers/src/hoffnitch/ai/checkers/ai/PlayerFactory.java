@@ -24,6 +24,8 @@ public class PlayerFactory {
 		playerTypes.add(KingBot.HEURISTIC_DESCRIPTION);
 		playerTypes.add(CornerDefender.HEURISTIC_DESCRIPTION);
 		playerTypes.add(PositionScorer.HEURISTIC_DESCRIPTION);
+		playerTypes.add(CountBot.HEURISTIC_DESCRIPTION + " Control");
+		playerTypes.add(CountBot.HEURISTIC_DESCRIPTION + " Experiment");
 	}
 	
 	public Player getPlayer(PlayerInfo playerInfo, BoardCanvas view) {
@@ -42,6 +44,10 @@ public class PlayerFactory {
 		    return new CornerDefender(playerInfo.getColor(), 1.4);
 		case PositionScorer.HEURISTIC_DESCRIPTION:
 		    return new PositionScorer(playerInfo.getColor());
+		case CountBot.HEURISTIC_DESCRIPTION + " Control":
+		    return new CountBot(playerInfo.getColor(), 1.4);
+		case CountBot.HEURISTIC_DESCRIPTION + " Experiment":
+		    return new CountBot(playerInfo.getColor(), 4);
 		}
 		return null;
 	}

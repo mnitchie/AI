@@ -2,9 +2,9 @@ package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.CheckersTurnMoveGenerator;
 import hoffnitch.ai.checkers.GameState;
+import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Turn;
-import hoffnitch.ai.checkers.db.DBConnection;
 import hoffnitch.ai.checkers.db.Game;
 import hoffnitch.ai.checkers.db.GameResult;
 
@@ -20,7 +20,7 @@ public class AutomatedGameSession {
     private int draws;
     private int numGames = 1000;
     
-    private static DBConnection db = new DBConnection();
+//    private static DBConnection db = new DBConnection();
     
     private static final int DRAW_THRESHHOLD = 100;
     
@@ -57,6 +57,10 @@ public class AutomatedGameSession {
                     draws++;
                     game.setResult(GameResult.DRAW);
                     System.out.println("Draw!");
+                    List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
+                    List<Piece> lightPieces = board.getPieces(PieceColor.LIGHT);
+                    System.out.println("Dark Pieces: " + darkPieces.size());
+                    System.out.println("Light Pieces: " + lightPieces.size());
                     break;
                 }
                 
@@ -65,6 +69,10 @@ public class AutomatedGameSession {
                     lightWins++;
                     System.out.println("Light Wins");
                     game.setResult(GameResult.LIGHT_WIN);
+                    List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
+                    List<Piece> lightPieces = board.getPieces(PieceColor.LIGHT);
+                    System.out.println("Dark Pieces: " + darkPieces.size());
+                    System.out.println("Light Pieces: " + lightPieces.size());
                     break;
                 }
                 
@@ -82,6 +90,10 @@ public class AutomatedGameSession {
                     darkWins++;
                     game.setResult(GameResult.DARK_WIN);
                     System.out.println("Dark wins");
+                    List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
+                    List<Piece> lightPieces = board.getPieces(PieceColor.LIGHT);
+                    System.out.println("Dark Pieces: " + darkPieces.size());
+                    System.out.println("Light Pieces: " + lightPieces.size());
                     break;
                 }
                 lightPlayer.receiveOpponentTurn(turn);
@@ -92,7 +104,7 @@ public class AutomatedGameSession {
                 numMoves++;
             }
             turn = null;
-            db.save(game);
+//            db.save(game);
         }
         Long end = System.currentTimeMillis();
 //        System.out.println(numGames + " games took " + (end - start) + " ms");
