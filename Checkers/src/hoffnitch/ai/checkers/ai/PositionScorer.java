@@ -9,9 +9,13 @@ public class PositionScorer extends AIPlayer {
     
     private PositionScores[] positionScores;
 
-    public PositionScorer(PieceColor color, PositionScores[] positionScores) {
+    public PositionScorer(PieceColor color) {
         super(HEURISTIC_DESCRIPTION, color);
-        this.positionScores = positionScores;
+        this.positionScores = new PositionScores[32];
+        for (int i = 0; i < positionScores.length; i++) {
+            positionScores[i] = new PositionScores();
+        }
+        
         evaluatePositions();
     }
     
@@ -27,8 +31,7 @@ public class PositionScorer extends AIPlayer {
 
     @Override
     public double evaluateBoard(GameState board) {
-        // TODO Auto-generated method stub
-        return 0;
+        return scoreBoardOnPositions(board);
     }
 
 }
