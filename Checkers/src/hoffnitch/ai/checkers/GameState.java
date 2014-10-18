@@ -144,11 +144,6 @@ public class GameState {
     	return getPieceAtPosition(Position.getPosition(index));   
     }
 	
-//	public Piece getPieceAtPosition(RowAndColumn rowAndColumn) {
-//        return getPieceAtPosition(rowAndColumn.row, rowAndColumn.column);
-//	    
-//	}
-	
 	public Piece getPieceAtPosition(int row, int column) {
 		return getPieceAtPosition(Position.getPosition(row, column));
     }
@@ -171,6 +166,14 @@ public class GameState {
 				clonedState[i][j] = boardPieces[i][j];
 		
 		return clonedState;
+	}
+	
+	public void clear() {
+		for (int i = 0; i < WIDTH; i++) {
+			for (int j = 0; j < WIDTH; j++) {
+				boardPieces[i][j] = null;
+			}
+		}
 	}
 	
 	public String toString() {

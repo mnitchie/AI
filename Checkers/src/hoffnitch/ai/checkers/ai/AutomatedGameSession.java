@@ -20,7 +20,7 @@ public class AutomatedGameSession {
     private int draws;
     private int numGames = 1000;
     
-//    private static DBConnection db = new DBConnection();
+    private static DBConnection db = new DBConnection();
     
     private static final int DRAW_THRESHHOLD = 100;
     
@@ -92,7 +92,7 @@ public class AutomatedGameSession {
                 numMoves++;
             }
             turn = null;
-//            db.save(game);
+            db.save(game);
         }
         Long end = System.currentTimeMillis();
         System.out.println(numGames + " games took " + (end - start) + " ms");
