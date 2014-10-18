@@ -16,7 +16,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	private double kingWeight;
 	private double pawnWeight;
 	private double distanceWeight;
-	private PositionScores positionScores;
+	private PositionScores[] positionScores;
 	
 	public AIPlayer(String name, PieceColor color) {
         super(name, color);
@@ -75,11 +75,11 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		turnTree.evaluateNodes(this);
 	}
 	
-	public PositionScores getPositionScores() {
+	public PositionScores[] getPositionScores() {
 		return positionScores;
 	}
 
-	public void setPositionScores(PositionScores positionScores) {
+	public void setPositionScores(PositionScores[] positionScores) {
 		this.positionScores = positionScores;
 	}
 
