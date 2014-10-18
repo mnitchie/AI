@@ -371,8 +371,38 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		return (piece != null && !piece.isCrowned() && piece.color == getColor())? 1: 0;
 	}
 	
+	/**
+	 * Score the board based on what pieces are in what position.
+	 * For this to be called, positionScores must have been set
+	 * @param board GameState to evaluate
+	 * @return Real number representing goodness of board
+	 */
 	protected double scoreBoardOnPositions(GameState board) {
-		return 0;
+		double score = 0;
+		for (int i = 1; i <= 32; i++) {
+			Piece piece = board.getPieceAtPosition(i);
+			if (piece != null) {
+				PositionScores positionScore = positionScores[i - 1];
+				// handle dark pieces
+				if (piece.color == PieceColor.DARK) {
+					if (piece.isCrowned()) {
+						score += positionScore.getBlackKingScore();
+					} else {
+						score += positionScore.getBlackPawnScore();
+					}
+				}
+				
+				// handle light pieces
+				else {
+					if (piece.isCrowned()) {
+						score += positionScore.getRedKingScore();
+					} else {
+						score += positionScore.getRedPawnScore();
+					}
+				}
+			}
+		}
+		return score;
 	}
 	
 }
