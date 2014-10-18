@@ -5,7 +5,7 @@ import hoffnitch.ai.checkers.PieceColor;
 public class Tournament {
     public static void main(String[] args) throws Exception {
         AutomatedGameSession random = new AutomatedGameSession(new RatioBot(
-                PieceColor.DARK), new CornerDefender(PieceColor.LIGHT), 6);
+                PieceColor.DARK, 1), new CornerDefender(PieceColor.LIGHT, 1.4), 6);
         
         random.play();
     }

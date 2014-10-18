@@ -33,13 +33,13 @@ public class PlayerFactory {
 		case RandomBot.HEURISTIC_DESCRIPTION:
 			return new RandomBot(playerInfo.getColor());
 		case RatioBot.HEURISTIC_DESCRIPTION:
-			return new RatioBot(playerInfo.getColor());
+			return new RatioBot(playerInfo.getColor(), 1);
 		case RatioWithKingsBot.HEURISTIC_DESCRIPTION:
 		    return new RatioWithKingsBot(playerInfo.getColor());
 		case KingBot.HEURISTIC_DESCRIPTION:
 		    return new KingBot(playerInfo.getColor());
 		case CornerDefender.HEURISTIC_DESCRIPTION:
-		    return new CornerDefender(playerInfo.getColor());
+		    return new CornerDefender(playerInfo.getColor(), 1.4);
 		case PositionScorer.HEURISTIC_DESCRIPTION:
 		    return new PositionScorer(playerInfo.getColor());
 		}

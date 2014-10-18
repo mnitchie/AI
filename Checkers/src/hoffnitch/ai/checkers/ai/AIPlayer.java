@@ -115,7 +115,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * @param board The current game board
 	 * @return A double representing the ratio of playerPieces:totalPieces
 	 */
-	protected double scoreBoardOnWeightedRatio(GameState board) {
+	protected double scoreBoardOnWeightedRatio(GameState board, double kingWeight) {
 		List<Piece> botPieces = board.getPieces(getColor());
 		List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
 		
@@ -125,8 +125,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
         int numBotKings = countKings(botPieces);
         int numOpponentKings = countKings(opponentPieces);
         
-        double botScore = pawnWeight * numBotPieces + numBotKings * kingWeight;
-        double opponentScore = pawnWeight * numOpponentPieces + numOpponentKings * kingWeight;
+        double botScore = numBotPieces + numBotKings * kingWeight;
+        double opponentScore = numOpponentPieces + numOpponentKings * kingWeight;
         
         return botScore / (botScore + opponentScore);
 	}
