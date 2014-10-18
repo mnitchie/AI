@@ -16,7 +16,6 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	private double kingWeight;
 	private double pawnWeight;
 	private double distanceWeight;
-	private PositionScores[] positionScores;
 	
 	public AIPlayer(String name, PieceColor color) {
         super(name, color);
@@ -73,14 +72,6 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	
 	public void evaluateTurns() {
 		turnTree.evaluateNodes(this);
-	}
-	
-	public PositionScores[] getPositionScores() {
-		return positionScores;
-	}
-
-	public void setPositionScores(PositionScores[] positionScores) {
-		this.positionScores = positionScores;
 	}
 
 	/**
@@ -377,7 +368,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * @param board GameState to evaluate
 	 * @return Real number representing goodness of board
 	 */
-	protected double scoreBoardOnPositions(GameState board) {
+	protected double scoreBoardOnPositions(GameState board, PositionScores[] positionScores) {
 		int multiplier = (getColor() == PieceColor.DARK)? 1: -1;
 		double score = 0;
 		for (int i = 1; i <= 32; i++) {
