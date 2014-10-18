@@ -5,14 +5,16 @@ import hoffnitch.ai.checkers.PieceColor;
 
 public class RatioBot extends AIPlayer
 {
-	public static final String HEURISTIC_DESCRIPTION = "Count Bot";
+	public static final String HEURISTIC_DESCRIPTION = "Ratio Bot";
+	private double kingWeight;
 	
-	public RatioBot(PieceColor color) {
+	public RatioBot(PieceColor color, double kingWeight) {
 		super(HEURISTIC_DESCRIPTION, color);
+		this.kingWeight = kingWeight;
 	}
 	
 	@Override
 	public double evaluateBoard(GameState board) {
-	    return getRatioWeight() * scoreBoardOnPieceRatio(board);
+		return scoreBoardOnWeightedRatio(board, kingWeight);
 	}
 }

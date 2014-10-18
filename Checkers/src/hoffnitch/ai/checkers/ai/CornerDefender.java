@@ -8,16 +8,18 @@ public class CornerDefender extends AIPlayer {
 	public static final String HEURISTIC_DESCRIPTION = "Corner Defender";
 	
 	private double promotionWeight = 30.0;
+	private double kingWeight;
 	
-	public CornerDefender(PieceColor color) {
+	public CornerDefender(PieceColor color, double kingWeight) {
 		super(HEURISTIC_DESCRIPTION, color, 1000.0, 17.0, 2.0);
+		this.kingWeight = kingWeight;
 		setPawnWeight(15.0);
 	}
 	
 	@Override
 	public double evaluateBoard(GameState board)
 	{
-		double ratio = getRatioWeight() * scoreBoardOnWeightedRatio(board);
+		double ratio = getRatioWeight() * scoreBoardOnWeightedRatio(board, kingWeight);
 		double output;
 		if (ratio == 1 || ratio == 0) {
 			output = ratio;

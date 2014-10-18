@@ -6,6 +6,7 @@ import hoffnitch.ai.checkers.PieceColor;
 public class PositionScorer extends AIPlayer {
     
     public static final String HEURISTIC_DESCRIPTION = "Position Scorer";
+    private static final double KING_MULTIPLIER = 10.1;
     
     private PositionScores[] positionScores;
 
@@ -31,7 +32,8 @@ public class PositionScorer extends AIPlayer {
 
     @Override
     public double evaluateBoard(GameState board) {
-        return scoreBoardOnPositions(board);
+        return 100 + scoreBoardOnPieceCount(board, KING_MULTIPLIER)
+        		+ scoreBoardOnPositions(board, positionScores);
     }
 
 }
