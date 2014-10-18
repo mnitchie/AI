@@ -8,8 +8,8 @@ public class CountBot extends AIPlayer
 	public static final String HEURISTIC_DESCRIPTION = "Count Bot";
 	private double kingWeight;
 	
-	public CountBot(String name, PieceColor color, double kingWeight) {
-		super(name, color);
+	public CountBot(PieceColor color, double kingWeight) {
+		super(HEURISTIC_DESCRIPTION, color);
 		this.kingWeight = kingWeight;
 	}
 
