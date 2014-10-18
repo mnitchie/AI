@@ -10,12 +10,13 @@ public class PositionScorer extends AIPlayer {
     private PositionScores[] positionScores;
 
     public PositionScorer(PieceColor color) {
-        super(HEURISTIC_DESCRIPTION, color);
+        super(HEURISTIC_DESCRIPTION, color, 1000.0, 1.4, 2.0);
         this.positionScores = new PositionScores[32];
         for (int i = 0; i < positionScores.length; i++) {
             positionScores[i] = new PositionScores();
         }
         
+        setPawnWeight(1);
         evaluatePositions();
     }
     
@@ -31,7 +32,8 @@ public class PositionScorer extends AIPlayer {
 
     @Override
     public double evaluateBoard(GameState board) {
-        return scoreBoardOnPositions(board);
+        return 1000000 * scoreBoardOnWeightedRatio(board)
+                + scoreBoardOnPositions(board, positionScores);
     }
 
 }

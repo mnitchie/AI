@@ -95,9 +95,9 @@ public class AutomatedGameSession {
             db.save(game);
         }
         Long end = System.currentTimeMillis();
-        System.out.println(numGames + " games took " + (end - start) + " ms");
-        System.out.println(darkPlayer.name + " won: " + darkWins);
-        System.out.println(lightPlayer.name + " won: " + lightWins);
-        System.out.println("Draws: " + draws);
+//        System.out.println(numGames + " games took " + (end - start) + " ms");
+//        System.out.println(darkPlayer.name + " won: " + darkWins);
+//        System.out.println(lightPlayer.name + " won: " + lightWins);
+//        System.out.println("Draws: " + draws);
     }
 }
