@@ -332,7 +332,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		} else {
 			// The distance should be inversed. That is, if a piece is
 		    // 10 spaces away, the value should be 1/10. 
-			return 1.0 / aggregateDistance;
+			return 1 - aggregateDistance;
 		}
 	}
 	
@@ -364,6 +364,12 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	    return 0;
 	}
 	
+	/**
+	 * 
+	 * @param board
+	 * @return
+	 * @deprecated - Use scoreBoardOnPositions
+	 */
 	protected double scoreBoardOnCornerProtection(GameState board) {
 		final int TOP_LEFT = 1;
 		final int BOTTOM_RIGHT = 32;

@@ -35,7 +35,7 @@ public class PlayerFactory {
 		case RandomBot.HEURISTIC_DESCRIPTION:
 			return new RandomBot(playerInfo.getColor());
 		case RatioBot.HEURISTIC_DESCRIPTION:
-			return new RatioBot(playerInfo.getColor(), 1);
+			return new RatioBot(playerInfo.getColor(), 1.4);
 		case RatioWithKingsBot.HEURISTIC_DESCRIPTION:
 		    return new RatioWithKingsBot(playerInfo.getColor());
 		case KingBot.HEURISTIC_DESCRIPTION:
