@@ -33,6 +33,7 @@ public class PositionScorer extends AIPlayer {
         			scoreForDefense(positionScores[index], row, col, defenseWeight);
         			scoreForPromotion(positionScores[index], row, promotionWeight);
         			scoreForCenteredness(positionScores[index], row, col, centeredWeight);
+        			index++;
         		}
         	}
         }
