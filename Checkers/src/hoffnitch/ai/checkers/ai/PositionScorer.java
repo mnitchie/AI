@@ -8,6 +8,10 @@ public class PositionScorer extends AIPlayer {
     public static final String HEURISTIC_DESCRIPTION = "Position Scorer";
     private static final double KING_MULTIPLIER = 10.1;
     
+    private double defenseWeight = 1;
+    private double promotionWeight = 2;
+    private double centeredWeight = 1;
+    
     private PositionScores[] positionScores;
 
     public PositionScorer(PieceColor color) {
@@ -22,28 +26,13 @@ public class PositionScorer extends AIPlayer {
     }
     
     private void evaluatePositions() {
-        int valPerRow = 1;
-        int maxRowVal = 7 * valPerRow;
-        for (int i = 0; i < positionScores.length; i++) {
-            int row = (i / 4);
-            positionScores[i].alterBlackPawnScore(row * valPerRow);
-            positionScores[i].alterRedPawnScore(maxRowVal - (row * valPerRow));
-        }
-        
-        for (int i = 0; i < positionScores.length; i++) {
-            int row = (i / 4);
-            positionScores[i].alterBlackPawnScore(row * valPerRow);
-            positionScores[i].alterRedPawnScore(maxRowVal - (row * valPerRow));
-        }
-        
         int index = 0;
         for (int row = 0; row < 8; row++) {
         	for (int col = 0; col < 8; col++) {
         		if ((row + col) % 2 == 1) {
-        			scoreForDefense(positionScores[index], row, col);
-        			scoreForPromotion(positionScores[index], row);
-        			scoreForCenteredness(positionScores[index], row, col);
-        			
+        			scoreForDefense(positionScores[index], row, col, defenseWeight);
+        			scoreForPromotion(positionScores[index], row, promotionWeight);
+        			scoreForCenteredness(positionScores[index], row, col, centeredWeight);
         		}
         	}
         }
@@ -57,19 +46,28 @@ public class PositionScorer extends AIPlayer {
      * @param row
      * @param col
      */
-    private void scoreForDefense(PositionScores scores, int row, int col) {
+    private void scoreForDefense(PositionScores scores, int row, int col, double weight) {
+    	double darkScore = 0;
+    	double lightScore = 0;
+    	
     	if (row == 0) {
-    		scores.alterBlackPawnScore(1);
+    		darkScore += 1;
     		if (col == 2) {
-        		scores.alterBlackPawnScore(2);
+    			darkScore += 2;
     		}
     	}
     	else if (row == 7) {
-    		scores.alterRedPawnScore(1);
+    		lightScore += 1;
     		if (col == 6) {
-        		scores.alterRedPawnScore(2);
+    			lightScore += 2;
     		}
     	}
+
+    	darkScore *= weight;
+    	lightScore *= weight;
+    	
+		scores.alterBlackPawnScore(darkScore);
+		scores.alterRedPawnScore(lightScore);
     }
     
     /**
@@ -77,12 +75,12 @@ public class PositionScorer extends AIPlayer {
      * @param scores
      * @param row
      */
-    private void scoreForPromotion(PositionScores scores, int row) {
+    private void scoreForPromotion(PositionScores scores, int row, double weight) {
     	final int valPerRow = 1;
         final int maxRowVal = 7 * valPerRow;
         
-    	scores.alterBlackPawnScore(row * valPerRow);
-    	scores.alterRedPawnScore(maxRowVal - (row * valPerRow));
+    	scores.alterBlackPawnScore(row * valPerRow * weight);
+    	scores.alterRedPawnScore((maxRowVal - (row * valPerRow)) * weight);
     }
     
     /**
@@ -92,7 +90,7 @@ public class PositionScorer extends AIPlayer {
      * @param row
      * @param col
      */
-    private void scoreForCenteredness(PositionScores scores, int row, int col) {
+    private void scoreForCenteredness(PositionScores scores, int row, int col, double weight) {
     	// I should explain why I'm doing this.
     	if (row > 3) {
     		row = 7 - row;
@@ -102,7 +100,7 @@ public class PositionScorer extends AIPlayer {
     	}
     	
     	// I'm thinking we care more about centering kings
-    	double score = Math.min(row, col);
+    	double score = Math.min(row, col) * weight;
     	double pawnScore = score / 2;
     	
     	scores.alterBlackKingScore(score);
