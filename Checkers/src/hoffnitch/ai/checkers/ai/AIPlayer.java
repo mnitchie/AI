@@ -138,11 +138,11 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
 		
 		for (Piece piece: botPieces) {
-			score += (piece.isCrowned())? 1 : kingMultiplier;
+			score += (piece.isCrowned())? kingMultiplier: 1;
 		}
 		
 		for (Piece piece: opponentPieces) {
-			score -= (piece.isCrowned())? 1 : kingMultiplier;
+			score -= (piece.isCrowned())? kingMultiplier: 1;
 		}
 		
 		return score;
