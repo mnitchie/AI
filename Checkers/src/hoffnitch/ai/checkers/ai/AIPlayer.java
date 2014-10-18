@@ -16,6 +16,8 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	private double kingWeight;
 	private double pawnWeight;
 	private double distanceWeight;
+	private PositionScores positionScores;
+	
 	public AIPlayer(String name, PieceColor color) {
         super(name, color);
         ratioWeight = 1;
@@ -73,7 +75,14 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		turnTree.evaluateNodes(this);
 	}
 	
-	
+	public PositionScores getPositionScores() {
+		return positionScores;
+	}
+
+	public void setPositionScores(PositionScores positionScores) {
+		this.positionScores = positionScores;
+	}
+
 	/**
 	 * @param board
 	 * @return Returns double representing board evaluation (higher values are better)
@@ -360,6 +369,10 @@ public abstract class AIPlayer extends NonHumanPlayer {
 			break;
 		}
 		return (piece != null && !piece.isCrowned() && piece.color == getColor())? 1: 0;
+	}
+	
+	protected double scoreBoardOnPositions(GameState board) {
+		return 0;
 	}
 	
 }
