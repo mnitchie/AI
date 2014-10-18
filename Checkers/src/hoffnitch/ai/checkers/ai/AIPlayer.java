@@ -131,6 +131,23 @@ public abstract class AIPlayer extends NonHumanPlayer {
         return botScore / (botScore + opponentScore);
 	}
 	
+	protected double scoreBoardOnPieceCount(GameState board, double kingMultiplier) {
+		double score = 0;
+		
+		List<Piece> botPieces = board.getPieces(getColor());
+		List<Piece> opponentPieces = board.getPieces(PieceColor.opposite(getColor()));
+		
+		for (Piece piece: botPieces) {
+			score += (piece.isCrowned())? 1 : kingMultiplier;
+		}
+		
+		for (Piece piece: opponentPieces) {
+			score -= (piece.isCrowned())? 1 : kingMultiplier;
+		}
+		
+		return score;
+	}
+	
 	/**
      * Scores the board based on the ratio of player kings to opponent kings
      * @param board The current game board
