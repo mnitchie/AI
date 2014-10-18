@@ -576,7 +576,7 @@ public class Demo implements MouseInputListener, ActionListener
 	 * Animates a turn, and then calls Demo.doTurn()
 	 */
 	private class TurnAnimator implements ActionListener {
-		private static final double distancePerFrame = 10.0;
+		private static final double distancePerFrame = 30.0;
 		private Turn turn;
 		private Timer timer;
 		private Point goalPoint;

@@ -88,6 +88,11 @@ public class CondensedGameState
 		indices = condenseIndices(darkIndices, lightIndices);
 	}
 	
+	public CondensedGameState(long pieceCounts, long indices) {
+		this.pieceCounts = pieceCounts;
+		this.indices = indices;
+	}
+	
 	public GameState generateGameState() {
 		GameState board = new GameState();
 		board.clear();
@@ -109,7 +114,7 @@ public class CondensedGameState
 	
 	private static void addPieces(GameState board, Piece[] pieces) {
 		for (int i = 0; i < pieces.length; i++) {
-			board.setPiece(pieces[i], Position.getPosition(pieces[i].getPosition().index));
+			board.setPiece(pieces[i], pieces[i].getPosition());
 		}
 	}
 	
@@ -129,13 +134,13 @@ public class CondensedGameState
 		// dark
 		for (int i = 0; i < darkIndices.length; i++) {
 			binary = binary << INDEX_SHIFT;
-			binary |= darkIndices[i];
+			binary |= darkIndices[i] - 1;
 		}
 		
 		// light
 		for (int i = 0; i < lightIndices.length; i++) {
 			binary = binary << INDEX_SHIFT;
-			binary |= lightIndices[i];
+			binary |= lightIndices[i] - 1;
 		}
 		
 		return binary;
@@ -146,7 +151,7 @@ public class CondensedGameState
 		// light kings
 		for (int i = lightKings.length - 1; i >= 0; i--) {
 			int index = (int)binary & INDEX_MASK;
-			lightKings[i] = new Piece(PieceColor.LIGHT, Position.getPosition(index));
+			lightKings[i] = new Piece(PieceColor.LIGHT, Position.getPosition(index + 1));
 			lightKings[i].setCrowned(true);
 			binary = binary >> INDEX_SHIFT;
 		}
@@ -154,14 +159,14 @@ public class CondensedGameState
 		// light pawns
 		for (int i = lightPawns.length - 1; i >= 0; i--) {
 			int index = (int)binary & INDEX_MASK;
-			lightPawns[i] = new Piece(PieceColor.LIGHT, Position.getPosition(index));
+			lightPawns[i] = new Piece(PieceColor.LIGHT, Position.getPosition(index + 1));
 			binary = binary >> INDEX_SHIFT;
 		}
 		
 		// dark kings
 		for (int i = darkKings.length - 1; i >= 0; i--) {
 			int index = (int)binary & INDEX_MASK;
-			darkKings[i] = new Piece(PieceColor.DARK, Position.getPosition(index));
+			darkKings[i] = new Piece(PieceColor.DARK, Position.getPosition(index + 1));
 			darkKings[i].setCrowned(true);
 			binary = binary >> INDEX_SHIFT;
 		}
@@ -169,7 +174,7 @@ public class CondensedGameState
 		// dark pawns
 		for (int i = darkPawns.length - 1; i >= 0; i--) {
 			int index = (int)binary & INDEX_MASK;
-			darkPawns[i] = new Piece(PieceColor.DARK, Position.getPosition(index));
+			darkPawns[i] = new Piece(PieceColor.DARK, Position.getPosition(index + 1));
 			binary = binary >> INDEX_SHIFT;
 		}
 	}
