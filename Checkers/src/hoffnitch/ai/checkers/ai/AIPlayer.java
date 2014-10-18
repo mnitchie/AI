@@ -378,6 +378,7 @@ public abstract class AIPlayer extends NonHumanPlayer {
 	 * @return Real number representing goodness of board
 	 */
 	protected double scoreBoardOnPositions(GameState board) {
+		int multiplier = (getColor() == PieceColor.DARK)? 1: -1;
 		double score = 0;
 		for (int i = 1; i <= 32; i++) {
 			Piece piece = board.getPieceAtPosition(i);
@@ -386,18 +387,18 @@ public abstract class AIPlayer extends NonHumanPlayer {
 				// handle dark pieces
 				if (piece.color == PieceColor.DARK) {
 					if (piece.isCrowned()) {
-						score += positionScore.getBlackKingScore();
+						score += multiplier * positionScore.getBlackKingScore();
 					} else {
-						score += positionScore.getBlackPawnScore();
+						score += multiplier * positionScore.getBlackPawnScore();
 					}
 				}
 				
 				// handle light pieces
 				else {
 					if (piece.isCrowned()) {
-						score += positionScore.getRedKingScore();
+						score -= multiplier * positionScore.getRedKingScore();
 					} else {
-						score += positionScore.getRedPawnScore();
+						score -= multiplier * positionScore.getRedPawnScore();
 					}
 				}
 			}
