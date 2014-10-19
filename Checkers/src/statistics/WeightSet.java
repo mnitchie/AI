@@ -2,36 +2,29 @@ package statistics;
 
 public class WeightSet
 {
-	private double king;
-	private KingAndPawnWeights alignment;
+	private double staticKing;
 	private double defendBackRow;
 	private double defendCorner;
 	private double random;
-	private KingAndPawnWeights statics;
-	private KingAndPawnWeights[] rings;
 	private double promotion;
 	private double border;
 	private double adjacentDiagonal;
 	private double tunneling;
+	private double pieceCount;
+	private KingAndPawnWeights statics;
+	private KingAndPawnWeights alignment;
+	private KingAndPawnWeights[] rings;
 	
 	public WeightSet() {
 		
 	}
 
-	public double getKing() {
-		return king;
+	public double getStaticKing() {
+		return staticKing;
 	}
 
-	public void setKing(double king) {
-		this.king = king;
-	}
-
-	public KingAndPawnWeights getAligned() {
-		return alignment;
-	}
-
-	public void setAligned(KingAndPawnWeights inline) {
-		this.alignment = inline;
+	public void setStaticKing(double staticKing) {
+		this.staticKing = staticKing;
 	}
 
 	public double getDefendBackRow() {
@@ -56,22 +49,6 @@ public class WeightSet
 
 	public void setRandom(double random) {
 		this.random = random;
-	}
-
-	public KingAndPawnWeights getStatics() {
-		return statics;
-	}
-
-	public void setStatics(KingAndPawnWeights statics) {
-		this.statics = statics;
-	}
-
-	public KingAndPawnWeights[] getRings() {
-		return rings;
-	}
-
-	public void setRings(KingAndPawnWeights[] rings) {
-		this.rings = rings;
 	}
 
 	public double getPromotion() {
@@ -104,6 +81,38 @@ public class WeightSet
 
 	public void setTunneling(double tunneling) {
 		this.tunneling = tunneling;
+	}
+
+	public double getPieceCount() {
+		return pieceCount;
+	}
+
+	public void setPieceCount(double pieceCount) {
+		this.pieceCount = pieceCount;
+	}
+
+	public KingAndPawnWeights getStatics() {
+		return statics;
+	}
+
+	public void setStatics(KingAndPawnWeights statics) {
+		this.statics = statics;
+	}
+
+	public KingAndPawnWeights getAlignment() {
+		return alignment;
+	}
+
+	public void setAlignment(KingAndPawnWeights alignment) {
+		this.alignment = alignment;
+	}
+
+	public KingAndPawnWeights[] getRings() {
+		return rings;
+	}
+
+	public void setRings(KingAndPawnWeights[] rings) {
+		this.rings = rings;
 	}
 	
 }
