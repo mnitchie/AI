@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.CheckersTurnMoveGenerator;
+import hoffnitch.ai.checkers.GameScorer;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
@@ -35,11 +36,12 @@ public class AutomatedGameSession {
         this.numGames = numGames;
     }
     
-    public void play() throws Exception{
+    public double play(PieceColor perspective) throws Exception{
         List<Turn> moves;
         Turn turn = null;
         GameState board;
         Game game;
+        double score = 0;
         
         Long start = System.currentTimeMillis();
         for (int i = 0; i < numGames; i++) {
@@ -55,6 +57,7 @@ public class AutomatedGameSession {
             while (true) {
                 if (numMoves > DRAW_THRESHHOLD) {
                     draws++;
+                    score += GameScorer.score(perspective, board, null);
                     game.setResult(GameResult.DRAW);
                     System.out.println("Draw!");
                     List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
@@ -67,6 +70,7 @@ public class AutomatedGameSession {
                 moves = moveGenerator.getMovesForTurn(PieceColor.DARK, board);
                 if (moves.size() == 0) {
                     lightWins++;
+                    score += GameScorer.score(perspective, board, PieceColor.LIGHT);
                     System.out.println("Light Wins");
                     game.setResult(GameResult.LIGHT_WIN);
                     List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
@@ -88,6 +92,7 @@ public class AutomatedGameSession {
                 moves = moveGenerator.getMovesForTurn(PieceColor.LIGHT, board);
                 if (moves.size() == 0) {
                     darkWins++;
+                    score += GameScorer.score(perspective, board, PieceColor.DARK);
                     game.setResult(GameResult.DARK_WIN);
                     System.out.println("Dark wins");
                     List<Piece> darkPieces = board.getPieces(PieceColor.DARK);
@@ -111,5 +116,6 @@ public class AutomatedGameSession {
 //        System.out.println(darkPlayer.name + " won: " + darkWins);
 //        System.out.println(lightPlayer.name + " won: " + lightWins);
 //        System.out.println("Draws: " + draws);
+        return score;
     }
 }
