@@ -1,5 +1,6 @@
 package hoffnitch.ai.checkers.ai;
 
+import hoffnitch.ai.checkers.Direction;
 import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
@@ -280,7 +281,6 @@ public class TylerBot extends AIPlayer {
     			}
     		}
     	}
-    	
     	return score;
     }
     
@@ -290,9 +290,27 @@ public class TylerBot extends AIPlayer {
     
     private double scoreOnTunneling(GameState board, PieceColor color) {
     	double score = 0;
+    	List<Piece> playerPieces = board.getPieces(color);
     	
-    	
-    	
+    	for (int i = 0; i < playerPieces.size(); i++) {
+    		Position position = playerPieces.get(i).getPosition();
+    		
+    		// test first direction
+    		Position topLeft = position.getOffsetPosition(Direction.TOP_LEFT);
+    		Position bottomRight = position.getOffsetPosition(Direction.BOTTOM_RIGHT);
+    		
+    		// i wish this line were longer...
+    		if ((topLeft == null || board.getPieceAtPosition(topLeft) != null && (bottomRight == null) || board.getPieceAtPosition(bottomRight) != null)) {
+    			score++;
+    		}
+    		
+    		// test other direction
+    		Position topRight = position.getOffsetPosition(Direction.TOP_LEFT);
+    		Position bottomLeft = position.getOffsetPosition(Direction.BOTTOM_RIGHT);
+    		if ((topRight == null || board.getPieceAtPosition(topRight) != null && (bottomLeft == null) || board.getPieceAtPosition(bottomLeft) != null)) {
+    			score++;
+    		}
+    	}
     	return score;
     }
     
