@@ -8,6 +8,8 @@ import hoffnitch.ai.checkers.Position;
 
 import java.util.List;
 
+import statistics.WeightSet;
+
 public class TylerBot extends AIPlayer {
     
     public static final String HEURISTIC_DESCRIPTION = "TYLER.BOT";
@@ -17,32 +19,22 @@ public class TylerBot extends AIPlayer {
     private static final int LIGHT_PAWN = 2;
     private static final int LIGHT_KING = 3;
     
-    private static final double KING_MULTIPLIER = 1.8;
-    
-    
-    private double defenseWeight = 4;
-    private double promotionWeight = 4;
-    private double centeredWeight = 4;
-    private double kingAlignmentWeight = 0.0;
-    private double pieceCountWeight = 0.0;
-    private double randomWeight = 0.0;
-    private double staticWeight = 80;
+    private WeightSet weights;
     
     private PositionScores[] positionScores;
 
-    public TylerBot(PieceColor color) {
+    public TylerBot(PieceColor color, WeightSet weights) {
         super(HEURISTIC_DESCRIPTION, color);
-        this.positionScores = new PositionScores[32];
+        this.weights = weights;
+        generatePositionScores();
+    }
+    
+    private void generatePositionScores() {
+    	this.positionScores = new PositionScores[32];
         for (int i = 0; i < positionScores.length; i++) {
             positionScores[i] = new PositionScores();
         }
         
-        setPawnWeight(1);
-        evaluatePositions();
-    }
-    
-    
-    private void evaluatePositions() {
         int index = 0;
         for (int row = 0; row < 8; row++) {
         	for (int col = 0; col < 8; col++) {
@@ -50,7 +42,7 @@ public class TylerBot extends AIPlayer {
         			scoreForDefense(positionScores[index], row, col, defenseWeight);
         			scoreForPromotion(positionScores[index], row, promotionWeight);
         			scoreForCenteredness(positionScores[index], row, col, centeredWeight);
-        			addStaticScore(positionScores[index], KING_MULTIPLIER, staticWeight);
+        			addStaticScore(positionScores[index], weights.getKing(), staticWeight);
         			index++;
         		}
         	}
@@ -60,6 +52,7 @@ public class TylerBot extends AIPlayer {
     private void addStaticScore(PositionScores scores, double kingWeight, double weight) {
     	double pawnWeight = weight;
     	kingWeight *= weight;
+    	
     	scores.alterBlackKingScore(kingWeight);
     	scores.alterRedKingScore(kingWeight);
     	scores.alterBlackPawnScore(pawnWeight);
@@ -345,77 +338,6 @@ public class TylerBot extends AIPlayer {
         }
 	}
 
-
-	public double getDefenseWeight() {
-		return defenseWeight;
-	}
-
-
-	public void setDefenseWeight(double defenseWeight) {
-		this.defenseWeight = defenseWeight;
-	}
-
-
-	public double getPromotionWeight() {
-		return promotionWeight;
-	}
-
-
-	public void setPromotionWeight(double promotionWeight) {
-		this.promotionWeight = promotionWeight;
-	}
-
-
-	public double getCenteredWeight() {
-		return centeredWeight;
-	}
-
-
-	public void setCenteredWeight(double centeredWeight) {
-		this.centeredWeight = centeredWeight;
-	}
-
-
-	public double getKingAlignmentWeight() {
-		return kingAlignmentWeight;
-	}
-
-
-	public void setKingAlignmentWeight(double kingAlignmentWeight) {
-		this.kingAlignmentWeight = kingAlignmentWeight;
-	}
-
-
-	public double getPieceCountWeight() {
-		return pieceCountWeight;
-	}
-
-
-	public void setPieceCountWeight(double pieceCountWeight) {
-		this.pieceCountWeight = pieceCountWeight;
-	}
-
-
-	public double getRandomWeight() {
-		return randomWeight;
-	}
-
-
-	public void setRandomWeight(double randomWeight) {
-		this.randomWeight = randomWeight;
-	}
-
-
-	public double getStaticWeight() {
-		return staticWeight;
-	}
-
-
-	public void setStaticWeight(double staticWeight) {
-		this.staticWeight = staticWeight;
-	}
-
-
 	public PositionScores[] getPositionScores() {
 		return positionScores;
 	}
@@ -425,5 +347,4 @@ public class TylerBot extends AIPlayer {
 		this.positionScores = positionScores;
 	}
 	
-
 }
