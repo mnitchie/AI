@@ -2,16 +2,16 @@ package statistics;
 
 public class WeightSet
 {
+	private double statics;
 	private double staticKing;
 	private double defendBackRow;
 	private double defendCorner;
 	private double random;
 	private double promotion;
-	private double border;
 	private double adjacentDiagonal;
 	private double tunneling;
 	private double pieceCount;
-	private KingAndPawnWeights statics;
+	private KingAndPawnWeights sides;
 	private KingAndPawnWeights alignment;
 	private KingAndPawnWeights[] rings;
 	
@@ -21,6 +21,14 @@ public class WeightSet
 
 	public double getStaticKing() {
 		return staticKing;
+	}
+
+	public double getStatics() {
+		return statics;
+	}
+
+	public void setStatics(double statics) {
+		this.statics = statics;
 	}
 
 	public void setStaticKing(double staticKing) {
@@ -59,14 +67,6 @@ public class WeightSet
 		this.promotion = promotion;
 	}
 
-	public double getBorder() {
-		return border;
-	}
-
-	public void setBorder(double border) {
-		this.border = border;
-	}
-
 	public double getAdjacentDiagonal() {
 		return adjacentDiagonal;
 	}
@@ -91,12 +91,12 @@ public class WeightSet
 		this.pieceCount = pieceCount;
 	}
 
-	public KingAndPawnWeights getStatics() {
-		return statics;
+	public KingAndPawnWeights getSides() {
+		return sides;
 	}
 
-	public void setStatics(KingAndPawnWeights statics) {
-		this.statics = statics;
+	public void setSides(KingAndPawnWeights sides) {
+		this.sides = sides;
 	}
 
 	public KingAndPawnWeights getAlignment() {

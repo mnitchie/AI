@@ -7,14 +7,14 @@ public class Tournament {
     public static void main(String[] args) throws Exception {
     	
     	PositionScorer bestAI = null;
-    	WeightSet bestWeights = new WeightSet();
+    	BasicWeightSet bestWeights = new BasicWeightSet();
     	double previousBest = Double.MIN_VALUE;
     	
-        double changeAmt = 4;
+        double changeAmt = 10;
         
-    	for (int i = 0; i < 100; i++) {
-    		
-    		WeightSet weights = new WeightSet(bestWeights);
+    	while(changeAmt > 1) {
+    		BasicWeightSet weights = new BasicWeightSet(bestWeights);
+		
     		adjustWeights(weights, changeAmt);
     		System.out.printf("change amt: %.4f\n", changeAmt);
     		System.out.print(weights.defenseWeight + " ");
@@ -43,7 +43,7 @@ public class Tournament {
     			bestAI = tyler;
     			bestWeights = weights;
     			System.out.println(		"-----------\n"
-    								+ 	" Best yet!"
+    								+ 	" Best yet! \n"
     								+ 	"-----------\n");
     		}
     		
@@ -54,7 +54,7 @@ public class Tournament {
     	
     }
     
-    public static void adjustWeights(WeightSet weights, double changeAmt) {
+    public static void adjustWeights(BasicWeightSet weights, double changeAmt) {
     	weights.defenseWeight += Math.random() * changeAmt * 2 - changeAmt;
     	weights.promotionWeight += Math.random() * changeAmt * 2 - changeAmt;
     	weights.centeredWeight += Math.random() * changeAmt * 2 - changeAmt;
@@ -64,7 +64,7 @@ public class Tournament {
     	weights.staticWeight += Math.random() * changeAmt * 2 - changeAmt;
     }
     
-    public static PositionScorer makeTyler(WeightSet weights, PieceColor color) {
+    public static PositionScorer makeTyler(BasicWeightSet weights, PieceColor color) {
     	PositionScorer output = new PositionScorer(color);
     	
     	output.setDefenseWeight(weights.defenseWeight);
@@ -78,7 +78,7 @@ public class Tournament {
     	return output;
     }
     
-    private static class WeightSet {
+    private static class BasicWeightSet {
     	double defenseWeight = 4;
     	double promotionWeight = 4;
     	double centeredWeight = 4;
@@ -87,11 +87,11 @@ public class Tournament {
     	double randomWeight = 0.0;
     	double staticWeight = 80;
     	
-    	public WeightSet() {
+    	public BasicWeightSet() {
     		
     	}
     	
-    	public WeightSet(WeightSet copy) {
+    	public BasicWeightSet(BasicWeightSet copy) {
     		defenseWeight = copy.defenseWeight;
     		promotionWeight = copy.promotionWeight;
     		centeredWeight = copy.centeredWeight;

@@ -14,6 +14,11 @@ public class KingAndPawnWeights
 		pawn = pawnWeight;
 	}
 
+	public KingAndPawnWeights(KingAndPawnWeights other) {
+		king = other.king;
+		pawn = other.pawn;
+	}
+	
 	public double getKing() {
 		return king;
 	}
