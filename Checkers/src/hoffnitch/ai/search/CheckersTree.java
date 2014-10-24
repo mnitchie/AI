@@ -123,6 +123,8 @@ public class CheckersTree
 		generate(root, opponentColor, maxDepth);
 		
 		root.turn.resetIterator();
+		System.out.println(playerColor);
+		System.out.println(root.score);
 		return root.turn;
 	}
 	
@@ -144,6 +146,24 @@ public class CheckersTree
 			// generate turns (you go next)
 			generate(root, playerColor, maxDepth);
 		}
+	}
+	
+	public boolean turnIsAvailable(Turn turn) {
+	    for (SearchNode n : root.children) {
+	        if (n.turn.equals(turn)) {
+	            n.score = Double.MAX_VALUE;
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	public void preventInverse(Turn turn) {
+	    for (SearchNode n : root.children) {
+	        if (n.turn.isInverseOf(turn)) {
+	            n.score = Integer.MIN_VALUE;
+	        }
+	    }
 	}
 	
 	private class SearchNode
