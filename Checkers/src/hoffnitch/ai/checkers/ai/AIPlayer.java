@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class AIPlayer extends NonHumanPlayer {
 	
-	private CheckersTree turnTree;
+	protected CheckersTree turnTree;
 	private double ratioWeight;
 	private double kingWeight;
 	private double pawnWeight;

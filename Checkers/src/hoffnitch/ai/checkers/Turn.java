@@ -22,6 +22,14 @@ public class Turn {
 		moves = new LinkedList<Position>();
 	}
 	
+	public Turn(int piecePositionIndex, PieceColor pieceColor, Position move) {
+	    this.piecePositionIndex = piecePositionIndex;
+        this.pieceColor = pieceColor;
+        
+        moves = new LinkedList<Position>();
+        addMove(move);
+	}
+	
 	public Turn(Piece piece) {
 		this(piece.getPosition().index, piece.color);
 	}
@@ -115,6 +123,13 @@ public class Turn {
 		}
 		
 		return isEqual;
+	}
+	
+	public boolean isInverseOf(Turn other) {
+	    if (moves.get(0).index == other.moves.get(1).index && moves.get(1).index == other.moves.get(0).index) {
+	        return true;
+	    }
+	    return false;
 	}
 	
 	public String toString() {

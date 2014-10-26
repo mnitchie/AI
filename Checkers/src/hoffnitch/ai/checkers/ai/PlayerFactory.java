@@ -26,6 +26,7 @@ public class PlayerFactory {
 		playerTypes.add(PositionScorer.HEURISTIC_DESCRIPTION);
 		playerTypes.add(CountBot.HEURISTIC_DESCRIPTION + " Control");
 		playerTypes.add(CountBot.HEURISTIC_DESCRIPTION + " Experiment");
+		playerTypes.add(MikeBot.HEURISTIC_DESCRIPTION);
 	}
 	
 	public Player getPlayer(PlayerInfo playerInfo, BoardCanvas view) {
@@ -48,6 +49,8 @@ public class PlayerFactory {
 		    return new CountBot(playerInfo.getColor(), 1.4);
 		case CountBot.HEURISTIC_DESCRIPTION + " Experiment":
 		    return new CountBot(playerInfo.getColor(), 4);
+		case MikeBot.HEURISTIC_DESCRIPTION: 
+            return new MikeBot(playerInfo.getColor(), 1.4);
 		}
 		return null;
 	}
