@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class Tester
+public class EndGameDatabaseBuilder
 {
 	private static final Position DEFAULT_POSITION = Position.getPosition(0);
 	private static final int FIRST_WHITE_PAWN_INDEX = 5;
@@ -27,7 +27,7 @@ public class Tester
 	
 	public static void main(String[] args) {
 		
-		Tester tester = new Tester();
+		EndGameDatabaseBuilder tester = new EndGameDatabaseBuilder();
 		System.out.println("running..");
 		
 		long beginTime = System.currentTimeMillis();
@@ -62,7 +62,7 @@ public class Tester
 		// end stupid part
 	}
 	
-	private static int runTestsForColor(Tester tester, int maxPieces, int maxLength, PieceColor color) {
+	private static int runTestsForColor(EndGameDatabaseBuilder tester, int maxPieces, int maxLength, PieceColor color) {
 		// will this work??
 		int longestPath = 0;
 		for (int numPieces = 2; numPieces <= maxPieces; numPieces++) {
@@ -83,7 +83,7 @@ public class Tester
 		return longestPath;
 	}
 	
-	public Tester() {
+	public EndGameDatabaseBuilder() {
 		endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();		
 	}
 	
