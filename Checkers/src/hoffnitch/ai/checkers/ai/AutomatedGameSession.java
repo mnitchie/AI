@@ -19,7 +19,7 @@ public class AutomatedGameSession {
     private int darkWins;
     private int lightWins;
     private int draws;
-    private int numGames = 1000;
+    private int numGames = 1;
     
 //    private static DBConnection db = new DBConnection();
     
