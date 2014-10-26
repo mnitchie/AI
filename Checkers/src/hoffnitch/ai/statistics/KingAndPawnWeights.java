@@ -1,4 +1,4 @@
-package statistics;
+package hoffnitch.ai.statistics;
 
 public class KingAndPawnWeights
 {
@@ -19,6 +19,16 @@ public class KingAndPawnWeights
 		pawn = other.pawn;
 	}
 	
+	public KingAndPawnWeights(KingAndPawnWeights other, double randomAmt) {
+		pawn = other.pawn + 2 * Math.random() * randomAmt - randomAmt;
+		king = other.king + 2 * Math.random() * randomAmt - randomAmt;
+	}
+	
+	public void randomize(double amt) {
+		king += Math.random() * amt * 2 - amt;
+		pawn += Math.random() * amt * 2 - amt;
+	}
+	
 	public double getKing() {
 		return king;
 	}
@@ -35,5 +45,7 @@ public class KingAndPawnWeights
 		this.pawn = pawn;
 	}
 	
-	
+	public String toString() {
+		return pawn + " " + king;
+	}
 }

@@ -5,11 +5,11 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.statistics.KingAndPawnWeights;
+import hoffnitch.ai.statistics.WeightSet;
 
 import java.util.List;
 
-import statistics.KingAndPawnWeights;
-import statistics.WeightSet;
 
 public class TylerBot extends AIPlayer
 {
@@ -43,15 +43,12 @@ public class TylerBot extends AIPlayer
 				if ((row + col) % 2 == 1) {
 					PositionScores scores = positionScores[index];
 					//scoreForDefense(scores, row, col, defenseWeight);
-					scoreDefendingCorner(scores, row, col,
-							weights.getDefendCorner());
-					scoreDefendingForBackRow(scores, row, col,
-							weights.getDefendBackRow());
+					scoreDefendingCorner(scores, row, col, weights.getDefendCorner());
+					scoreDefendingForBackRow(scores, row, col, weights.getDefendBackRow());
 					scoreForPromotion(scores, row, weights.getPromotion());
 					//scoreForCenteredness(positionScores[index], row, col, centeredWeight);
 					scoreForSide(scores, col, weights.getSides());
-					addStaticScore(positionScores[index],
-							weights.getStaticKing(), weights.getStatics());
+					addStaticScore(positionScores[index], weights.getStatics());//.getStaticKing(), weights.getStatics());
 
 					for (int i = 0; i < weights.getRings().length; i++) {
 						KingAndPawnWeights ringWeight = weights.getRings()[i];
@@ -63,11 +60,10 @@ public class TylerBot extends AIPlayer
 		}
 	}
 
-	private void addStaticScore(PositionScores scores, double kingWeight,
-			double weight) {
-		double pawnWeight = weight;
-		kingWeight *= weight;
-
+	private void addStaticScore(PositionScores scores, KingAndPawnWeights weights) {
+		double pawnWeight = weights.getPawn();
+		double kingWeight = weights.getKing();
+		
 		scores.alterBlackKingScore(kingWeight);
 		scores.alterRedKingScore(kingWeight);
 		scores.alterBlackPawnScore(pawnWeight);
@@ -153,7 +149,7 @@ public class TylerBot extends AIPlayer
 				+ weights.getAlignment().getPawn() * scoreBoardOnAlignedPawns(board)
 				+ weights.getAlignment().getKing() * scoreBoardOnAlignedKings(board)
 				+ weights.getPieceCount() * totalPieceCount(board)
-				+ weights.getRandom() * Math.random()
+				//+ weights.getRandom() * Math.random()
 				+ weights.getTunneling() * scoreOnTunneling(board)
 				;
 	}

@@ -8,49 +8,64 @@ public class Tournament {
     	
     	PositionScorer bestAI = null;
     	BasicWeightSet bestWeights = new BasicWeightSet();
-    	double previousBest = Double.MIN_VALUE;
+    	double previousBest = Double.NEGATIVE_INFINITY;
     	
         double changeAmt = 10;
         
-    	while(changeAmt > 1) {
-    		BasicWeightSet weights = new BasicWeightSet(bestWeights);
-		
-    		adjustWeights(weights, changeAmt);
-    		System.out.printf("change amt: %.4f\n", changeAmt);
-    		System.out.print(weights.defenseWeight + " ");
-    		System.out.print(weights.promotionWeight + " ");
-    		System.out.print(weights.centeredWeight + " ");
-    		System.out.print(weights.kingAlignmentWeight + " ");
-    		System.out.print(weights.pieceCountWeight + " ");
-    		System.out.print(weights.randomWeight + " ");
-    		System.out.print(weights.staticWeight + " ");
-    		System.out.println();
-    		
-    		// run for dark
-    		PositionScorer tyler = makeTyler(weights, PieceColor.DARK);
-    		CountBot mike = new CountBot(PieceColor.LIGHT, 1.4);
-    		AutomatedGameSession game = new AutomatedGameSession(tyler, mike, 1);
-    		double sessionScore = game.play(PieceColor.DARK);
-
-    		// run for light
-    		tyler = makeTyler(weights, PieceColor.LIGHT);
-    		mike = new CountBot(PieceColor.DARK, 1.4);
-    		game = new AutomatedGameSession(mike, tyler, 1);
-    		sessionScore += game.play(PieceColor.LIGHT);
-    		
-    		if (sessionScore > previousBest) {
-    			previousBest = sessionScore;
-    			bestAI = tyler;
-    			bestWeights = weights;
-    			System.out.println(		"-----------\n"
-    								+ 	" Best yet! \n"
-    								+ 	"-----------\n");
-    		}
-    		
-    		changeAmt *= 0.99;
-    	}
-    	
+        try {
+	    	while(changeAmt > 1) {
+	    		BasicWeightSet weights = new BasicWeightSet(bestWeights);
+			
+	    		adjustWeights(weights, changeAmt);
+	    		System.out.printf("change amt: %.4f\n", changeAmt);
+	    		System.out.print(weights.defenseWeight + " ");
+	    		System.out.print(weights.promotionWeight + " ");
+	    		System.out.print(weights.centeredWeight + " ");
+	    		System.out.print(weights.kingAlignmentWeight + " ");
+	    		System.out.print(weights.pieceCountWeight + " ");
+	    		System.out.print(weights.randomWeight + " ");
+	    		System.out.print(weights.staticWeight + " ");
+	    		System.out.println();
+	    		
+	    		// run for dark
+	    		PositionScorer tyler = makeTyler(weights, PieceColor.DARK);
+	    		CountBot mike = new CountBot(PieceColor.LIGHT, 1.4);
+	    		AutomatedGameSession game = new AutomatedGameSession(tyler, mike, 3);
+	    		double sessionScore = game.play(PieceColor.DARK);
+	
+	    		// run for light
+	    		tyler = makeTyler(weights, PieceColor.LIGHT);
+	    		mike = new CountBot(PieceColor.DARK, 1.4);
+	    		game = new AutomatedGameSession(mike, tyler, 3);
+	    		sessionScore += game.play(PieceColor.LIGHT);
+	    		
+	    		System.out.println("score: " + sessionScore + " vs " + previousBest);
+	    		if (sessionScore > previousBest) {
+	    			previousBest = sessionScore;
+	    			bestAI = tyler;
+	    			bestWeights = weights;
+	    			System.out.println(		"-----------\n"
+	    								+ 	" Best yet! \n"
+	    								+ 	"-----------\n");
+	    		}
+	    		
+	    		changeAmt *= 0.995;
+	    	}
+        }
+        catch (OutOfMemoryError e) {
+        	System.out.println(e.getMessage());
+        }
     	System.out.println("done");
+    	System.out.println("BEST:");
+    	
+    	System.out.printf("change amt: %.4f\n", changeAmt);
+		System.out.print(bestWeights.defenseWeight + " ");
+		System.out.print(bestWeights.promotionWeight + " ");
+		System.out.print(bestWeights.centeredWeight + " ");
+		System.out.print(bestWeights.kingAlignmentWeight + " ");
+		System.out.print(bestWeights.pieceCountWeight + " ");
+		System.out.print(bestWeights.randomWeight + " ");
+		System.out.print(bestWeights.staticWeight + " ");
     	
     }
     
