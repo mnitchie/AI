@@ -20,6 +20,7 @@ public class BoardCanvas extends JComponent {
 	public static final Color BOARD_BLACK	= Color.GRAY;
 	public static final Color BOARD_WHITE	= Color.WHITE;
 	public static final Color ARROW_COLOR	= Color.CYAN;
+	public static final Color INDEX_COLOR	= Color.BLUE;
 	
 	private List<GuiPiece> guiPieces;
 	private List<Arrow> arrows;
@@ -56,6 +57,9 @@ public class BoardCanvas extends JComponent {
 		if (arrows != null)
 			for (Arrow arrow: arrows)
 				g.fillPolygon(arrow.toPolygon());
+		
+		// indices
+		drawIndices(g);
 	}
 	
 	/**
@@ -63,12 +67,25 @@ public class BoardCanvas extends JComponent {
 	 * @param g
 	 */
 	private void drawBoard(Graphics g) {
-		int width = GameState.WIDTH;
-		for (short row = 0; row < width; row++)
-			for (short col = 0; col < width; col++) {
+		for (short row = 0; row < GameState.WIDTH; row++) {
+			for (short col = 0; col < GameState.WIDTH; col++) {
 				Color color = ((row + col) % 2 == 0)? BOARD_WHITE: BOARD_BLACK;
 				drawTile(g, row, col, color);
 			}
+		}
+	}
+	
+	/**
+	 * Draw tile indices
+	 * @param g
+	 */
+	private void drawIndices(Graphics g) {
+		g.setColor(INDEX_COLOR);
+		for (short row = 0; row < GameState.WIDTH; row++) {
+			for (short col = 0; col < GameState.WIDTH; col++) {
+				drawIndex(g, row, col);
+			}
+		}
 	}
 	
 	/**
@@ -81,6 +98,23 @@ public class BoardCanvas extends JComponent {
 	private void drawTile(Graphics g, short row, short col, Color color) {
 		g.setColor(color);
 		g.fillRect(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+	}
+	
+	/**
+	 * Draw a tile's index.
+	 * This assumes the appropriate color has already been set on g.
+	 * @param g Graphics object
+	 * @param row Row index
+	 * @param col Column index
+	 */
+	private void drawIndex(Graphics g, short row, short col) {
+		if ((row + col) % 2 == 1) {
+			int x = col * TILE_SIZE;
+			int y = row * TILE_SIZE;
+			int index = col / 2 + row * 4;
+			g.setColor(INDEX_COLOR);
+			g.drawString("" + index, x + 10, y + 20);
+		}
 	}
 	
 	/**
