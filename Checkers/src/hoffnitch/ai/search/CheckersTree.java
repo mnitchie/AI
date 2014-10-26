@@ -53,6 +53,10 @@ public class CheckersTree
 		}
 	}
 	
+	public double getNextTurnValue() {
+		return root.score;
+	}
+	
 	public void evaluateNodes(AIPlayer ai) {
 		max(root, ai);
 //		System.out.println(root);

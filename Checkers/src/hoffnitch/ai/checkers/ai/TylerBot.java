@@ -5,14 +5,18 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.endGame.CondensedGameState;
-import hoffnitch.ai.endGame.EndGameDatabaseBuilder;
 import hoffnitch.ai.endGame.EndGameDatabaseManager;
 import hoffnitch.ai.statistics.KingAndPawnWeights;
 import hoffnitch.ai.statistics.WeightSet;
 
+import java.security.AllPermission;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -27,13 +31,52 @@ public class TylerBot extends AIPlayer
 
 	private WeightSet weights;
 	private Connection endGameDatabaseConnection;
+	private Statement databaseStatement;
 	private PositionScores[] positionScores;
-
+	private HashMap<Long, HashMap<Long, Integer>> endGameScenarios;
+	
 	public TylerBot(PieceColor color, WeightSet weights) {
 		super(HEURISTIC_DESCRIPTION, color);
 		this.weights = weights;
 		generatePositionScores();
 		endGameDatabaseConnection = EndGameDatabaseManager.getConnection();
+		try {
+			databaseStatement = endGameDatabaseConnection.createStatement();
+			
+			// load the entire database into a hashmap!!
+			endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();
+			
+			System.out.println("querying for endgame data..");
+			ResultSet allData = databaseStatement.executeQuery("SELECT * FROM endgame");
+			System.out.println("got the data");
+			System.out.println("loading endgame data to hashmap");
+			
+			int distance;
+			long pieceCount;
+			long indices;
+			int numLoaded = 0;
+			HashMap<Long, Integer> mapForPieceCount;
+			while (allData.next()) {
+				distance = allData.getInt("distance");
+				pieceCount = allData.getLong("pieceCount");
+				indices = allData.getLong("indices");
+				
+				mapForPieceCount = endGameScenarios.get(pieceCount);
+				if (mapForPieceCount == null) {
+					mapForPieceCount = new HashMap<Long, Integer>();
+					endGameScenarios.put(pieceCount, mapForPieceCount);
+				}
+				
+				mapForPieceCount.put(indices, distance);
+				numLoaded++;
+			}
+			System.out.println("loaded");
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private int getDistanceFromDatabase(GameState gameState) {
@@ -43,11 +86,17 @@ public class TylerBot extends AIPlayer
 			gameState = gameState.getInverse();
 		}
 		
-		CondensedGameState condensedGameState = new CondensedGameState(gameState, getColor());
-		int distanceToWin = EndGameDatabaseManager.selectGameState(endGameDatabaseConnection, 
-				condensedGameState.pieceCounts, condensedGameState.indices);
+		CondensedGameState condensedGameState = new CondensedGameState(gameState, EXPECTED_COLOR);
+		HashMap<Long, Integer> endGame = endGameScenarios.get(condensedGameState.pieceCounts);
+		if (endGame != null) {
+			Integer distanceToWin = endGame.get(condensedGameState.indices);
+			
+			if (distanceToWin != null) {
+				return distanceToWin;
+			}
+		}
 		
-		return distanceToWin;
+		return -1;
 	}
 	
 	private void generatePositionScores() {
@@ -162,13 +211,27 @@ public class TylerBot extends AIPlayer
 	}
 
 	@Override
-	public double evaluateBoard(GameState board) {
-		int distanceInDatabase = getDistanceFromDatabase(board);
+	public Turn getTurn() {
+		evaluateTurns();
+		double turnScore = getTurnTree().getNextTurnValue();
 		
-		// if the board is in the database, then cool
-		if (distanceInDatabase >= 0) {
-			System.out.println("Winning in " + distanceInDatabase + " turns..");
-			return 1000000 - distanceInDatabase;
+		if (turnScore > 90000) {
+			System.out.println("Winning in " + (int)(1000000 - turnScore) + " turns");
+		}
+		
+		return getTurnTree().getBestTurn();
+	}
+	
+	@Override
+	public double evaluateBoard(GameState board) {
+		
+		if (board.getPieces(PieceColor.DARK).size() + board.getPieces(PieceColor.LIGHT).size() <= 5) {
+			int distanceInDatabase = getDistanceFromDatabase(board);
+			
+			// if the board is in the database, then cool
+			if (distanceInDatabase >= 0) {
+				return 1000000 - distanceInDatabase;
+			}
 		}
 		
 		// otherwise, do the other stuff

@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Set;
 
 public class EndGameDatabaseManager
 {
@@ -17,6 +19,7 @@ public class EndGameDatabaseManager
 	private static final String AND = " AND ";
 	private static final String INDICES_EQUALS = "indices=";
 	private static final String SELECT_SUFFIX = ")";
+	private static final String INSERT = "INSERT INTO endgame(pieceCount, indices, distance) VALUES(?, ?, ?)";
 	
 	public static boolean createTable(Connection connection) {
 		final String CREATE = "CREATE TABLE endgame("
@@ -84,9 +87,40 @@ public class EndGameDatabaseManager
 		return success;
 	}
 	
-	public static int selectGameState(Connection connection, long pieceCount, long indices) {
+	public static void batchInsertGameStates(Connection connection, HashMap<Long, HashMap<Long, Integer>> endGameScenarios, long count) {
+		Statement statement;
 		try {
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
+			statement.addBatch("BEGIN");
+			Set<Long> pieceCounts = endGameScenarios.keySet();
+			for (Long pieceCount: pieceCounts) {
+				HashMap<Long, Integer> endGames = endGameScenarios.get(pieceCount);
+				Set<Long> indexSets = endGames.keySet();
+				for (Long indexSet: indexSets) {
+					Integer distance = endGames.get(indexSet);
+					String query = INSERT_PREFIX
+							+ pieceCount + ","
+							+ indexSet + ","
+							+ distance
+							+ INSERT_SUFFIX
+							;
+					statement.addBatch(query);
+					
+				}
+			}
+			statement.addBatch("END");
+			statement.executeBatch();
+			statement.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static int selectGameState(Statement statement, Connection connection, long pieceCount, long indices) {
+		try {
+			
 			ResultSet result = statement.executeQuery(SELECT_PREFIX
 					+ PIECE_COUNT_EQUALS + pieceCount
 					+ AND
@@ -95,6 +129,18 @@ public class EndGameDatabaseManager
 			if (result.next()) {
 				return result.getInt("distance");
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
+	public static int selectGameState(Connection connection, long pieceCount, long indices) {
+		try {
+			Statement statement = connection.createStatement();
+			statement.close();
+			return selectGameState(statement, connection, pieceCount, indices);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

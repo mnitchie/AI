@@ -46,7 +46,7 @@ public class EndGameDatabaseBuilder
 		System.out.println("wins indexed: " + tester.getNumIndexedWins());
 		
 		System.out.println("writing to db..");
-		saveToDatabase(tester.endGameScenarios);
+		saveToDatabase(tester.endGameScenarios, tester.getNumIndexedWins());
 		
 		// This part is stupid testing
 		long pC = CondensedGameState.condenseNumberPieces(0, 1, 0, 1, CondensedGameState.DARK);
@@ -68,20 +68,28 @@ public class EndGameDatabaseBuilder
 		// end stupid part
 	}
 	
-	private static void saveToDatabase(HashMap<Long, HashMap<Long, Integer>> endGameScenarios) {
+	private static void saveToDatabase(HashMap<Long, HashMap<Long, Integer>> endGameScenarios, long numRows) {
 		Connection connection = EndGameDatabaseManager.getConnection();
 		EndGameDatabaseManager.createTable(connection);
-		
-		Set<Long> pieceCounts = endGameScenarios.keySet();
-		for (Long pieceCount: pieceCounts) {
-			HashMap<Long, Integer> endGames = endGameScenarios.get(pieceCount);
-			Set<Long> indexSets = endGames.keySet();
-			for (Long indexSet: indexSets) {
-				Integer distance = endGames.get(indexSet);
-				
-				EndGameDatabaseManager.insertGameState(connection, pieceCount, indexSet, distance);
-			}
-		}
+//		
+//		Set<Long> pieceCounts = endGameScenarios.keySet();
+//		for (Long pieceCount: pieceCounts) {
+//			HashMap<Long, Integer> endGames = endGameScenarios.get(pieceCount);
+//			Set<Long> indexSets = endGames.keySet();
+//			for (Long indexSet: indexSets) {
+//				Integer distance = endGames.get(indexSet);
+//				
+//				EndGameDatabaseManager.insertGameState(connection, pieceCount, indexSet, distance);
+//			}
+//		}
+//		
+//		try {
+//			connection.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		EndGameDatabaseManager.batchInsertGameStates(connection, endGameScenarios, numRows);
 		
 		try {
 			connection.close();
