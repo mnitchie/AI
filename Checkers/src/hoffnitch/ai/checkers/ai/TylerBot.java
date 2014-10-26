@@ -5,15 +5,19 @@ import hoffnitch.ai.checkers.GameState;
 import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
+import hoffnitch.ai.endGame.CondensedGameState;
+import hoffnitch.ai.endGame.EndGameDatabaseBuilder;
+import hoffnitch.ai.endGame.EndGameDatabaseManager;
 import hoffnitch.ai.statistics.KingAndPawnWeights;
 import hoffnitch.ai.statistics.WeightSet;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 
 public class TylerBot extends AIPlayer
 {
-
 	public static final String HEURISTIC_DESCRIPTION = "TYLER.BOT";
 
 	private static final int DARK_PAWN = 0;
@@ -22,15 +26,30 @@ public class TylerBot extends AIPlayer
 	private static final int LIGHT_KING = 3;
 
 	private WeightSet weights;
-
+	private Connection endGameDatabaseConnection;
 	private PositionScores[] positionScores;
 
 	public TylerBot(PieceColor color, WeightSet weights) {
 		super(HEURISTIC_DESCRIPTION, color);
 		this.weights = weights;
 		generatePositionScores();
+		endGameDatabaseConnection = EndGameDatabaseManager.getConnection();
 	}
 
+	private int getDistanceFromDatabase(GameState gameState) {
+		final PieceColor EXPECTED_COLOR = PieceColor.DARK;
+		
+		if (getColor() != EXPECTED_COLOR) {
+			gameState = gameState.getInverse();
+		}
+		
+		CondensedGameState condensedGameState = new CondensedGameState(gameState, getColor());
+		int distanceToWin = EndGameDatabaseManager.selectGameState(endGameDatabaseConnection, 
+				condensedGameState.pieceCounts, condensedGameState.indices);
+		
+		return distanceToWin;
+	}
+	
 	private void generatePositionScores() {
 		this.positionScores = new PositionScores[32];
 		for (int i = 0; i < positionScores.length; i++) {
@@ -48,7 +67,7 @@ public class TylerBot extends AIPlayer
 					scoreForPromotion(scores, row, weights.getPromotion());
 					//scoreForCenteredness(positionScores[index], row, col, centeredWeight);
 					scoreForSide(scores, col, weights.getSides());
-					addStaticScore(positionScores[index], weights.getStatics());//.getStaticKing(), weights.getStatics());
+					addStaticScore(positionScores[index], weights.getStatics());
 
 					for (int i = 0; i < weights.getRings().length; i++) {
 						KingAndPawnWeights ringWeight = weights.getRings()[i];
@@ -144,6 +163,15 @@ public class TylerBot extends AIPlayer
 
 	@Override
 	public double evaluateBoard(GameState board) {
+		int distanceInDatabase = getDistanceFromDatabase(board);
+		
+		// if the board is in the database, then cool
+		if (distanceInDatabase >= 0) {
+			System.out.println("Winning in " + distanceInDatabase + " turns..");
+			return 1000000 - distanceInDatabase;
+		}
+		
+		// otherwise, do the other stuff
 		return scoreBoardOnPositions(board, positionScores)
 				+ weights.getAdjacentDiagonal() * scoreOnDiagonalTeammate(board)
 				+ weights.getAlignment().getPawn() * scoreBoardOnAlignedPawns(board)

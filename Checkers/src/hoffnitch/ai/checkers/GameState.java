@@ -176,6 +176,35 @@ public class GameState {
 		}
 	}
 	
+	/**
+	 * Get the inverse of a GameState, in which piece positions and colors are reversed.
+	 * For example, if in the original state, light has 4 pieces in its back row,
+	 * and dark has 1 king on the left edge, the inverse will have 4 dark pieces on dark's
+	 * back row, and 1 light king on the right edge.
+	 * @return inverse
+	 */
+	public GameState getInverse() {
+		GameState inverse = new GameState();
+		inverse.clear();
+		
+		for (int row = 0; row < WIDTH; row++) {
+			for (int col = 0; col < WIDTH; col++) {
+				Piece originalPiece = boardPieces[row][col];
+				if (originalPiece != null) {
+					Position originalPosition = Position.getPosition(row, col);
+					Position inversePosition = Position.getPosition(33 - originalPosition.index);
+					Piece inversePiece = new Piece(PieceColor.opposite(originalPiece.color), inversePosition);
+					
+					inversePiece.setCrowned(originalPiece.isCrowned());
+					
+					inverse.setPiece(inversePiece, inversePosition);
+				}
+			}
+		}
+		
+		return inverse;
+	}
+	
 	public String toString() {
 	    
 	    StringBuilder toReturn = new StringBuilder();
@@ -209,5 +238,6 @@ public class GameState {
 	    }
         toReturn.append(horizontal);
         return toReturn.toString();
-	}	
+	}
+	
 }
