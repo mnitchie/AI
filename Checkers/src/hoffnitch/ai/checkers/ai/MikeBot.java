@@ -1,6 +1,7 @@
 package hoffnitch.ai.checkers.ai;
 
 import hoffnitch.ai.checkers.GameState;
+import hoffnitch.ai.checkers.Piece;
 import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
 import hoffnitch.ai.checkers.Turn;
@@ -10,6 +11,8 @@ public class MikeBot extends AIPlayer {
     public static final String HEURISTIC_DESCRIPTION = "Mike Bot";
     private double kingWeight;
     private Turn previousTurn;
+    private float previousTurnScore;
+    private int maxScript;
     
     private String[] darkScript = {
             "11-15",
@@ -57,12 +60,15 @@ public class MikeBot extends AIPlayer {
     public MikeBot(PieceColor color, double kingWeight) {
         super(HEURISTIC_DESCRIPTION, color);
         this.kingWeight = kingWeight;
+        maxScript = color.equals(PieceColor.DARK) ? 3 : 0;
     }
     
     @Override
     public double evaluateBoard(GameState board) {
         double score = 0;
-            score += scoreBoardOnPieceCount(board, kingWeight);
+        score += scoreBoardOnPieceCount(board, kingWeight);
+        score += scoreBoardOnKingsInMiddle(board);
+        score += scoreBoardOnPawnsNearPromotion(board);
         
 //        if (score == 0) {
 //            score += scoreBoardOnPositions(board);
@@ -71,24 +77,39 @@ public class MikeBot extends AIPlayer {
         return score;
     }
     
-//    public double scoreBoardOnPositions(GameState board) {
-//        double score = 0;
-//        for (Piece p : board.getPieces(getColor())) {
-//            if (p.isCrowned()) {
-//                score += darkKingScores[p.getPosition().index - 1];
-//            }
-////            } else {
-////                score += darkPawnScores[p.getPosition().index - 1];
-////            }
-//        }
-//        return score;
-//    }
+    public double scoreBoardOnPawnsNearPromotion(GameState board) {
+        double score = 0;
+        for (Piece p : board.getPieces(getColor())) {
+            if (getColor().equals(PieceColor.DARK) && !p.isCrowned() && p.getPosition().index % 8 == 6) {
+//                score += .3;
+            } else if (getColor().equals(PieceColor.LIGHT ) && !p.isCrowned() && p.getPosition().index % 8 == 1) {
+                score += .3;
+            }
+            
+        }
+        
+        return score;
+    }
+    
+    public double scoreBoardOnKingsInMiddle(GameState board) {
+        double score = 0;
+        for (Piece p : board.getPieces(getColor())) {
+            if (getColor().equals(PieceColor.DARK) && p.isCrowned() && p.getPosition().index % 8 == 5) {
+//                score += .1;
+            } else if (getColor().equals(PieceColor.LIGHT ) && p.isCrowned() && p.getPosition().index % 8 == 2) {
+                score += .1;
+            }
+            
+        }
+        
+        return score;
+    }
     
     @Override
     public Turn getTurn() {
         System.out.println("Getting turns");
         turnCount++;
-        if (turnCount <= 1) {
+        if (turnCount <= maxScript) {
             System.out.println("turn count is < 7");
             int start;
             int end;

@@ -159,6 +159,9 @@ public class CheckersTree
 	}
 	
 	public void preventInverse(Turn turn) {
+	    if (turn == null) {
+	        return;
+	    }
 	    for (SearchNode n : root.children) {
 	        if (n.turn.isInverseOf(turn)) {
 	            n.score = Integer.MIN_VALUE;
