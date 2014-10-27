@@ -7,11 +7,14 @@ import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
 import hoffnitch.ai.checkers.Turn;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-public class Tester
+public class EndGameDatabaseBuilder
 {
 	private static final Position DEFAULT_POSITION = Position.getPosition(0);
 	private static final int FIRST_WHITE_PAWN_INDEX = 5;
@@ -27,7 +30,7 @@ public class Tester
 	
 	public static void main(String[] args) {
 		
-		Tester tester = new Tester();
+		EndGameDatabaseBuilder tester = new EndGameDatabaseBuilder();
 		System.out.println("running..");
 		
 		long beginTime = System.currentTimeMillis();
@@ -42,9 +45,11 @@ public class Tester
 		System.out.println("longest path: " + longestPath);
 		System.out.println("wins indexed: " + tester.getNumIndexedWins());
 		
+		System.out.println("writing to db..");
+		saveToDatabase(tester.endGameScenarios, tester.getNumIndexedWins());
 		
-		// This part is stupid
-		long pC = CondensedGameState.condenseNumberPieces(2, 0, 0, 1, CondensedGameState.DARK);
+		// This part is stupid testing
+		long pC = CondensedGameState.condenseNumberPieces(0, 1, 0, 1, CondensedGameState.DARK);
 		HashMap<Long, Integer> m = tester.endGameScenarios.get(pC);
 		Iterator<Long> iterator = m.keySet().iterator();
 		
@@ -53,7 +58,8 @@ public class Tester
 			Long in = iterator.next();
 			CondensedGameState cgs = new CondensedGameState(pC, in);
 			int len = m.get(in);
-			if (len > 2 && len < 4) {
+			if (len == 1) {
+				getDistanceFromDatabase(cgs.pieceCounts, cgs.indices);
 				System.out.println(len);
 				System.out.println(cgs.generateGameState());
 				shown++;
@@ -62,13 +68,61 @@ public class Tester
 		// end stupid part
 	}
 	
-	private static int runTestsForColor(Tester tester, int maxPieces, int maxLength, PieceColor color) {
+	private static void saveToDatabase(HashMap<Long, HashMap<Long, Integer>> endGameScenarios, long numRows) {
+		Connection connection = EndGameDatabaseManager.getConnection();
+		EndGameDatabaseManager.createTable(connection);
+//		
+//		Set<Long> pieceCounts = endGameScenarios.keySet();
+//		for (Long pieceCount: pieceCounts) {
+//			HashMap<Long, Integer> endGames = endGameScenarios.get(pieceCount);
+//			Set<Long> indexSets = endGames.keySet();
+//			for (Long indexSet: indexSets) {
+//				Integer distance = endGames.get(indexSet);
+//				
+//				EndGameDatabaseManager.insertGameState(connection, pieceCount, indexSet, distance);
+//			}
+//		}
+//		
+//		try {
+//			connection.close();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		EndGameDatabaseManager.batchInsertGameStates(connection, endGameScenarios, numRows);
+		
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void getDistanceFromDatabase(long pieceCount, long indices) {
+		Connection connection = EndGameDatabaseManager.getConnection();
+		
+		int distance = EndGameDatabaseManager.selectGameState(connection, pieceCount, indices);
+		System.out.println("DIST FROM DB: " + distance);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static int runTestsForColor(EndGameDatabaseBuilder tester, int maxPieces, int maxLength, PieceColor color) {
 		// will this work??
 		int longestPath = 0;
-		for (int numPieces = 2; numPieces <= maxPieces; numPieces++) {
+		
+		final int MIN_PIECE_COUNT = 2;
+		final int MAX_BLACK_PAWNS = 0;
+		
+		for (int numPieces = MIN_PIECE_COUNT; numPieces <= maxPieces; numPieces++) {
 			for (int numBlack = 1; numBlack < numPieces; numBlack++) {
 				int numWhite = numPieces - numBlack;
-				for (int numBlackPawns = 0; numBlackPawns <= numBlack; numBlackPawns++) {
+				for (int numBlackPawns = 0; numBlackPawns <= MAX_BLACK_PAWNS && numBlackPawns <= numBlack; numBlackPawns++) {
 					int numBlackKings = numBlack - numBlackPawns;
 					for (int numWhitePawns = 0; numWhitePawns <= numWhite; numWhitePawns++) {
 						int numWhiteKings = numWhite - numWhitePawns;
@@ -83,7 +137,7 @@ public class Tester
 		return longestPath;
 	}
 	
-	public Tester() {
+	public EndGameDatabaseBuilder() {
 		endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();		
 	}
 	

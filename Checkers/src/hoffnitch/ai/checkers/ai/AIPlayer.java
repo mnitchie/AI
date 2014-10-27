@@ -70,6 +70,10 @@ public abstract class AIPlayer extends NonHumanPlayer {
 		turnTree = new CheckersTree(initialBoard, yourColor, firstColor, maxDepth);
 	}
 	
+	public CheckersTree getTurnTree() {
+		return turnTree;
+	}
+
 	public void evaluateTurns() {
 		turnTree.evaluateNodes(this);
 	}

@@ -21,12 +21,15 @@ public class PositionScorer extends AIPlayer {
     private double defenseWeight = 4;
     private double promotionWeight = 4;
     private double centeredWeight = 4;
+    private double kingAlignmentWeight = 0.0;
+    private double pieceCountWeight = 0.0;
+    private double randomWeight = 0.0;
     private double staticWeight = 80;
     
     private PositionScores[] positionScores;
 
     public PositionScorer(PieceColor color) {
-        super(HEURISTIC_DESCRIPTION, color, 1000.0, 1.4, 2.0);
+        super(HEURISTIC_DESCRIPTION, color);
         this.positionScores = new PositionScores[32];
         for (int i = 0; i < positionScores.length; i++) {
             positionScores[i] = new PositionScores();
@@ -35,6 +38,7 @@ public class PositionScorer extends AIPlayer {
         setPawnWeight(1);
         evaluatePositions();
     }
+    
     
     private void evaluatePositions() {
         int index = 0;
@@ -49,14 +53,6 @@ public class PositionScorer extends AIPlayer {
         		}
         	}
         }
-        System.out.println("--- dark pawn");
-        printPositionScores(positionScores, DARK_PAWN);
-        System.out.println("--- dark king");
-        printPositionScores(positionScores, DARK_KING);
-        System.out.println("--- light pawn");
-        printPositionScores(positionScores, LIGHT_PAWN);
-        System.out.println("--- light king");
-        printPositionScores(positionScores, LIGHT_KING);
     }
     
     private void addStaticScore(PositionScores scores, double kingWeight, double weight) {
@@ -148,10 +144,9 @@ public class PositionScorer extends AIPlayer {
     @Override
     public double evaluateBoard(GameState board) {
         return scoreBoardOnPositions(board, positionScores)
-        		//+ 1 * Math.random()
-        		+ 1 * scoreBoardOnAlignedKings(board)
-        		- 1 * totalPieceCount(board)
-        		+ 0 * scoreBoardOnDistanceToPromotion(board);
+        		+ randomWeight * Math.random()
+        		+ kingAlignmentWeight * scoreBoardOnAlignedKings(board)
+        		+ pieceCountWeight * totalPieceCount(board);
     }
     
     public double totalPieceCount(GameState board) {
@@ -218,5 +213,86 @@ public class PositionScorer extends AIPlayer {
         	System.out.println();
         }
 	}
+
+
+	public double getDefenseWeight() {
+		return defenseWeight;
+	}
+
+
+	public void setDefenseWeight(double defenseWeight) {
+		this.defenseWeight = defenseWeight;
+	}
+
+
+	public double getPromotionWeight() {
+		return promotionWeight;
+	}
+
+
+	public void setPromotionWeight(double promotionWeight) {
+		this.promotionWeight = promotionWeight;
+	}
+
+
+	public double getCenteredWeight() {
+		return centeredWeight;
+	}
+
+
+	public void setCenteredWeight(double centeredWeight) {
+		this.centeredWeight = centeredWeight;
+	}
+
+
+	public double getKingAlignmentWeight() {
+		return kingAlignmentWeight;
+	}
+
+
+	public void setKingAlignmentWeight(double kingAlignmentWeight) {
+		this.kingAlignmentWeight = kingAlignmentWeight;
+	}
+
+
+	public double getPieceCountWeight() {
+		return pieceCountWeight;
+	}
+
+
+	public void setPieceCountWeight(double pieceCountWeight) {
+		this.pieceCountWeight = pieceCountWeight;
+	}
+
+
+	public double getRandomWeight() {
+		return randomWeight;
+	}
+
+
+	public void setRandomWeight(double randomWeight) {
+		this.randomWeight = randomWeight;
+	}
+
+
+	public double getStaticWeight() {
+		return staticWeight;
+	}
+
+
+	public void setStaticWeight(double staticWeight) {
+		this.staticWeight = staticWeight;
+	}
+
+
+	public PositionScores[] getPositionScores() {
+		return positionScores;
+	}
+
+
+	public void setPositionScores(PositionScores[] positionScores) {
+		this.positionScores = positionScores;
+	}
+	
 
 }
