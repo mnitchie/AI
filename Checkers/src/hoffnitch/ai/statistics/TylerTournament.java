@@ -5,6 +5,7 @@ import hoffnitch.ai.checkers.ai.AutomatedGameSession;
 import hoffnitch.ai.checkers.ai.CountBot;
 import hoffnitch.ai.checkers.ai.PositionScorer;
 import hoffnitch.ai.checkers.ai.TylerBot;
+import hoffnitch.ai.endGame.EndGameData;
 
 public class TylerTournament
 {
@@ -19,7 +20,7 @@ public class TylerTournament
         
         System.out.println(bestWeights);
         WeightSet weights = bestWeights;
-        
+        EndGameData endGameData = new EndGameData();
         try {
 	    	while(changeAmt > 1) {
 			
@@ -28,7 +29,7 @@ public class TylerTournament
 	    		System.out.print(weights);
 	    		
 	    		// run for dark
-	    		TylerBot tyler = new TylerBot(PieceColor.DARK, weights);
+	    		TylerBot tyler = new TylerBot(PieceColor.DARK, weights, endGameData);
 	    		CountBot mike = new CountBot(PieceColor.LIGHT, 1.4);
 	    		AutomatedGameSession game = new AutomatedGameSession(tyler, mike, 1);
 	    		double sessionScore = game.play(PieceColor.DARK);
@@ -36,7 +37,7 @@ public class TylerTournament
 	    		// if that didn't suck, try as the other color
 	    		if (sessionScore > 0) {
 		    		// run for light
-		    		tyler = new TylerBot(PieceColor.LIGHT, weights);
+		    		tyler = new TylerBot(PieceColor.LIGHT, weights, endGameData);
 		    		mike = new CountBot(PieceColor.DARK, 1.4);
 		    		game = new AutomatedGameSession(mike, tyler, 1);
 		    		sessionScore += game.play(PieceColor.LIGHT);
