@@ -111,7 +111,7 @@ public class BoardCanvas extends JComponent {
 		if ((row + col) % 2 == 1) {
 			int x = col * TILE_SIZE;
 			int y = row * TILE_SIZE;
-			int index = col / 2 + row * 4;
+			int index = col / 2 + row * 4 + 1;
 			g.setColor(INDEX_COLOR);
 			g.drawString("" + index, x + 10, y + 20);
 		}
