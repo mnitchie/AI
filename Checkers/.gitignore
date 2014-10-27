@@ -3,5 +3,4 @@
 *.classpath
 *.preferences
 *.settings
-/lib
 /target
