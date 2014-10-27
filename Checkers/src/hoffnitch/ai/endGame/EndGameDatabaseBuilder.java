@@ -11,8 +11,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class EndGameDatabaseBuilder
 {
@@ -22,6 +22,7 @@ public class EndGameDatabaseBuilder
 	
 	public HashMap<Long, HashMap<Long, Integer>> endGameScenarios;
 	private HashMap<Long, Integer> pathLengthsForCurrentPieceCount;
+	private static List<Long> pieceCountsToAdd;
 	private long pieceCounts;
 	private PieceColor botColor;
 	private PieceColor opponentColor;
@@ -34,7 +35,7 @@ public class EndGameDatabaseBuilder
 		System.out.println("running..");
 		
 		long beginTime = System.currentTimeMillis();
-		final int MAX_PIECES = 5;
+		final int MAX_PIECES = 3;
 		final int MAX_LENGTH = 25;
 		
 		int longestPath = runTestsForColor(tester, MAX_PIECES, MAX_LENGTH, PieceColor.DARK);
@@ -46,7 +47,7 @@ public class EndGameDatabaseBuilder
 		System.out.println("wins indexed: " + tester.getNumIndexedWins());
 		
 		System.out.println("writing to db..");
-		saveToDatabase(tester.endGameScenarios, tester.getNumIndexedWins());
+		saveToDatabase(tester.endGameScenarios);
 		
 		// This part is stupid testing
 		long pC = CondensedGameState.condenseNumberPieces(0, 1, 0, 1, CondensedGameState.DARK);
@@ -68,28 +69,10 @@ public class EndGameDatabaseBuilder
 		// end stupid part
 	}
 	
-	private static void saveToDatabase(HashMap<Long, HashMap<Long, Integer>> endGameScenarios, long numRows) {
+	private static void saveToDatabase(HashMap<Long, HashMap<Long, Integer>> endGameScenarios) {
 		Connection connection = EndGameDatabaseManager.getConnection();
 		EndGameDatabaseManager.createTable(connection);
-//		
-//		Set<Long> pieceCounts = endGameScenarios.keySet();
-//		for (Long pieceCount: pieceCounts) {
-//			HashMap<Long, Integer> endGames = endGameScenarios.get(pieceCount);
-//			Set<Long> indexSets = endGames.keySet();
-//			for (Long indexSet: indexSets) {
-//				Integer distance = endGames.get(indexSet);
-//				
-//				EndGameDatabaseManager.insertGameState(connection, pieceCount, indexSet, distance);
-//			}
-//		}
-//		
-//		try {
-//			connection.close();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		EndGameDatabaseManager.batchInsertGameStates(connection, endGameScenarios, numRows);
+		EndGameDatabaseManager.batchInsertGameStates(connection, endGameScenarios, pieceCountsToAdd);
 		
 		try {
 			connection.close();
@@ -117,7 +100,7 @@ public class EndGameDatabaseBuilder
 		int longestPath = 0;
 		
 		final int MIN_PIECE_COUNT = 2;
-		final int MAX_BLACK_PAWNS = 0;
+		final int MAX_BLACK_PAWNS = 1;
 		
 		for (int numPieces = MIN_PIECE_COUNT; numPieces <= maxPieces; numPieces++) {
 			for (int numBlack = 1; numBlack < numPieces; numBlack++) {
@@ -126,9 +109,13 @@ public class EndGameDatabaseBuilder
 					int numBlackKings = numBlack - numBlackPawns;
 					for (int numWhitePawns = 0; numWhitePawns <= numWhite; numWhitePawns++) {
 						int numWhiteKings = numWhite - numWhitePawns;
-						int newLongestPath = tester.runRange(numBlackPawns, numBlackKings, numWhitePawns, numWhiteKings, color, 1, maxLength);
-						if (newLongestPath > longestPath) {
-							longestPath = newLongestPath;
+						long pieceCount = CondensedGameState.condenseNumberPieces(numBlackPawns, numBlackKings, numWhitePawns, numWhiteKings, CondensedGameState.DARK);
+						if (!EndGameDatabaseManager.hasPieceCount(pieceCount)) {
+							pieceCountsToAdd.add(pieceCount);
+							int newLongestPath = tester.runRange(numBlackPawns, numBlackKings, numWhitePawns, numWhiteKings, color, 1, maxLength);
+							if (newLongestPath > longestPath) {
+								longestPath = newLongestPath;
+							}
 						}
 					}
 				}
@@ -138,7 +125,15 @@ public class EndGameDatabaseBuilder
 	}
 	
 	public EndGameDatabaseBuilder() {
-		endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();		
+		EndGameData databaseData = new EndGameData();
+		
+		// block until data is loaded
+		System.out.println("loading..");
+		while (!databaseData.isLoaded());
+		System.out.println("done");
+		
+		endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();
+		pieceCountsToAdd = new LinkedList<Long>();
 	}
 	
 	public long getNumIndexedWins() {
@@ -300,12 +295,17 @@ public class EndGameDatabaseBuilder
 					else {
 						CondensedGameState condensedFinalBoard = new CondensedGameState(finalBoard, botColor);
 						HashMap<Long, Integer> mapForPieceCount = endGameScenarios.get(condensedFinalBoard.pieceCounts);
+						
+						if (mapForPieceCount == null) {
+							mapForPieceCount = new HashMap<Long, Integer>();
+							endGameScenarios.put(condensedFinalBoard.pieceCounts, mapForPieceCount);
+						}
+						
 						Integer newPathLength = mapForPieceCount.get(condensedFinalBoard.indices);
 						if (newPathLength != null && newPathLength < bestCase) {
 							bestCase = newPathLength + 1;
 						}
 					}
-					
 				}
 				if (bestCase == Integer.MAX_VALUE) {
 					winnable = false;
