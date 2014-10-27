@@ -21,7 +21,7 @@ import java.util.List;
 
 public class TylerBot extends AIPlayer
 {
-	public static final String HEURISTIC_DESCRIPTION = "TYLER.BOT";
+	public static final String HEURISTIC_DESCRIPTION = "Tylerbot";
 
 	private static final int DARK_PAWN = 0;
 	private static final int DARK_KING = 1;
