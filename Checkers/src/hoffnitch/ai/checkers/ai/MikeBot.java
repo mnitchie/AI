@@ -107,10 +107,10 @@ public class MikeBot extends AIPlayer {
     
     @Override
     public Turn getTurn() {
-        System.out.println("Getting turns");
+        //System.out.println("Getting turns");
         turnCount++;
         if (turnCount <= maxScript) {
-            System.out.println("turn count is < 7");
+            //System.out.println("turn count is < 7");
             int start;
             int end;
             if (this.getColor().equals(PieceColor.DARK)) {
@@ -120,12 +120,12 @@ public class MikeBot extends AIPlayer {
                 start = Integer.parseInt(lightScript[turnCount-1].split("-")[0]);
                 end = Integer.parseInt(lightScript[turnCount-1].split("-")[1]);
             }   
-            System.out.println(start);
-            System.out.println(end);
+            //System.out.println(start);
+            //System.out.println(end);
             Turn theTurn = new Turn(start, this.getColor(), Position.getPosition(start));
             theTurn.addMove(Position.getPosition(end));
             if (turnTree.turnIsAvailable(theTurn)) {
-                System.out.println("The turn is available");
+                //System.out.println("The turn is available");
                 previousTurn = turnTree.getBestTurn();
                 return previousTurn;
             }

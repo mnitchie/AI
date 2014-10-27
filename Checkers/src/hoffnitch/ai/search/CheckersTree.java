@@ -127,8 +127,8 @@ public class CheckersTree
 		generate(root, opponentColor, maxDepth);
 		
 		root.turn.resetIterator();
-		System.out.println(playerColor);
-		System.out.println(root.score);
+		//System.out.println(playerColor);
+		//System.out.println(root.score);
 		return root.turn;
 	}
 	

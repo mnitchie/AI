@@ -7,18 +7,17 @@ import hoffnitch.ai.checkers.PieceColor;
 import hoffnitch.ai.checkers.Position;
 import hoffnitch.ai.checkers.Turn;
 import hoffnitch.ai.endGame.CondensedGameState;
+import hoffnitch.ai.endGame.EndGameData;
 import hoffnitch.ai.endGame.EndGameDatabaseManager;
 import hoffnitch.ai.statistics.KingAndPawnWeights;
 import hoffnitch.ai.statistics.WeightSet;
 
-import java.security.AllPermission;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
-
 
 public class TylerBot extends AIPlayer
 {
@@ -30,69 +29,74 @@ public class TylerBot extends AIPlayer
 	private static final int LIGHT_KING = 3;
 
 	private WeightSet weights;
-	private Connection endGameDatabaseConnection;
-	private Statement databaseStatement;
+	//private Connection endGameDatabaseConnection;
+	//private Statement databaseStatement;
 	private PositionScores[] positionScores;
-	private HashMap<Long, HashMap<Long, Integer>> endGameScenarios;
+	private EndGameData endGameData;
 	
-	public TylerBot(PieceColor color, WeightSet weights) {
+	public TylerBot(PieceColor color, WeightSet weights, EndGameData endGameData) {
 		super(HEURISTIC_DESCRIPTION, color);
 		this.weights = weights;
+		this.endGameData = endGameData;
 		generatePositionScores();
-		endGameDatabaseConnection = EndGameDatabaseManager.getConnection();
-		try {
-			databaseStatement = endGameDatabaseConnection.createStatement();
-			
-			// load the entire database into a hashmap!!
-			endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();
-			
-			System.out.println("querying for endgame data..");
-			ResultSet allData = databaseStatement.executeQuery("SELECT * FROM endgame");
-			System.out.println("got the data");
-			System.out.println("loading endgame data to hashmap");
-			
-			int distance;
-			long pieceCount;
-			long indices;
-			int numLoaded = 0;
-			HashMap<Long, Integer> mapForPieceCount;
-			while (allData.next()) {
-				distance = allData.getInt("distance");
-				pieceCount = allData.getLong("pieceCount");
-				indices = allData.getLong("indices");
-				
-				mapForPieceCount = endGameScenarios.get(pieceCount);
-				if (mapForPieceCount == null) {
-					mapForPieceCount = new HashMap<Long, Integer>();
-					endGameScenarios.put(pieceCount, mapForPieceCount);
-				}
-				
-				mapForPieceCount.put(indices, distance);
-				numLoaded++;
-			}
-			System.out.println("loaded");
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		endGameDatabaseConnection = EndGameDatabaseManager.getConnection();
+//		try {
+//			databaseStatement = endGameDatabaseConnection.createStatement();
+//			
+//			// load the entire database into a hashmap!!
+//			endGameScenarios = new HashMap<Long, HashMap<Long, Integer>>();
+//			
+//			System.out.println("querying for endgame data..");
+//			ResultSet allData = databaseStatement.executeQuery("SELECT * FROM endgame");
+//			System.out.println("got the data");
+//			System.out.println("loading endgame data to hashmap");
+//			
+//			int distance;
+//			long pieceCount;
+//			long indices;
+//			int numLoaded = 0;
+//			HashMap<Long, Integer> mapForPieceCount;
+//			while (allData.next()) {
+//				distance = allData.getInt("distance");
+//				pieceCount = allData.getLong("pieceCount");
+//				indices = allData.getLong("indices");
+//				
+//				mapForPieceCount = endGameScenarios.get(pieceCount);
+//				if (mapForPieceCount == null) {
+//					mapForPieceCount = new HashMap<Long, Integer>();
+//					endGameScenarios.put(pieceCount, mapForPieceCount);
+//				}
+//				
+//				mapForPieceCount.put(indices, distance);
+//				numLoaded++;
+//			}
+//			System.out.println("loaded");
+//			
+//			
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private int getDistanceFromDatabase(GameState gameState) {
-		final PieceColor EXPECTED_COLOR = PieceColor.DARK;
+		// check if it's loaded yet
 		
-		if (getColor() != EXPECTED_COLOR) {
-			gameState = gameState.getInverse();
-		}
-		
-		CondensedGameState condensedGameState = new CondensedGameState(gameState, EXPECTED_COLOR);
-		HashMap<Long, Integer> endGame = endGameScenarios.get(condensedGameState.pieceCounts);
-		if (endGame != null) {
-			Integer distanceToWin = endGame.get(condensedGameState.indices);
+		if (endGameData.isLoaded()) {
+			final PieceColor EXPECTED_COLOR = PieceColor.DARK;
 			
-			if (distanceToWin != null) {
-				return distanceToWin;
+			if (getColor() != EXPECTED_COLOR) {
+				gameState = gameState.getInverse();
+			}
+			
+			CondensedGameState condensedGameState = new CondensedGameState(gameState, EXPECTED_COLOR);
+			HashMap<Long, Integer> endGame = endGameData.getEndGameScenarios().get(condensedGameState.pieceCounts);
+			if (endGame != null) {
+				Integer distanceToWin = endGame.get(condensedGameState.indices);
+				
+				if (distanceToWin != null) {
+					return distanceToWin;
+				}
 			}
 		}
 		
